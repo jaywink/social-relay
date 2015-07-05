@@ -3,3 +3,6 @@ Flask==0.10.1
 # redis backend
 hiredis==0.2.0
 redis==2.10.3
+
+# social-federation
+git+https://github.com/jaywink/social-federation.git@master#egg=federation

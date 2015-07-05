@@ -1,0 +1,9 @@
+DEBUG = True
+SECRET_KEY = 'fhweuifhiwehgfewhiewhiufehiufhewiuhfiuwehuifhih873778378h78f7837878fh8hwfuekwjfe'
+USERNAME = 'admin'
+PASSWORD = 'admin'
+
+REDIS_DB = 0
+REDIS_PORT = 6379
+REDIS_HOST = 'localhost'
+SALT = 'uifehufhiwehiujk'

@@ -1,0 +1,9 @@
+incr global:nextEntryId
+
+posts:[id]:raw_content
+posts:[id]:provider_display_name
+posts:[id]:location
+posts:[id]:guid
+posts:[id]:handle
+posts:[id]:public
+posts:[id]:created_at

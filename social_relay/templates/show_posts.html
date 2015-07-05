@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block body %}
+  <ul class=entries>
+  {% for i in idlist %}
+    <li><h2>{{ (r.get('posts:%s:handle' % i)).decode('utf-8') }}</h2>{{ (r.get('posts:%s:raw_content' % i)).decode('utf-8') }}
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+  </ul>
+{% endblock %}

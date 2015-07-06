@@ -1,4 +1,4 @@
-incr global:nextEntryId
+incr global:nextPostId
 
 posts:[id]:raw_content
 posts:[id]:provider_display_name

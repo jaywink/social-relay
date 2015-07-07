@@ -1,7 +1,8 @@
+import json
 from random import random
 import redis
 
-from flask import render_template, request, flash, url_for, redirect
+from flask import render_template, request, flash, url_for, redirect, Response
 
 from federation.controllers import handle_receive, handle_create_payload
 from federation.entities.base import Post
@@ -36,6 +37,13 @@ def receive_public():
             r.set('posts:%s:raw_content' % id, '%s' % entity.raw_content)
             r.set('posts:%s:guid' % id, '%s' % entity.guid)
             r.set('posts:%s:handle' % id, '%s' % entity.handle)
+
+    # return 200 whatever
+    data = {
+        'result'  : 'ok',
+    }
+    js = json.dumps(data)
+    return Response(js, status=200, mimetype='application/json')
 
 
 @app.route('/add')

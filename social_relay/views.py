@@ -6,6 +6,7 @@ from flask import render_template, request, flash, url_for, redirect, Response
 
 from federation.controllers import handle_receive, handle_create_payload
 from federation.entities.base import Post
+from federation.hostmeta.generators import generate_host_meta
 
 from social_relay import app
 
@@ -21,6 +22,12 @@ def show_posts():
         posts.append({"handle": r.get('posts:%s:handle' % i.decode("utf-8")).decode("utf-8"),
                       "raw_content": r.get('posts:%s:raw_content' % i.decode("utf-8")).decode("utf-8")})
     return render_template('show_posts.html', idlist=idlist, posts=posts)
+
+
+@app.route('/.well-known/host-meta')
+def host_meta():
+    hostmeta = generate_host_meta("diaspora", webfinger_host=app.config.get("SERVER_HOST"))
+    return Response(hostmeta, status=200, mimetype="application/xrd+xml")
 
 
 @app.route("/receive/public", methods=["POST"])

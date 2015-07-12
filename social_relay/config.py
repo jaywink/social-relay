@@ -1,6 +1,10 @@
 # No need to change this normally, override in locals if needed
 RELAY_USERNAME = "relay"
 
+# Just something hcard needs, override in locals if you want to customize
+# This might appear visible on some pod who fetches the relay hcard...
+RELAY_NAME = "Social-Relay"
+
 # Relays only need a public key because Diaspora pods want to read one. So this doesn't need changing normally,
 # override in locals if needed
 RELAY_PUBLIC_KEY = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9eofav26VCq3C6g9sIPjiEYzhuiFGGAMx4NAY2bP9NFxXtuERYsqtS+" \

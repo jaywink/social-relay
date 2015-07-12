@@ -6,7 +6,7 @@ from flask import render_template, request, flash, url_for, redirect, Response, 
 
 from federation.controllers import handle_receive, handle_create_payload
 from federation.entities.base import Post
-from federation.hostmeta.generators import generate_host_meta, generate_legacy_webfinger
+from federation.hostmeta.generators import generate_host_meta, generate_legacy_webfinger, generate_hcard
 
 from social_relay import app
 
@@ -43,6 +43,24 @@ def webfinger():
         public_key=app.config.get("RELAY_PUBLIC_KEY")
     )
     return Response(webfinger, status=200, mimetype="application/xrd+xml")
+
+
+@app.route("/hcard/users/<guid>")
+def hcard(guid):
+    if guid != app.config.get("RELAY_GUID"):
+        return abort(404)
+    hcard = generate_hcard(
+        "diaspora",
+        hostname=app.config.get("SERVER_HOST"),
+        fullname=app.config.get("RELAY_NAME"),
+        firstname=app.config.get("RELAY_NAME"),
+        lastname="",
+        photo300="",
+        photo100="",
+        photo50="",
+        searchable="false"
+    )
+    return Response(hcard, status=200)
 
 
 @app.route("/receive/public", methods=["POST"])

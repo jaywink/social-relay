@@ -2,11 +2,11 @@ import json
 from random import random
 import redis
 
-from flask import render_template, request, flash, url_for, redirect, Response
+from flask import render_template, request, flash, url_for, redirect, Response, abort
 
 from federation.controllers import handle_receive, handle_create_payload
 from federation.entities.base import Post
-from federation.hostmeta.generators import generate_host_meta
+from federation.hostmeta.generators import generate_host_meta, generate_legacy_webfinger
 
 from social_relay import app
 
@@ -28,6 +28,21 @@ def show_posts():
 def host_meta():
     hostmeta = generate_host_meta("diaspora", webfinger_host=app.config.get("SERVER_HOST"))
     return Response(hostmeta, status=200, mimetype="application/xrd+xml")
+
+
+@app.route("/webfinger")
+def webfinger():
+    account = request.args.get("q", "")
+    if account != app.config.get("RELAY_ACCOUNT"):
+        return abort(404)
+    webfinger = generate_legacy_webfinger(
+        "diaspora",
+        handle=app.config.get("RELAY_ACCOUNT"),
+        host=app.config.get("SERVER_HOST"),
+        guid=app.config.get("RELAY_GUID"),
+        public_key=app.config.get("RELAY_PUBLIC_KEY")
+    )
+    return Response(webfinger, status=200, mimetype="application/xrd+xml")
 
 
 @app.route("/receive/public", methods=["POST"])

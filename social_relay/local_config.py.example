@@ -1,11 +1,13 @@
 DEBUG = True
 SECRET_KEY = ''
-USERNAME = 'admin'
-PASSWORD = 'admin'
 
 REDIS_DB = 0
 REDIS_PORT = 6379
 REDIS_HOST = 'localhost'
 SALT = 'retwis'
 
+# Change this to real domain
 SERVER_HOST = "http://127.0.0.1:5000"
+
+# You MUST generate a unique GUID for the relay user. This MUST be 32 chars long.
+#RELAY_GUID = ""

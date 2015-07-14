@@ -6,3 +6,7 @@ redis==2.10.3
 
 # social-federation
 git+https://github.com/jaywink/social-federation.git@master#egg=federation
+
+# generic
+requests==2.7.0
+schedule==0.3.2

@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 {% block body %}
   <ul class=entries>
-  {% for post in posts %}
-    <li><h2>{{ post["handle"] }}</h2>{{ post["raw_content"] }}
+  {% for item in items %}
+    <li><p>{{ item.decode("utf-8") }}</p>
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em>
   {% endfor %}

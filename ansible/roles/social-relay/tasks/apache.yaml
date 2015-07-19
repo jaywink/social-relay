@@ -1,0 +1,31 @@
+---
+- name: Apache wsgi module deps
+  apt: name=libapache2-mod-wsgi
+  notify:
+    - restart apache
+- name: Apache WSGI module enable
+  apache2_module: state=present name=wsgi
+  notify:
+    - restart apache
+- name: Apache SSL module
+  apache2_module: state=present name=ssl
+  notify:
+    - restart apache
+- name: Apache site
+  template: dest=/etc/apache2/sites-available/socialrelay.conf src=apache.conf.j2
+- name: SSL cert
+  copy:
+      content: "{{ ssl_cert }}"
+      dest: /etc/ssl/certs/{{ hostname }}.crt
+- name: SSL key
+  copy:
+      content: "{{ ssl_key }}"
+      dest: /etc/ssl/private/{{ hostname }}.key
+- name: SSL chain
+  copy:
+      content: "{{ ssl_chain }}"
+      dest: /etc/ssl/certs/{{ hostname }}.chain.pem
+- name: Enable site
+  command: a2ensite socialrelay
+  notify:
+    - restart apache

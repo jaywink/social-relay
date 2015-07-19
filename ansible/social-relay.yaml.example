@@ -1,0 +1,5 @@
+---
+- hosts: changeme
+  sudo: yes
+  roles:
+    - social-relay

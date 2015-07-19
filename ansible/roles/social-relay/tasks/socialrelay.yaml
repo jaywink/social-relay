@@ -1,0 +1,11 @@
+---
+- name: Get latest socialrelay code
+  git: accept_hostkey=yes dest=/home/socialrelay/socialrelay repo=https://github.com/jaywink/social-relay.git
+- name: Install app requirements
+  pip: requirements=/home/socialrelay/socialrelay/requirements/base.txt virtualenv=/home/socialrelay/venv virtualenv_command=virtualenv-3.4
+- name: Create local settings
+  template: dest=/home/socialrelay/socialrelay/social_relay/local_config.py src=local_config.py.j2
+- name: Make sure home directory is owned by user
+  file: path=/home/socialrelay/socialrelay owner=socialrelay group=socialrelay recurse=yes
+- name: Make sure venv directory is owned by user
+  file: path=/home/socialrelay/venv owner=socialrelay group=socialrelay recurse=yes

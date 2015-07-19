@@ -1,0 +1,5 @@
+---
+- name: Pip
+  command: easy_install -U pip
+- name: Virtualenv
+  apt: name=python-virtualenv

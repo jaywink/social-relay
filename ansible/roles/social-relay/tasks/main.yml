@@ -1,0 +1,7 @@
+---
+- include: user.yaml
+- include: redis.yaml
+- include: apache.yaml
+- include: ssh.yaml
+- include: python.yaml
+- include: socialrelay.yaml

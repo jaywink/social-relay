@@ -1,0 +1,43 @@
+WSGIPythonPath /home/socialrelay/socialrelay:/home/socialrelay/venv/lib/python3.4/site-packages
+
+<VirtualHost *:80>
+    ServerName {{ hostname }}
+    ServerAlias www.{{ hostname }}
+    RedirectPermanent / https://{{ hostname }}/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName {{ hostname }}
+    ServerAlias www.{{ hostname }}
+
+    ServerAdmin webmaster@{{ hostname }}
+
+    DocumentRoot {{ web_root }}
+
+    Alias /robots.txt {{ web_root }}/robots.txt
+    Alias /favicon.ico {{ web_root }}/favicon.ico
+
+    <Directory {{ web_root }}>
+        Require all granted
+        Options -MultiViews -Indexes
+    </Directory>
+
+    WSGIDaemonProcess socialrelay user=socialrelay group=socialrelay threads=5
+    WSGIScriptAlias / /home/socialrelay/socialrelay/socialrelay.wsgi
+
+    <Directory /home/socialrelay/socialrelay>
+        <Files socialrelay.wsgi>
+            Require all granted
+        </Files>
+        WSGIProcessGroup socialrelay
+        WSGIApplicationGroup %{GLOBAL}
+        WSGIScriptReloading On
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/{{ hostname }}.crt
+    SSLCertificateKeyFile /etc/ssl/private/{{ hostname }}.key
+    SSLCertificateChainFile /etc/ssl/certs/{{ hostname }}.chain.pem
+</VirtualHost>

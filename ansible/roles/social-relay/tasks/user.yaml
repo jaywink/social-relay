@@ -1,0 +1,3 @@
+---
+- name: Social-Relay user
+  user: name=socialrelay state=present

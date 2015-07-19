@@ -1,0 +1,23 @@
+---
+hostname: mysocialrelay.me
+secret_key:
+relay_guid:
+web_root: /home/socialrelay/socialrelay/static
+ssl_cert: |
+    -----BEGIN CERTIFICATE-----
+    MIIGojdfowjhefihiiiiiiiiiiiiiiiiiiiiiiiiiqwfqwqdqwkmionmjmodwwJJ
+    ...
+    0p+E+OzdV9ugka6drW3vwSIxO8mhwHGDwaB+p/RDfgWI40clKu8=
+    -----END CERTIFICATE-----
+ssl_key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpAIBAdfcmewiomoiwqeodiwqojdjwiojoxcjowjiqjxowqjOCJlYPPIbP1kG
+    ...
+    R0fGN9FlmmisBb6wrLX4RkRnB926g43pxJJv9gI4WCxQQF8MzSratw==
+    -----END RSA PRIVATE KEY-----
+ssl_chain: |
+    -----BEGIN CERTIFICATE-----
+    MIIFgregregrgregrerIHFxU9nqs/vzANBgkqhkiG9w0BAQsFADB9MQswCQYDVQQG
+    ...
+    gGgreggregtf0s+bA==
+    -----END CERTIFICATE-----

@@ -1,12 +1,12 @@
-DEBUG = True
-SECRET_KEY = ''
+DEBUG = False
+SECRET_KEY = '{{ secret_key }}'
 
 REDIS_DB = 0
 REDIS_PORT = 6379
 REDIS_HOST = 'localhost'
 
 # Change this to real domain
-SERVER_HOST = "http://127.0.0.1:5000"
+SERVER_HOST = "https://{{ hostname }}"
 
 # You MUST generate a unique GUID for the relay user. This MUST be 32 chars long.
-#RELAY_GUID = ""
+RELAY_GUID = "{{ relay_guid }}"

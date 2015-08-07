@@ -10,3 +10,7 @@ SERVER_HOST = "http://127.0.0.1:5000"
 
 # You MUST generate a unique GUID for the relay user. This MUST be 32 chars long.
 #RELAY_GUID = ""
+
+# Here you can set a list of hosts which will always get forwarded to
+# For example, for testing
+ALWAYS_FORWARD_TO_HOSTS = []

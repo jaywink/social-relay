@@ -63,6 +63,7 @@ def process(payload):
         logging.warning("No entities in payload")
         return
     send_to_pods = pods_who_want_all()
+    send_to_pods += config.ALWAYS_FORWARD_TO_HOSTS
     for entity in entities:
         logging.info("Entity: %s" % entity)
         # We only care about posts atm

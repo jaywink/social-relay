@@ -25,7 +25,7 @@ def get_pod_relay_preferences(host):
     except (ConnectionError, Timeout):
         return None
     try:
-        return response.json()
+        return response.text
     except ValueError:
         return None
 

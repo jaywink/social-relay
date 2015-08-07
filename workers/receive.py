@@ -1,5 +1,5 @@
 from _socket import timeout
-import traceback
+import json
 from federation.controllers import handle_receive
 from federation.entities.base import Post
 from federation.exceptions import NoSuitableProtocolFoundError
@@ -20,6 +20,7 @@ def get_pod_preferences():
 def pods_who_want_all():
     pods = []
     for pod, data in get_pod_preferences().items():
+        data = json.loads(data.decode("utf-8"))
         if data["subscribe"] and data["scope"] == "all":
             pods.append(pod)
     return pods
@@ -34,11 +35,11 @@ def send_payload(host, payload):
     print("Sending payload to %s" % host)
     try:
         try:
-            response = requests.post("https://%s/receive/public" % host, data=payload.decode("utf-8"), timeout=10)
+            response = requests.post("https://%s/receive/public" % host, data=payload, timeout=10)
         except timeout:
             response = False
         if not response or response.status_code != 200:
-            response = requests.get("http://%s/receive/public" % host, data=payload.decode("utf-8"), timeout=10)
+            response = requests.get("http://%s/receive/public" % host, data=payload, timeout=10)
             if response.status_code != 200:
                 return False
     except (ConnectionError, Timeout):
@@ -64,8 +65,4 @@ def process(payload):
             # Send out
             # TODO: add scope: tags checks
             for pod in send_to_pods:
-                try:
-                    send_payload(pod, payload)
-                except Exception as e:
-                    # We don't want do die on errors here, print stack and continue to next
-                    print(traceback.format_exc())
+                send_payload(pod, payload)

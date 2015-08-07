@@ -1,5 +1,6 @@
 from _socket import timeout
 import json
+import logging
 from federation.controllers import handle_receive
 from federation.entities.base import Post
 from federation.exceptions import NoSuitableProtocolFoundError
@@ -32,7 +33,7 @@ def send_payload(host, payload):
     Return True or False, depending on success of operation.
     Timeouts or connection errors will not be raised.
     """
-    print("Sending payload to %s" % host)
+    logging.info("Sending payload to %s" % host)
     try:
         try:
             response = requests.post("https://%s/receive/public" % host, data=payload, timeout=10)
@@ -51,15 +52,19 @@ def process(payload):
     """Open payload and route it to any pods that might be interested in it."""
     try:
         sender, protocol_name, entities = handle_receive(payload, skip_author_verification=True)
+        logging.debug("sender=%s, protocol_name=%s, entities=%s" % (sender, protocol_name, entities))
     except NoSuitableProtocolFoundError:
+        logging.warning("No suitable protocol found for payload")
         return
     if protocol_name != "diaspora":
+        logging.warning("Unsupported protocol: %s, sender: %s" % (protocol_name, sender))
         return
     if not entities:
+        logging.warning("No entities in payload")
         return
     send_to_pods = pods_who_want_all()
     for entity in entities:
-        print(entity)
+        logging.info("Entity: %s" % entity)
         # We only care about posts atm
         if isinstance(entity, Post):
             # Send out

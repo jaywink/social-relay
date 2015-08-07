@@ -14,7 +14,8 @@ build
 eggs
 parts
 bin
-var
+var/*
+!.placeholder
 sdist
 develop-eggs
 .installed.cfg

@@ -1,4 +1,7 @@
 # No need to change this normally, override in locals if needed
+import logging
+import os
+
 RELAY_USERNAME = "relay"
 
 # Just something hcard needs, override in locals if you want to customize
@@ -14,6 +17,14 @@ RELAY_PUBLIC_KEY = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9eofav26VCq3C6g9sIPji
                    "ZADp relay@localhost"
 
 POD_LIST_JSON = "http://the-federation.info/pods.json"
+
+LOG_PATH = "var/social-relay.log"
+
+logging.basicConfig(
+    filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", LOG_PATH),
+    level=logging.DEBUG,
+    format='%(asctime)s:%(levelname)s:%(module)s: %(message)s'
+)
 
 from social_relay.local_config import *
 

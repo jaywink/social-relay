@@ -1,3 +1,4 @@
+import logging
 from redis import Redis
 import requests
 import schedule
@@ -9,7 +10,7 @@ r = Redis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=config.REDIS_DB)
 
 
 def fetch_pod_lists():
-    print("Fetching pod list")
+    logging.info("Fetching pod list")
     response = requests.get(config.POD_LIST_JSON)
     data = response.json()
     # TODO: also remove inactives from list

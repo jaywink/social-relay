@@ -23,6 +23,18 @@ To run a single task, do for example:
 To run scheduled tasks, keep this running:
  
     python -m tasks.schedule_jobs
+    
+### Processing receive queue
+
+Keep one or more of these running:
+
+    rqworker receive
+
+You might optionally want to run one worker towards the `failed` queue.
+
+### Deploying
+
+Pretty much normal Python + WSGI setup, just install the requirements and serve using WSGI. For Ubuntu 14.04, an Ansible role is provided.
 
 ### License
 

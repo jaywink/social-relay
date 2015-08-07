@@ -2,6 +2,13 @@
 
 See https://wiki.diasporafoundation.org/Relay_servers_for_public_posts
 
+### Requirements
+
+* Python 3.x
+* Redis
+
+Python libraries in `requirements/base.txt`.
+
 ### Running server
 
 Create local config:

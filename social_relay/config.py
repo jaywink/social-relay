@@ -1,5 +1,6 @@
 # No need to change this normally, override in locals if needed
 import logging
+from logging import handlers
 import os
 
 RELAY_USERNAME = "relay"
@@ -19,14 +20,25 @@ RELAY_PUBLIC_KEY = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9eofav26VCq3C6g9sIPji
 POD_LIST_JSON = "http://the-federation.info/pods.json"
 
 LOG_PATH = "var/social-relay.log"
-
-logging.basicConfig(
-    filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", LOG_PATH),
-    level=logging.DEBUG,
-    format='%(asctime)s:%(levelname)s:%(module)s: %(message)s'
-)
+LOG_TO_CONSOLE = False
 
 from social_relay.local_config import *
+
+# Logging init
+file_handler = handlers.RotatingFileHandler(
+    filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", LOG_PATH),
+    maxBytes=10000000,
+    backupCount=10
+)
+logging_handlers = [file_handler]
+if LOG_TO_CONSOLE:
+    logging_handlers.append(logging.StreamHandler())
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s:%(levelname)s:%(module)s: %(message)s',
+    handlers=logging_handlers
+)
 
 # Make sure we have a GUID
 try:

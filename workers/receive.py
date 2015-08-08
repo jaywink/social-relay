@@ -23,7 +23,7 @@ def pods_who_want_all():
     for pod, data in get_pod_preferences().items():
         data = json.loads(data.decode("utf-8"))
         if data["subscribe"] and data["scope"] == "all":
-            pods.append(pod)
+            pods.append(pod.decode("utf-8"))
     return pods
 
 
@@ -36,11 +36,11 @@ def send_payload(host, payload):
     logging.info("Sending payload to %s" % host)
     try:
         try:
-            response = requests.post("https://%s/receive/public" % host, data=payload, timeout=10)
+            response = requests.post("https://%s/receive/public" % host, data={"xml": payload}, timeout=10)
         except timeout:
             response = False
         if not response or response.status_code != 200:
-            response = requests.get("http://%s/receive/public" % host, data=payload, timeout=10)
+            response = requests.get("http://%s/receive/public" % host, data={"xml": payload}, timeout=10)
             if response.status_code != 200:
                 return False
     except (ConnectionError, Timeout):

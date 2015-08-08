@@ -64,6 +64,9 @@ def process(payload):
         return
     send_to_pods = pods_who_want_all()
     send_to_pods += config.ALWAYS_FORWARD_TO_HOSTS
+    if sender.split("@")[1] in send_to_pods:
+        # Don't send back to sender
+        send_to_pods.remove(sender.split("@")[1])
     for entity in entities:
         logging.info("Entity: %s" % entity)
         # We only care about posts atm

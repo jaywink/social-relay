@@ -18,6 +18,16 @@ def get_pod_preferences():
     return r.hgetall("pod_preferences")
 
 
+def pods_who_want_tags(tags):
+    pods = []
+    for pod, data in get_pod_preferences().items():
+        data = json.loads(data.decode("utf-8"))
+        if not set(data["tags"]).isdisjoint(tags):
+            # One or more tags match
+            pods.append(pod.decode("utf-8"))
+    return pods
+
+
 def pods_who_want_all():
     pods = []
     for pod, data in get_pod_preferences().items():
@@ -71,7 +81,8 @@ def process(payload):
         logging.info("Entity: %s" % entity)
         # We only care about posts atm
         if isinstance(entity, Post):
+            # Add pods who want this posts tags
+            final_send_to_pods = send_to_pods[:] + pods_who_want_tags(entity.tags)
             # Send out
-            # TODO: add scope: tags checks
-            for pod in send_to_pods:
+            for pod in final_send_to_pods:
                 send_payload(pod, payload)

@@ -40,11 +40,15 @@ def send_payload(host, payload):
     logging.info("Sending payload to %s" % host)
     try:
         try:
-            response = requests.post("https://%s/receive/public" % host, data={"xml": payload}, timeout=10)
+            response = requests.post(
+                "https://%s/receive/public" % host, data={"xml": payload}, timeout=10, allow_redirects=False
+            )
         except timeout:
             response = False
         if not response or response.status_code != 200:
-            response = requests.get("http://%s/receive/public" % host, data={"xml": payload}, timeout=10)
+            response = requests.post(
+                "http://%s/receive/public" % host, data={"xml": payload}, timeout=10, allow_redirects=False
+            )
             if response.status_code != 200:
                 return False
     except (ConnectionError, Timeout):

@@ -13,6 +13,7 @@ schedule==0.3.2
 
 # background jobs
 rq==0.5.4
+rq-dashboard==0.3.4
 
 # pod preferences
 jsonschema==2.5.1

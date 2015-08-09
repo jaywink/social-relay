@@ -4,7 +4,7 @@ See https://wiki.diasporafoundation.org/Relay_servers_for_public_posts
 
 ### Requirements
 
-* Python 3.x
+* Python 3.x (though the frontend works, mostly, with Python 2.x)
 * Redis
 
 Python libraries in `requirements/base.txt`.
@@ -20,6 +20,11 @@ Edit the `local_config.py` file as instructed in the file.
 Run the server:
 
     python runserver.py
+    
+### RQ Dashboard
+
+An RQ dashboard can be found at `/rq`. There is no authentication, yet. Make sure to disable it via
+`social_relay/local_config.py` by setting `RQ_DASHBOARD = False` if you want to disable this view.
 
 ### Running tasks
 
@@ -41,7 +46,8 @@ You might optionally want to run one worker towards the `failed` queue.
 
 ### Deploying
 
-Pretty much normal Python + WSGI setup, just install the requirements and serve using WSGI. For Ubuntu 14.04, an Ansible role is provided.
+Pretty much normal Python + WSGI setup, just install the requirements and serve using WSGI. For Ubuntu 14.04,
+an Ansible role is provided.
 
 ### License
 

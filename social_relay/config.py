@@ -19,6 +19,8 @@ RELAY_PUBLIC_KEY = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9eofav26VCq3C6g9sIPji
 
 POD_LIST_JSON = "http://the-federation.info/pods.json"
 
+RQ_DASHBOARD = True
+
 LOG_PATH = "var/social-relay.log"
 LOG_TO_CONSOLE = False
 

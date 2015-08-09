@@ -4,6 +4,7 @@ from federation.hostmeta.generators import generate_host_meta, generate_legacy_w
 from flask import render_template, request, Response, abort
 import redis
 from rq import Queue
+from rq_dashboard import RQDashboard
 
 from social_relay import app
 
@@ -12,11 +13,13 @@ r = redis.Redis(host=app.config.get("REDIS_HOST"), port=app.config.get("REDIS_PO
 
 public_queue = Queue("receive", connection=r)
 
+if app.config.get("RQ_DASHBOARD"):
+    RQDashboard(app)
+
 
 @app.route('/')
-def show_public_queue():
-    items = r.lrange("receive_public", 0, 29)
-    return render_template('show_public_queue.html', items=items)
+def index():
+    return render_template('index.html', config=app.config)
 
 
 @app.route('/.well-known/host-meta')

@@ -14,3 +14,6 @@ SERVER_HOST = "http://127.0.0.1:5000"
 # Here you can set a list of hosts which will always get forwarded to
 # For example, for testing
 ALWAYS_FORWARD_TO_HOSTS = []
+
+# Uncomment the line below to disable RQ dashboard
+#RQ_DASHBOARD = False

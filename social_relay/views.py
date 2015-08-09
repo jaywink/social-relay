@@ -13,8 +13,26 @@ r = redis.Redis(host=app.config.get("REDIS_HOST"), port=app.config.get("REDIS_PO
 
 public_queue = Queue("receive", connection=r)
 
+
+# RQ DASHBOARD
 if app.config.get("RQ_DASHBOARD"):
-    RQDashboard(app)
+    # Snippet from https://github.com/nvie/rq-dashboard/issues/75#issuecomment-90843823
+    # Prepare the authentication for the RQ dashboard
+    def _basic_http_auth():
+        auth = request.authorization
+        return auth and auth.password == app.config.get("RQ_DASHBOARD_PASSWORD") and \
+               auth.username == app.config.get("RQ_DASHBOARD_USERNAME")
+
+    # And we register it
+    RQDashboard(app, auth_handler=_basic_http_auth)
+
+    # NOTE: RQ Dashboard is registered as a blueprint and thus we can setup a Flask error handler for our case.
+    # When the configured RQ Dashboard auth_handler returns False, a 401 HTTPException is thrown out,
+    # so we can intercept it. Thus, we setup an error handler for the rq_dashboard blueprint.
+    def _auth_exception_handler(error):
+        return '', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'}
+
+    app.error_handler_spec.setdefault('rq_dashboard', {})[401] = _auth_exception_handler
 
 
 @app.route('/')

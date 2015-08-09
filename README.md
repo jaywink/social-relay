@@ -23,8 +23,8 @@ Run the server:
     
 ### RQ Dashboard
 
-An RQ dashboard can be found at `/rq`. There is no authentication, yet. Make sure to disable it via
-`social_relay/local_config.py` by setting `RQ_DASHBOARD = False` if you want to disable this view.
+An RQ dashboard can be found at `/rq`. Enable it in `social_relay/local_config.py` by setting `RQ_DASHBOARD = True`.
+You must also set a username and password in the same file.
 
 ### Running tasks
 

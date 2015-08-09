@@ -19,7 +19,7 @@ RELAY_PUBLIC_KEY = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9eofav26VCq3C6g9sIPji
 
 POD_LIST_JSON = "http://the-federation.info/pods.json"
 
-RQ_DASHBOARD = True
+RQ_DASHBOARD = False  # Enable in local config
 
 LOG_PATH = "var/social-relay.log"
 LOG_TO_CONSOLE = False
@@ -49,6 +49,16 @@ except Exception:
     print("****\nYOU MUST define 'RELAY_GUID' configuration as 32 chars that will be unique *across* the "
           "whole network.\n****")
     raise
+
+# Make sure if RQ_DASHBOARD is enabled, we have user/pass
+if RQ_DASHBOARD:
+    try:
+        assert RQ_DASHBOARD_USERNAME
+        assert RQ_DASHBOARD_PASSWORD
+    except Exception:
+        print("****\nYOU MUST define RQ_DASHBOARD_USERNAME and RQ_DASHBOARD_PASSWORD if RQ_DASHBOARD is enabled.\n"
+              "****")
+        raise
 
 RELAY_ACCOUNT = "%s@%s" % (
     RELAY_USERNAME,

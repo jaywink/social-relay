@@ -15,5 +15,9 @@ SERVER_HOST = "http://127.0.0.1:5000"
 # For example, for testing
 ALWAYS_FORWARD_TO_HOSTS = []
 
-# Uncomment the line below to disable RQ dashboard
-#RQ_DASHBOARD = False
+# Uncomment the line below to enable RQ dashboard
+#RQ_DASHBOARD = True
+
+# You *must* set these if RQ_DASHBOARD is enabled.
+#RQ_DASHBOARD_USERNAME = "a very good username"
+#RQ_DASHBOARD_PASSWORD = "a very good password"

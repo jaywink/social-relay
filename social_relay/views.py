@@ -86,6 +86,7 @@ def hcard(guid):
     return Response(hcard, status=200)
 
 
+@app.route("/receive/public/", methods=["POST"])
 @app.route("/receive/public", methods=["POST"])
 def receive_public():
     payload = request.form["xml"]

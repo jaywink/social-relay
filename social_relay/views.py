@@ -1,16 +1,16 @@
 import json
 
-from federation.hostmeta.generators import generate_host_meta, generate_legacy_webfinger, generate_hcard
 from flask import render_template, request, Response, abort
 from flask.ext.bower import Bower
-import redis
 from rq import Queue
 from rq_dashboard import RQDashboard
 
+from federation.hostmeta.generators import generate_host_meta, generate_legacy_webfinger, generate_hcard
+
 from social_relay import app
+from social_relay.utils.data import r
+from social_relay.utils.statistics import get_subscriber_stats
 
-
-r = redis.Redis(host=app.config.get("REDIS_HOST"), port=app.config.get("REDIS_PORT"), db=app.config.get("REDIS_DB"))
 
 public_queue = Queue("receive", connection=r)
 
@@ -43,7 +43,8 @@ Bower(app)
 # Main routes
 @app.route('/')
 def index():
-    return render_template('index.html', config=app.config)
+    stats = get_subscriber_stats()
+    return render_template('index.html', config=app.config, stats=stats)
 
 
 @app.route('/.well-known/host-meta')

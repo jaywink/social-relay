@@ -15,8 +15,8 @@
     <link href="{{ url_for('bower.static', filename='bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('bower.static', filename='bootstrap/dist/css/bootstrap-theme.min.css') }}" rel="stylesheet">
 
-    <!-- Custom styles -->
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <!-- Bootstrap dashboard -->
+    <link href="{{ url_for('static', filename='dashboard.css') }}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -52,7 +52,29 @@
 
     <div class="container-fluid">
         <div class="row">
-            {% block body %}{% endblock %}
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active"><a class="selector" href="#" data-content="subscribers">Subscribers</a></li>
+                    <li><a class="selector" href="#" data-content="about">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <script type="application/javascript">
+            $(document).ready(function() {
+                $(".selector").click(function(ev) {
+                    ev.preventDefault();
+                    var $elem = $(ev.currentTarget);
+                    $(".nav-sidebar li.active").removeClass("active");
+                    $elem.parent().addClass("active");
+                    $(".content:visible").hide();
+                    $(".content[content='"+$elem.data('content')+"']").show();
+                });
+            });
+        </script>
+        <div class="row">
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                {% block body %}{% endblock %}
+            </div>
         </div>
     </div>
 </body>

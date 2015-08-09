@@ -1,21 +1,15 @@
 from _socket import timeout
 import json
 import logging
-from federation.controllers import handle_receive
-from federation.entities.base import Post
-from federation.exceptions import NoSuitableProtocolFoundError
-import redis
 import requests
 from requests.exceptions import ConnectionError, Timeout
 
+from federation.controllers import handle_receive
+from federation.entities.base import Post
+from federation.exceptions import NoSuitableProtocolFoundError
+
 from social_relay import config
-
-
-r = redis.Redis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=config.REDIS_DB)
-
-
-def get_pod_preferences():
-    return r.hgetall("pod_preferences")
+from social_relay.utils.data import get_pod_preferences
 
 
 def pods_who_want_tags(tags):

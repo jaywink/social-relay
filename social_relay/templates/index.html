@@ -1,3 +1,41 @@
 {% extends "layout.html" %}
+
 {% block body %}
+    <div class="content" content="subscribers">
+        <h1 class="page-header">Subscriber statistics</h1>
+
+        <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+                <h4>Compatible pods</h4>
+                <span class="text-muted">{{ stats.total }}</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+                <h4>Subscribing pods</h4>
+                <span class="text-muted">Total: {{ stats.subscribers.total }}</span><br>
+                <span class="text-muted">All: {{ stats.subscribers.all }}</span><br>
+                <span class="text-muted">Tags: {{ stats.subscribers.tags }}</span>
+            </div>
+            <div class="col-xs-12 col-sm-6 placeholder">
+                <h4>Distinct tags</h4>
+                <span class="text-muted">{{ stats.tags|join(', ') }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="content" content="about" style="display: none;">
+        <h1 class="page-header">About</h1>
+
+        <div class="row">
+            <div class="col-md-10">
+                <p>
+                    The Social Relay is an application to relay public posts between pods of the diaspora* and compatible social networking servers.
+                </p>
+                <p>
+                    See more <a href="https://wiki.diasporafoundation.org/Relay_servers_for_public_posts">here</a>.
+                </p>
+                <p>
+                    Code under AGPLv3 in <a href="https://github.com/jaywink/social-relay">GitHub</a>.
+                </p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

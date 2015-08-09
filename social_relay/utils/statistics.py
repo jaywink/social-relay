@@ -20,12 +20,12 @@ def get_subscriber_stats():
             stats["total"] += 1
             if data["subscribe"]:
                 stats["subscribers"]["total"] += 1
-                if stats["scope"] == "all":
+                if data["scope"] == "all":
                     stats["subscribers"]["all"] += 1
-                elif stats["scope"] == "tags":
+                elif data["scope"] == "tags":
                     stats["subscribers"]["tags"] += 1
                 tags += data["tags"]
-                stats["tags"] = set(tags)
         except KeyError:
             pass
+    stats["tags"] = set(tags)
     return stats

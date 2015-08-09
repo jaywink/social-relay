@@ -34,7 +34,7 @@ class PodPoller(object):
                 response = requests.get("http://%s/.well-known/x-social-relay" % host, timeout=5)
                 if response.status_code != 200:
                     return None
-        except (ConnectionError, Timeout):
+        except (ConnectionError, Timeout, timeout):
             return None
         try:
             # Make sure we have a valid x-social-relay doc

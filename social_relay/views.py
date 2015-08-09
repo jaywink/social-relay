@@ -2,6 +2,7 @@ import json
 
 from federation.hostmeta.generators import generate_host_meta, generate_legacy_webfinger, generate_hcard
 from flask import render_template, request, Response, abort
+from flask.ext.bower import Bower
 import redis
 from rq import Queue
 from rq_dashboard import RQDashboard
@@ -35,6 +36,11 @@ if app.config.get("RQ_DASHBOARD"):
     app.error_handler_spec.setdefault('rq_dashboard', {})[401] = _auth_exception_handler
 
 
+# Bower
+Bower(app)
+
+
+# Main routes
 @app.route('/')
 def index():
     return render_template('index.html', config=app.config)

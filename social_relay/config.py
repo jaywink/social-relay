@@ -21,6 +21,8 @@ POD_LIST_JSON = "http://the-federation.info/pods.json"
 
 RQ_DASHBOARD = False  # Enable in local config
 
+BOWER_COMPONENTS_ROOT = "../bower_components"
+
 LOG_PATH = "var/social-relay.log"
 LOG_TO_CONSOLE = False
 

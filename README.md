@@ -26,6 +26,10 @@ Run the server:
 An RQ dashboard can be found at `/rq`. Enable it in `social_relay/local_config.py` by setting `RQ_DASHBOARD = True`.
 You must also set a username and password in the same file.
 
+### JavaScript
+
+Bower is used to pull in some JavaScript libs. [Install it first](http://bower.io/) if needed. Then run `bower install`.
+
 ### Running tasks
 
 To run a single task, do for example:

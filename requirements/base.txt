@@ -1,4 +1,5 @@
 Flask==0.10.1
+Flask-Bower==1.2.1
 
 # redis backend
 hiredis==0.2.0

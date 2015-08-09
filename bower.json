@@ -1,0 +1,7 @@
+{
+  "name": "social-relay",
+  "description": "Social Relay",
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}

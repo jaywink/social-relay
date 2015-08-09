@@ -30,6 +30,7 @@
         WSGIProcessGroup socialrelay
         WSGIApplicationGroup %{GLOBAL}
         WSGIScriptReloading On
+        WSGIPassAuthorization On
         Order deny,allow
         Allow from all
     </Directory>

@@ -1,0 +1,7 @@
+[Unit]
+Description=social-relay
+Wants=redis.service
+After=redis.service
+
+[Install]
+WantedBy=multi-user.target

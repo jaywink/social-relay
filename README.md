@@ -48,6 +48,8 @@ Keep one or more of these running:
 
 You might optionally want to run one worker towards the `failed` queue.
 
+Note! If you changed Redis connection parameters in `social_relay/local_config.py`, make sure to pass the right connection parameters when calling `rqworker`. The command line utilities for RQ don't read the configuration for the relay.
+
 ### Deploying
 
 Pretty much normal Python + WSGI setup, just install the requirements and serve using WSGI. For Ubuntu 14.04,

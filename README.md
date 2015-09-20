@@ -1,5 +1,7 @@
 ## Social-Relay
 
+[![Code Health](https://landscape.io/github/jaywink/social-relay/master/landscape.svg?style=flat)](https://landscape.io/github/jaywink/social-relay/master)
+
 See https://wiki.diasporafoundation.org/Relay_servers_for_public_posts
 
 ### Requirements

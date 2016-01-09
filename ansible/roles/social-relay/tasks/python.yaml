@@ -1,5 +1,12 @@
 ---
-- name: Pip
-  command: easy_install -U pip
 - name: Virtualenv
-  apt: name=python-virtualenv
+  apt: name={{ item }}
+  with_items:
+    - python-virtualenv
+    - python3-setuptools
+- name: Create virtualenv
+  # We do this here since Ansible only has virtualenv_python in 2.x
+  become_user: socialrelay
+  command: creates=/home/socialrelay/venv virtualenv -p python3.4 /home/socialrelay/venv
+- name: Update pip
+  pip: name=pip state=latest virtualenv=/home/socialrelay/venv

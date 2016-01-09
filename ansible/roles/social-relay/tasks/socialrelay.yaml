@@ -1,11 +1,18 @@
 ---
 - name: Get latest socialrelay code
+  become_user: socialrelay
   git: accept_hostkey=yes dest=/home/socialrelay/socialrelay repo=https://github.com/jaywink/social-relay.git
 - name: Install app requirements
-  pip: requirements=/home/socialrelay/socialrelay/requirements/base.txt virtualenv=/home/socialrelay/venv virtualenv_command=virtualenv-3.4
+  become_user: socialrelay
+  pip: requirements=/home/socialrelay/socialrelay/requirements/base.txt virtualenv=/home/socialrelay/venv
 - name: Create local settings
+  become_user: socialrelay
   template: dest=/home/socialrelay/socialrelay/social_relay/local_config.py src=local_config.py.j2
-- name: Make sure home directory is owned by user
-  file: path=/home/socialrelay/socialrelay owner=socialrelay group=socialrelay recurse=yes
-- name: Make sure venv directory is owned by user
-  file: path=/home/socialrelay/venv owner=socialrelay group=socialrelay recurse=yes
+- name: Set up worker upstart job
+  template: dest=/etc/init/socialrelay-worker.conf src=socialrelay-worker.conf.j2
+  notify:
+    - restart worker
+- name: Set up scheduled jobs upstart job
+  template: dest=/etc/init/socialrelay-jobs.conf src=socialrelay-jobs.conf.j2
+  notify:
+    - restart jobs

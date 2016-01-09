@@ -1,5 +1,8 @@
 ---
 - hosts: changeme
-  sudo: yes
+  become: yes
+  become_user: root
+  vars_files:
+    - /path/to/your/vars.yml
   roles:
     - social-relay

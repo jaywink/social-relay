@@ -1,0 +1,5 @@
+---
+- name: restart worker
+  service: name=socialrelay-worker state=restarted
+- name: restart jobs
+  service: name=socialrelay-jobs state=restarted

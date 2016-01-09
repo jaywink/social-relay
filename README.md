@@ -1,7 +1,5 @@
 ## Social-Relay
 
-[![Code Health](https://landscape.io/github/jaywink/social-relay/master/landscape.svg?style=flat)](https://landscape.io/github/jaywink/social-relay/master)
-
 See https://wiki.diasporafoundation.org/Relay_servers_for_public_posts
 
 ### Requirements
@@ -38,7 +36,7 @@ To run a single task, do for example:
 
     python -m tasks.fetch_pod_list
      
-To run scheduled tasks, keep this running:
+To run all scheduled tasks, keep this running:
  
     python -m tasks.schedule_jobs
     
@@ -55,7 +53,7 @@ Note! If you changed Redis connection parameters in `social_relay/local_config.p
 ### Deploying
 
 Pretty much normal Python + WSGI setup, just install the requirements and serve using WSGI. For Ubuntu 14.04,
-an Ansible role is provided.
+an Ansible role is provided. It will run also the scheduled jobs and a worker via upstart.
 
 ### License
 

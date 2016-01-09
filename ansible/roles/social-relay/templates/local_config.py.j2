@@ -10,3 +10,14 @@ SERVER_HOST = "https://{{ hostname }}"
 
 # You MUST generate a unique GUID for the relay user. This MUST be 32 chars long.
 RELAY_GUID = "{{ relay_guid }}"
+
+ALWAYS_FORWARD_TO_HOSTS = []
+
+LOG_TO_CONSOLE = True
+
+# Uncomment the line below to disable RQ dashboard
+#RQ_DASHBOARD = True
+
+# You *must* set these.
+RQ_DASHBOARD_USERNAME = "admin"
+RQ_DASHBOARD_PASSWORD = "admin"

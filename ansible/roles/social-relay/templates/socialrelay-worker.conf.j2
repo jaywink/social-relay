@@ -1,0 +1,13 @@
+description "socialrelay worker"
+setuid socialrelay
+setgid socialrelay
+start on runlevel [2345]
+stop on runlevel [06]
+
+respawn
+
+env PYTHONPATH="/home/socialrelay/socialrelay"
+
+chdir /home/socialrelay/socialrelay
+exec /home/socialrelay/venv/bin/python -m runworker receive
+{#exec /home/socialrelay/venv/bin/rqworker receive#}

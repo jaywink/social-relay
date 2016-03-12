@@ -1,0 +1,14 @@
+[Unit]
+Description=social-relay tasks
+PartOf=social-relay.target
+
+[Service]
+User=socialrelay
+Group=socialrelay
+WorkingDirectory=/path/to/social-relay
+ExecStart=/bin/bash -lc "true; source venv/bin/activate; python -m tasks.schedule_jobs"
+KillMode=control-group
+Restart=always
+
+[Install]
+WantedBy=social-relay.target

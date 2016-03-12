@@ -1,0 +1,14 @@
+[Unit]
+Description=social-relay server
+PartOf=social-relay.target
+
+[Service]
+User=socialrelay
+Group=socialrelay
+WorkingDirectory=/path/to/social-relay
+ExecStart=/bin/bash -lc "true; source venv/bin/activate; gunicorn --bind 127.0.0.1:5000 -w 1 socialrelay"
+KillMode=control-group
+Restart=always
+
+[Install]
+WantedBy=social-relay.target

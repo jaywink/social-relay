@@ -55,6 +55,28 @@ Note! If you changed Redis connection parameters in `social_relay/local_config.p
 Pretty much normal Python + WSGI setup, just install the requirements and serve using WSGI. For Ubuntu 14.04,
 an Ansible role is provided. It will run also the scheduled jobs and a worker via upstart.
 
+#### Init
+
+There are example systemd service files in the 'extra' directory. The examples
+use a specific user and utilize gunicorn. They have been tested on CentOS 7.
+
+To use, modify as needed (user, group, and path), copy to `/etc/systemd/service`
+and start/enable as such:
+
+    systemctl start social-relay_server.service
+    systemctl start social-relay_tasks.service
+    systemctl start social-relay_rqworker@receive.service
+    systemctl start social-relay.target
+
+    systemctl enable social-relay_server.service
+    systemctl enable social-relay_tasks.service
+    systemctl enable social-relay_rqworker@receive.service
+    systemctl enable social-relay.target
+
+The rqworker service file can also be used to start the optional `failed` queue as well.
+
+    systemctl start social-relay_rqworker@failed.service
+
 ### License
 
 AGPLv3

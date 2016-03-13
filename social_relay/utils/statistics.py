@@ -1,5 +1,7 @@
+import datetime
 import json
 
+from social_relay.models import ReceiveStatistic, WorkerReceiveStatistic
 from social_relay.utils.data import get_pod_preferences
 
 
@@ -29,3 +31,22 @@ def get_subscriber_stats():
             pass
     stats["tags"] = set(tags)
     return stats
+
+
+def get_count_stats():
+    day_ago = datetime.datetime.now() - datetime.timedelta(hours=24)
+    week_ago = datetime.datetime.now() - datetime.timedelta(days=7)
+    month_ago = datetime.datetime.now() - datetime.timedelta(days=30)
+    incoming = {
+        "today": ReceiveStatistic.select().where(ReceiveStatistic.created_at >= day_ago).count(),
+        "week": ReceiveStatistic.select().where(ReceiveStatistic.created_at >= week_ago).count(),
+        "month": ReceiveStatistic.select().where(ReceiveStatistic.created_at >= month_ago).count(),
+        "all_time": ReceiveStatistic.select().count(),
+    }
+    outgoing = {
+        "today": WorkerReceiveStatistic.select().where(WorkerReceiveStatistic.created_at >= day_ago).count(),
+        "week": WorkerReceiveStatistic.select().where(WorkerReceiveStatistic.created_at >= week_ago).count(),
+        "month": WorkerReceiveStatistic.select().where(WorkerReceiveStatistic.created_at >= month_ago).count(),
+        "all_time": WorkerReceiveStatistic.select().count(),
+    }
+    return incoming, outgoing

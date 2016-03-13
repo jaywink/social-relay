@@ -2,22 +2,39 @@
 
 {% block body %}
     <div class="content" content="subscribers">
-        <h1 class="page-header">Subscriber statistics</h1>
+        <h1 class="page-header">Activity</h1>
+        <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+                <h4>Incoming received</h4>
+                <span class="text-muted">Today: {{ incoming_counts.today }}</span><br>
+                <span class="text-muted">7 days: {{ incoming_counts.week }}</span><br>
+                <span class="text-muted">30 days: {{ incoming_counts.month }}</span><br>
+                <span class="text-muted">All time: {{ incoming_counts.all_time }}</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+                <h4>Outgoing sent</h4>
+                <span class="text-muted">Today: {{ outgoing_counts.today }}</span><br>
+                <span class="text-muted">7 days: {{ outgoing_counts.week }}</span><br>
+                <span class="text-muted">30 days: {{ outgoing_counts.month }}</span><br>
+                <span class="text-muted">All time: {{ outgoing_counts.all_time }}</span>
+            </div>
+        </div>
 
+        <h1 class="page-header">Subscriber statistics</h1>
         <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
                 <h4>Compatible pods</h4>
-                <span class="text-muted">{{ stats.total }}</span>
+                <span class="text-muted">{{ subscriber_stats.total }}</span>
             </div>
             <div class="col-xs-6 col-sm-3 placeholder">
                 <h4>Subscribing pods</h4>
-                <span class="text-muted">Total: {{ stats.subscribers.total }}</span><br>
-                <span class="text-muted">All: {{ stats.subscribers.all }}</span><br>
-                <span class="text-muted">Tags: {{ stats.subscribers.tags }}</span>
+                <span class="text-muted">Total: {{ subscriber_stats.subscribers.total }}</span><br>
+                <span class="text-muted">All: {{ subscriber_stats.subscribers.all }}</span><br>
+                <span class="text-muted">Tags: {{ subscriber_stats.subscribers.tags }}</span>
             </div>
             <div class="col-xs-12 col-sm-6 placeholder">
                 <h4>Distinct tags</h4>
-                <span class="text-muted">{{ stats.tags|join(', ') }}</span>
+                <span class="text-muted">{{ subscriber_stats.tags|join(', ') }}</span>
             </div>
         </div>
     </div>

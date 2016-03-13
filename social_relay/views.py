@@ -95,7 +95,10 @@ def hcard(guid):
 @app.route("/receive/public/", methods=["POST"])
 @app.route("/receive/public", methods=["POST"])
 def receive_public():
-    payload = request.form["xml"]
+    try:
+        payload = request.form["xml"]
+    except KeyError:
+        return abort(404)
     # Queue to rq for processing
     public_queue.enqueue("workers.receive.process", payload)
 

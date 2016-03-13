@@ -32,7 +32,10 @@ DATABASE_NAME = 'var/social-relay.db'
 from social_relay.local_config import *
 
 # Set up database URI
-DATABASE = 'sqlite:///{name}'.format(name=DATABASE_NAME)
+if "TEST" in os.environ:
+    DATABASE = "sqlite:///test.db"
+else:
+    DATABASE = 'sqlite:///{name}'.format(name=DATABASE_NAME)
 
 # Logging init
 file_handler = handlers.RotatingFileHandler(
@@ -68,7 +71,13 @@ if RQ_DASHBOARD:
               "****")
         raise
 
-RELAY_ACCOUNT = "%s@%s" % (
-    RELAY_USERNAME,
-    SERVER_HOST.split("//")[1]
-)
+if "TEST" in os.environ:
+    RELAY_ACCOUNT = "relay@relay.local"
+else:
+    RELAY_ACCOUNT = "%s@%s" % (
+        RELAY_USERNAME,
+        SERVER_HOST.split("//")[1]
+    )
+
+if "TEST" in os.environ:
+    RELAY_GUID = "jvfhieuhfuih78fhf8uibhfhuyweyfdu"

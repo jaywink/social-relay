@@ -26,7 +26,13 @@ BOWER_COMPONENTS_ROOT = "../bower_components"
 LOG_PATH = "var/social-relay.log"
 LOG_TO_CONSOLE = False
 
+# Database
+DATABASE_NAME = 'var/social-relay.db'
+
 from social_relay.local_config import *
+
+# Set up database URI
+DATABASE = 'sqlite:///{name}'.format(name=DATABASE_NAME)
 
 # Logging init
 file_handler = handlers.RotatingFileHandler(

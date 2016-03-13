@@ -21,3 +21,5 @@ ssl_chain: |
     ...
     gGgreggregtf0s+bA==
     -----END CERTIFICATE-----
+
+socialrelay_database_file: "var/social-relay.db"

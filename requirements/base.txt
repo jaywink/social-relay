@@ -18,3 +18,8 @@ rq-dashboard==0.3.4
 
 # pod preferences
 jsonschema==2.5.1
+
+# Database
+peewee==2.8.0
+# Database migrations
+arnold==0.4.1

@@ -9,7 +9,8 @@ from federation.hostmeta.generators import generate_host_meta, generate_legacy_w
 
 from social_relay import app
 from social_relay.utils.data import r
-from social_relay.utils.statistics import get_subscriber_stats, get_count_stats
+from social_relay.utils.statistics import get_subscriber_stats, get_count_stats, log_receive_statistics
+
 
 public_queue = Queue("receive", connection=r)
 
@@ -101,6 +102,9 @@ def receive_public():
         return abort(404)
     # Queue to rq for processing
     public_queue.enqueue("workers.receive.process", payload)
+
+    # Log statistics
+    log_receive_statistics(request.host)
 
     # return 200 whatever
     data = {

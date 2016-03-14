@@ -3,7 +3,7 @@ import logging
 from logging import handlers
 import os
 
-# Set this to a real domain in local config 
+# Set this to a real domain in local config
 SERVER_HOST = "http://127.0.0.1:5000"
 
 RELAY_USERNAME = "relay"
@@ -36,6 +36,9 @@ DATABASE_NAME = 'var/social-relay.db'
 REDIS_DB = 0
 REDIS_PORT = 6379
 REDIS_HOST = 'localhost'
+
+# Override in local config with hosts to always forward to
+ALWAYS_FORWARD_TO_HOSTS = []
 
 try:
     from social_relay.local_config import *

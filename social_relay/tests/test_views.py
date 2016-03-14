@@ -1,5 +1,8 @@
-import pytest
+# -*- coding: utf-8 -*-
+from unittest.mock import patch
+
 from flask import url_for
+import pytest
 
 
 @pytest.mark.usefixtures('client_class')
@@ -28,3 +31,11 @@ class TestViewsRespond(object):
 
     def test_receive_public_returns_200_with_xml_content(self, client):
         assert client.post(url_for("receive_public"), data={"xml": "foo"}).status_code == 200
+
+
+@pytest.mark.usefixtures('client_class')
+class TestViewsCallStatisticsLoggers(object):
+    @patch("social_relay.views.log_receive_statistics")
+    def test_receive_public_calls_log_receive_statistics(self, mock_statistics, client):
+        client.post(url_for("receive_public"), data={"xml": "foo"})
+        assert mock_statistics.call_count == 1

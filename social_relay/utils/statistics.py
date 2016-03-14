@@ -50,3 +50,15 @@ def get_count_stats():
         "all_time": WorkerReceiveStatistic.select().count(),
     }
     return incoming, outgoing
+
+
+def log_receive_statistics(sender_host):
+    """Add a ReceiveStatistic entry to the database."""
+    ReceiveStatistic.create(sender_host=sender_host)
+
+
+def log_worker_receive_statistics(protocol, entities, sent_amount, sent_success):
+    """Add a WorkerReceiveStatistic entry to the database."""
+    WorkerReceiveStatistic.create(
+        protocol=protocol, entities=entities, sent_amount=sent_amount, sent_success=sent_success
+    )

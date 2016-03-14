@@ -32,10 +32,7 @@ DATABASE_NAME = 'var/social-relay.db'
 from social_relay.local_config import *
 
 # Set up database URI
-if "TEST" in os.environ:
-    DATABASE = "sqlite:///test.db"
-else:
-    DATABASE = 'sqlite:///{name}'.format(name=DATABASE_NAME)
+DATABASE = 'sqlite:///{name}'.format(name=DATABASE_NAME)
 
 # Logging init
 file_handler = handlers.RotatingFileHandler(
@@ -71,13 +68,11 @@ if RQ_DASHBOARD:
               "****")
         raise
 
-if "TEST" in os.environ:
-    RELAY_ACCOUNT = "relay@relay.local"
-else:
-    RELAY_ACCOUNT = "%s@%s" % (
-        RELAY_USERNAME,
-        SERVER_HOST.split("//")[1]
-    )
+RELAY_ACCOUNT = "%s@%s" % (
+    RELAY_USERNAME,
+    SERVER_HOST.split("//")[1]
+)
 
+# Finally if running tests load some overrides
 if "TEST" in os.environ:
-    RELAY_GUID = "jvfhieuhfuih78fhf8uibhfhuyweyfdu"
+    from social_relay.tests.config import *

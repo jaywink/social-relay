@@ -1,0 +1,21 @@
+sudo: false
+language: python
+python:
+  - "3.4"
+  - "3.5"
+services:
+  - redis-server
+install:
+  - pip install -U pip
+  - pip install -r requirements/development.txt
+  - pip freeze
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - bower_components/
+before_script:
+  - npm install -g bower
+  - bower install
+script: py.test --cov=./
+after_success:
+  - codecov

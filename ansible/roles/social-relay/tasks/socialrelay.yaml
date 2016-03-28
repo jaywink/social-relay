@@ -2,10 +2,11 @@
 # Code
 - name: Get latest socialrelay code
   become_user: socialrelay
-  git: accept_hostkey=yes dest=/home/socialrelay/socialrelay repo=https://github.com/jaywink/social-relay.git
+  git: accept_hostkey=yes dest=/home/socialrelay/socialrelay repo=https://github.com/jaywink/social-relay.git force=yes
   notify:
     - restart worker
     - restart jobs
+    - restart web
 
 # Requirements
 - name: Install app requirements
@@ -14,6 +15,7 @@
   notify:
     - restart worker
     - restart jobs
+    - restart web
 
 # Settings
 - name: Create local settings
@@ -22,6 +24,7 @@
   notify:
     - restart worker
     - restart jobs
+    - restart web
 
 # Database
 - name: Run migrations
@@ -30,6 +33,12 @@
   notify:
     - restart worker
     - restart jobs
+    - restart web
+
+# Bower
+- name: Install bower statics
+  become_user: socialrelay
+  bower: path=/home/socialrelay/socialrelay
 
 # Upstart
 - name: Set up worker upstart job
@@ -40,3 +49,7 @@
   template: dest=/etc/init/socialrelay-jobs.conf src=socialrelay-jobs.conf.j2
   notify:
     - restart jobs
+- name: Set up web upstart job
+  template: dest=/etc/init/socialrelay-web.conf src=socialrelay-web.conf.j2
+  notify:
+    - restart web

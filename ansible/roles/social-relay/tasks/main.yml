@@ -1,8 +1,10 @@
 ---
 - include: user.yaml
+- include: packages.yaml
 - include: redis.yaml
 - include: database.yaml
 - include: apache.yaml
 - include: ssh.yaml
 - include: python.yaml
 - include: socialrelay.yaml
+- include: uwsgi.yaml

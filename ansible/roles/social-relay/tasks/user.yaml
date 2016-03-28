@@ -1,3 +1,7 @@
 ---
 - name: Social-Relay user
   user: name=socialrelay state=present
+- name: Ensure www-data member of socialrelay group
+  user: name=www-data append=yes groups=socialrelay state=present
+- name: Make socialrelay home non-world readable
+  file: path=/home/socialrelay mode=0750 state=directory

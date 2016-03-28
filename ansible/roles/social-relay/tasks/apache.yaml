@@ -1,14 +1,14 @@
 ---
-- name: Apache wsgi module deps
-  apt: name=libapache2-mod-wsgi
+- name: Apache uWSGI module deps
+  apt: name=libapache2-mod-proxy-uwsgi
   notify:
     - restart apache
-- name: Apache WSGI module enable
-  apache2_module: state=present name=wsgi
-  notify:
-    - restart apache
-- name: Apache SSL module
-  apache2_module: state=present name=ssl
+- name: Apache modules enabled
+  apache2_module: state=present name={{ item }}
+  with_items:
+    - proxy_uwsgi
+    - proxy
+    - ssl
   notify:
     - restart apache
 - name: Apache site

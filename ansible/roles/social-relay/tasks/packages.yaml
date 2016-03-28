@@ -1,0 +1,29 @@
+---
+- name: Ensure locales are set
+  lineinfile: line='LANGUAGE="en_US.UTF-8"' dest=/etc/default/locale state=present
+  lineinfile: line='LC_ALL="en_US.UTF-8"' dest=/etc/default/locale state=present
+- name: Generate locales
+  command: /usr/sbin/locale-gen
+- name: Check for node.js repository
+  stat: path=/etc/apt/sources.list.d/nodesource.list
+  register: check_nodejs
+- name: Node.js repository
+  shell: curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+  when: not check_nodejs.stat.exists
+- name: System dependencies
+  apt: name={{ item }} state=present update_cache=yes cache_valid_time=86400
+  with_items:
+    - git
+    # Apache
+    - apache2
+    # uWSGI
+    - build-essential
+    - python3-dev
+    # Social-Federation deps
+    - libxml2-dev
+    - libxslt-dev
+    - lib32z1-dev
+    # Bower statics
+    - nodejs
+- name: Install bower
+  npm: name=bower global=yes state=latest

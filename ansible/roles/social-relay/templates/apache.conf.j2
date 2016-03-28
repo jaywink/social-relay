@@ -10,30 +10,17 @@
 
     ServerAdmin webmaster@{{ socialrelay_hostname }}
 
-    DocumentRoot {{ socialrelay_web_root }}
-
     Alias /robots.txt {{ socialrelay_web_root }}/robots.txt
     Alias /favicon.ico {{ socialrelay_web_root }}/favicon.ico
+    Alias /static {{ socialrelay_web_root }}
 
     <Directory {{ socialrelay_web_root }}>
         Require all granted
         Options -MultiViews -Indexes
     </Directory>
 
-    WSGIDaemonProcess socialrelay user=socialrelay group=socialrelay threads=5 python-path=/home/socialrelay/socialrelay:/home/socialrelay/venv2/lib/python2.7/site-packages
-    WSGIScriptAlias / /home/socialrelay/socialrelay/socialrelay.wsgi home=/home/socialrelay/socialrelay
-
-    <Directory /home/socialrelay/socialrelay>
-        <Files socialrelay.wsgi>
-            Require all granted
-        </Files>
-        WSGIProcessGroup socialrelay
-        WSGIApplicationGroup %{GLOBAL}
-        WSGIScriptReloading On
-        WSGIPassAuthorization On
-        Order deny,allow
-        Allow from all
-    </Directory>
+    ProxyPass /static !
+    ProxyPass / uwsgi://127.0.0.1:3039/
 
     SSLEngine on
     SSLCertificateFile /etc/ssl/certs/{{ socialrelay_hostname }}.crt

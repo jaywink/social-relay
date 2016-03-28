@@ -1,0 +1,7 @@
+---
+- name: uWSGI ini file
+  template: src=socialrelay.ini dest=/home/socialrelay/socialrelay.ini
+  notify:
+    - restart web
+- name: Install uWSGI
+  pip: name=uwsgi state=latest virtualenv=/home/socialrelay/venv

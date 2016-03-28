@@ -6,8 +6,14 @@ See https://wiki.diasporafoundation.org/Relay_servers_for_public_posts
 
 ### Requirements
 
-* Python 3.x (though the frontend works, mostly, with Python 2.x)
+* Python 3.x
 * Redis
+* Packages for building LXML (required by Social-Federation library):
+   - libxml2-dev
+   - libxslt-dev
+   - lib32z1-dev
+   - python3-dev
+       - Alternatively, install `python-lxml` package, for example, if you don't want to install everything in a virtual env.
 
 Python libraries in `requirements/base.txt`.
 

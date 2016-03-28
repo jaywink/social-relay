@@ -17,7 +17,7 @@
 # Database
 - name: Run migrations
   become_user: socialrelay
-  scripts: venv_exec.sh arnold up 0
+  script: venv_exec.sh arnold up 0
 
 # Upstart
 - name: Set up worker upstart job

@@ -3,21 +3,33 @@
 - name: Get latest socialrelay code
   become_user: socialrelay
   git: accept_hostkey=yes dest=/home/socialrelay/socialrelay repo=https://github.com/jaywink/social-relay.git
+  notify:
+    - restart worker
+    - restart jobs
 
 # Requirements
 - name: Install app requirements
   become_user: socialrelay
   pip: requirements=/home/socialrelay/socialrelay/requirements/base.txt virtualenv=/home/socialrelay/venv
+  notify:
+    - restart worker
+    - restart jobs
 
 # Settings
 - name: Create local settings
   become_user: socialrelay
   template: dest=/home/socialrelay/socialrelay/social_relay/local_config.py src=local_config.py.j2
+  notify:
+    - restart worker
+    - restart jobs
 
 # Database
 - name: Run migrations
   become_user: socialrelay
   script: venv_exec.sh arnold up 0
+  notify:
+    - restart worker
+    - restart jobs
 
 # Upstart
 - name: Set up worker upstart job

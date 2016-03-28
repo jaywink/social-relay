@@ -23,3 +23,4 @@ ssl_chain: |
     -----END CERTIFICATE-----
 
 socialrelay_database_file: "var/social-relay.db"
+socialrelay_redis_db: 0

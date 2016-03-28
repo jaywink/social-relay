@@ -21,7 +21,7 @@
     </Directory>
 
     WSGIDaemonProcess socialrelay user=socialrelay group=socialrelay threads=5 python-path=/home/socialrelay/socialrelay:/home/socialrelay/venv2/lib/python2.7/site-packages
-    WSGIScriptAlias / /home/socialrelay/socialrelay/socialrelay.wsgi
+    WSGIScriptAlias / /home/socialrelay/socialrelay/socialrelay.wsgi home=/home/socialrelay/socialrelay
 
     <Directory /home/socialrelay/socialrelay>
         <Files socialrelay.wsgi>

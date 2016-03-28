@@ -10,6 +10,7 @@ from federation.exceptions import NoSuitableProtocolFoundError
 
 from social_relay import config
 from social_relay.utils.data import get_pod_preferences
+from social_relay.utils.statistics import log_worker_receive_statistics
 
 
 def pods_who_want_tags(tags):
@@ -75,12 +76,22 @@ def process(payload):
     if sender.split("@")[1] in send_to_pods:
         # Don't send back to sender
         send_to_pods.remove(sender.split("@")[1])
-    for entity in entities:
-        logging.info("Entity: %s" % entity)
-        # We only care about posts atm
-        if isinstance(entity, Post):
-            # Add pods who want this posts tags
-            final_send_to_pods = send_to_pods[:] + pods_who_want_tags(entity.tags)
-            # Send out
-            for pod in final_send_to_pods:
-                send_payload(pod, payload)
+    sent_amount = 0
+    sent_success = 0
+    try:
+        for entity in entities:
+            logging.info("Entity: %s" % entity)
+            # We only care about posts atm
+            if isinstance(entity, Post):
+                # Add pods who want this posts tags
+                final_send_to_pods = send_to_pods[:] + pods_who_want_tags(entity.tags)
+                # Send out
+                for pod in final_send_to_pods:
+                    result = send_payload(pod, payload)
+                    if result:
+                        sent_success += 1
+                    sent_amount += 1
+    finally:
+        log_worker_receive_statistics(
+            protocol_name, len(entities), sent_amount, sent_success
+        )

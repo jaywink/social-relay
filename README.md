@@ -1,4 +1,5 @@
 [![Stories in Ready](https://badge.waffle.io/jaywink/social-relay.png?label=ready&title=Ready)](https://waffle.io/jaywink/social-relay)
+
 ## Social-Relay
 
 See https://wiki.diasporafoundation.org/Relay_servers_for_public_posts

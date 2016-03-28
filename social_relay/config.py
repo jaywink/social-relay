@@ -3,6 +3,9 @@ import logging
 from logging import handlers
 import os
 
+# Set this to a real domain in local config
+SERVER_HOST = "http://127.0.0.1:5000"
+
 RELAY_USERNAME = "relay"
 
 # Just something hcard needs, override in locals if you want to customize
@@ -26,7 +29,33 @@ BOWER_COMPONENTS_ROOT = "../bower_components"
 LOG_PATH = "var/social-relay.log"
 LOG_TO_CONSOLE = False
 
-from social_relay.local_config import *
+# Database
+DATABASE_NAME = 'var/social-relay.db'
+
+# Redis
+REDIS_DB = 0
+REDIS_PORT = 6379
+REDIS_HOST = 'localhost'
+
+# Override in local config with hosts to always forward to
+ALWAYS_FORWARD_TO_HOSTS = []
+
+try:
+    from social_relay.local_config import *
+except ImportError:
+    pass
+
+# Set up database URI
+DATABASE = 'sqlite:///{name}'.format(name=DATABASE_NAME)
+
+RELAY_ACCOUNT = "%s@%s" % (
+    RELAY_USERNAME,
+    SERVER_HOST.split("//")[1]
+)
+
+# If running tests load some overrides here
+if "TEST" in os.environ:
+    from social_relay.tests.config import *
 
 # Logging init
 file_handler = handlers.RotatingFileHandler(
@@ -61,8 +90,3 @@ if RQ_DASHBOARD:
         print("****\nYOU MUST define RQ_DASHBOARD_USERNAME and RQ_DASHBOARD_PASSWORD if RQ_DASHBOARD is enabled.\n"
               "****")
         raise
-
-RELAY_ACCOUNT = "%s@%s" % (
-    RELAY_USERNAME,
-    SERVER_HOST.split("//")[1]
-)

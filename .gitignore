@@ -1,7 +1,8 @@
 *.py[cod]
 __pycache__
 
-database.sqlite
+test.db
+.cache
 
 # C extensions
 *.so

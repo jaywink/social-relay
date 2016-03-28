@@ -1,8 +1,11 @@
 ---
-hostname: mysocialrelay.me
-secret_key:
-relay_guid:
-web_root: /home/socialrelay/socialrelay/static
+socialrelay_database_file: "var/social-relay.db"
+socialrelay_hostname: mysocialrelay.me
+socialrelay_redis_db: 0
+socialrelay_relay_guid:
+socialrelay_secret_key:
+socialrelay_web_root: /home/socialrelay/socialrelay/static
+
 ssl_cert: |
     -----BEGIN CERTIFICATE-----
     MIIGojdfowjhefihiiiiiiiiiiiiiiiiiiiiiiiiiqwfqwqdqwkmionmjmodwwJJ
@@ -21,6 +24,3 @@ ssl_chain: |
     ...
     gGgreggregtf0s+bA==
     -----END CERTIFICATE-----
-
-socialrelay_database_file: "var/social-relay.db"
-socialrelay_redis_db: 0

@@ -1,15 +1,15 @@
 DEBUG = False
-SECRET_KEY = '{{ secret_key }}'
+SECRET_KEY = '{{ socialrelay_secret_key }}'
 
 REDIS_DB = {{ socialrelay_redis_db }}
 REDIS_PORT = 6379
 REDIS_HOST = 'localhost'
 
 # Change this to real domain
-SERVER_HOST = "https://{{ hostname }}"
+SERVER_HOST = "https://{{ socialrelay_hostname }}"
 
 # You MUST generate a unique GUID for the relay user. This MUST be 32 chars long.
-RELAY_GUID = "{{ relay_guid }}"
+RELAY_GUID = "{{ socialrelay_relay_guid }}"
 
 ALWAYS_FORWARD_TO_HOSTS = []
 

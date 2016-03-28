@@ -16,15 +16,15 @@
 - name: SSL cert
   copy:
       content: "{{ ssl_cert }}"
-      dest: /etc/ssl/certs/{{ hostname }}.crt
+      dest: /etc/ssl/certs/{{ socialrelay_hostname }}.crt
 - name: SSL key
   copy:
       content: "{{ ssl_key }}"
-      dest: /etc/ssl/private/{{ hostname }}.key
+      dest: /etc/ssl/private/{{ socialrelay_hostname }}.key
 - name: SSL chain
   copy:
       content: "{{ ssl_chain }}"
-      dest: /etc/ssl/certs/{{ hostname }}.chain.pem
+      dest: /etc/ssl/certs/{{ socialrelay_hostname }}.chain.pem
 - name: Enable site
   command: a2ensite socialrelay
   notify:

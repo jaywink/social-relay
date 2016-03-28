@@ -1,21 +1,21 @@
 <VirtualHost *:80>
-    ServerName {{ hostname }}
-    ServerAlias www.{{ hostname }}
-    RedirectPermanent / https://{{ hostname }}/
+    ServerName {{ socialrelay_hostname }}
+    ServerAlias www.{{ socialrelay_hostname }}
+    RedirectPermanent / https://{{ socialrelay_hostname }}/
 </VirtualHost>
 
 <VirtualHost *:443>
-    ServerName {{ hostname }}
-    ServerAlias www.{{ hostname }}
+    ServerName {{ socialrelay_hostname }}
+    ServerAlias www.{{ socialrelay_hostname }}
 
-    ServerAdmin webmaster@{{ hostname }}
+    ServerAdmin webmaster@{{ socialrelay_hostname }}
 
-    DocumentRoot {{ web_root }}
+    DocumentRoot {{ socialrelay_web_root }}
 
-    Alias /robots.txt {{ web_root }}/robots.txt
-    Alias /favicon.ico {{ web_root }}/favicon.ico
+    Alias /robots.txt {{ socialrelay_web_root }}/robots.txt
+    Alias /favicon.ico {{ socialrelay_web_root }}/favicon.ico
 
-    <Directory {{ web_root }}>
+    <Directory {{ socialrelay_web_root }}>
         Require all granted
         Options -MultiViews -Indexes
     </Directory>
@@ -36,7 +36,7 @@
     </Directory>
 
     SSLEngine on
-    SSLCertificateFile /etc/ssl/certs/{{ hostname }}.crt
-    SSLCertificateKeyFile /etc/ssl/private/{{ hostname }}.key
-    SSLCertificateChainFile /etc/ssl/certs/{{ hostname }}.chain.pem
+    SSLCertificateFile /etc/ssl/certs/{{ socialrelay_hostname }}.crt
+    SSLCertificateKeyFile /etc/ssl/private/{{ socialrelay_hostname }}.key
+    SSLCertificateChainFile /etc/ssl/certs/{{ socialrelay_hostname }}.chain.pem
 </VirtualHost>

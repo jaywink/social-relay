@@ -1,10 +1,10 @@
 [![Build Status](https://travis-ci.org/jaywink/social-relay.svg?branch=master)](https://travis-ci.org/jaywink/social-relay) [![Stories in Ready](https://badge.waffle.io/jaywink/social-relay.png?label=ready&title=Ready)](https://waffle.io/jaywink/social-relay)
 
-## Social-Relay
+# Social-Relay
 
 See https://wiki.diasporafoundation.org/Relay_servers_for_public_posts
 
-### Requirements
+## Requirements
 
 * Python 3.x
 * Redis
@@ -17,7 +17,7 @@ See https://wiki.diasporafoundation.org/Relay_servers_for_public_posts
 
 Python libraries in `requirements/base.txt`.
 
-### Running server
+## Configuring
 
 Create local config:
 
@@ -25,50 +25,48 @@ Create local config:
 
 Edit the `local_config.py` file as instructed in the file.
 
-Run the server:
-
-    python runserver.py
-
 ### RQ Dashboard
 
 An RQ dashboard can be found at `/rq`. Enable it in `social_relay/local_config.py` by setting `RQ_DASHBOARD = True`.
 You must also set a username and password in the same file.
 
-### JavaScript
+## Static files
 
 Bower is used to pull in some JavaScript libs. [Install it first](http://bower.io/) if needed. Then run `bower install`.
 
-### Running tasks
+Statics are server under the `/static` path which should be server by the web server.
 
-To run a single task, do for example:
+## Running tasks
 
-    python -m tasks.fetch_pod_list
+For normal operation, scheduled jobs should always be running. They take care of refreshing the pod list and polling pods for their subscription preferences. Without these scheduled jobs, the relay will not be able to function.
 
-To run all scheduled tasks, keep this running:
+Keep this running:
 
     python -m tasks.schedule_jobs
 
-### Processing receive queue
+## Processing receive queue
 
-Keep one or more of these running:
+Incoming posts are stored in Redis and processed using RQ workers. Keep one or more worker running always.
 
-    rqworker receive
+To make use of the app configuration for Redis in `social_relay/local_config.py`, use the provided `runworker.py` wrapper, as follows:
 
-You might optionally want to run one worker towards the `failed` queue.
+    python runworker.py receive
 
-Note! If you changed Redis connection parameters in `social_relay/local_config.py`, make sure to pass the right connection parameters when calling `rqworker`. The command line utilities for RQ don't read the configuration for the relay.
+If you do run a worker via `rqworker` command directly, make sure to use the same Redis database as set in app configuration.
 
-### Deploying
+## Deployment
 
-Pretty much normal Python + WSGI setup, just install the requirements and serve using WSGI. See the following sections for platform specific helpers.
+Pretty much normal Python + WSGI setup, just install the requirements and serve app using WSGI and statics via the web server. See the following sections for platform specific helpers.
 
-#### Ansible (Ubuntu)
+An Apache2 site example can be found [here](https://github.com/jaywink/social-relay/blob/master/ansible/roles/social-relay/templates/apache.conf.j2). The same folder also has examples for upstart init jobs.
 
-An Ansible role written for Ubuntu is provided in `ansible` directory. It will run also the scheduled jobs and a worker via upstart.
+### Ansible (Ubuntu)
+
+An Ansible role written for Ubuntu is provided in `ansible` directory. The role uses uWSGI and Apache to serve the app. It will run also the scheduled jobs and a worker. Everything is handled by upstart.
 
 Tested with Ubuntu 14.04 LTS.
 
-#### SystemD service files
+### SystemD service files
 
 There are example systemd service files in the 'extra' directory. The examples
 use a specific user and utilize gunicorn. They have been tested on CentOS 7.
@@ -90,6 +88,18 @@ The rqworker service file can also be used to start the optional `failed` queue 
 
     systemctl start social-relay_rqworker@failed.service
 
-### License
+## Running a development server
+
+This is not the recommended way for a production server. For testing and development, run the server:
+
+    python devserver.py
+
+## Running tests
+
+Make sure you have installed requirements from `requirements/development.txt`.
+
+Execute `py.test` to run the tests.
+
+## License
 
 AGPLv3

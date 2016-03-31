@@ -2,8 +2,8 @@ DEBUG = False
 SECRET_KEY = '{{ socialrelay_secret_key }}'
 
 REDIS_DB = {{ socialrelay_redis_db }}
-REDIS_PORT = 6379
-REDIS_HOST = 'localhost'
+REDIS_PORT = {{ socialrelay_redis_port }}
+REDIS_HOST = '{{ socialrelay_redis_host }}'
 
 # Change this to real domain
 SERVER_HOST = "https://{{ socialrelay_hostname }}"

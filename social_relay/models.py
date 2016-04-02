@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from peewee import DateTimeField, CharField, IntegerField
+from peewee import DateTimeField, CharField, IntegerField, BooleanField
 from playhouse.fields import ManyToManyField
 
 from social_relay import database
@@ -32,9 +32,10 @@ class Node(database.Model):
     """Stores Nodes, ie pods, servers, etc."""
     host = CharField(unique=True)
     created_at = DateTimeField(default=datetime.datetime.now)
-    last_success = DateTimeField()
+    last_success = DateTimeField(null=True)
     total_delivered = IntegerField(default=0)
     failure_count = IntegerField(default=0)
+    https = BooleanField(default=False)
 
 
 class Post(database.Model):

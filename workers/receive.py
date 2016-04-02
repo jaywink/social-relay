@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+import datetime
 from _socket import timeout
 import json
 import logging
@@ -5,10 +7,11 @@ import requests
 from requests.exceptions import ConnectionError, Timeout
 
 from federation.controllers import handle_receive
-from federation.entities.base import Post
+from federation.entities import base
 from federation.exceptions import NoSuitableProtocolFoundError
 
 from social_relay import config
+from social_relay.models import Node, Post
 from social_relay.utils.data import get_pod_preferences
 from social_relay.utils.statistics import log_worker_receive_statistics
 
@@ -35,10 +38,14 @@ def pods_who_want_all():
 def send_payload(host, payload):
     """Post payload to host, try https first, fall back to http.
 
-    Return True or False, depending on success of operation.
+    Return a dictionary containing:
+        "result": True or False, depending on success of operation.
+        "https": True or False
+
     Timeouts or connection errors will not be raised.
     """
     logging.info("Sending payload to %s" % host)
+    https = True
     try:
         try:
             response = requests.post(
@@ -47,14 +54,27 @@ def send_payload(host, payload):
         except timeout:
             response = False
         if not response or response.status_code != 200:
+            https = False
             response = requests.post(
                 "http://%s/receive/public" % host, data={"xml": payload}, timeout=10, allow_redirects=False
             )
             if response.status_code != 200:
-                return False
+                return {"result": False, "https": https}
     except (ConnectionError, Timeout):
-        return False
-    return True
+        return {"result": False, "https": https}
+    return {"result": True, "https": https}
+
+
+def save_post_metadata(entity, protocol, hosts):
+    """Save Post metadata to db.
+
+    :param entity: Post entity
+    :param protocol: Protocol identifier
+    :param hosts: List of hostnames that send was done successfully
+    """
+    post, created = Post.get_or_create(guid=entity.guid, protocol=protocol)
+    for host in hosts:
+        post.nodes.add(Node.get(host=host))
 
 
 def process(payload):
@@ -82,16 +102,39 @@ def process(payload):
         for entity in entities:
             logging.info("Entity: %s" % entity)
             # We only care about posts atm
-            if isinstance(entity, Post):
+            if isinstance(entity, base.Post):
+                sent_to_nodes = []
                 # Add pods who want this posts tags
                 final_send_to_pods = send_to_pods[:] + pods_who_want_tags(entity.tags)
                 # Send out
                 for pod in final_send_to_pods:
-                    result = send_payload(pod, payload)
-                    if result:
+                    response = send_payload(pod, payload)
+                    if response["result"]:
                         sent_success += 1
+                        sent_to_nodes.append(pod)
                     sent_amount += 1
+                    update_node(pod, response)
+                if sent_to_nodes:
+                    save_post_metadata(entity=entity, protocol=protocol_name, hosts=sent_to_nodes)
     finally:
         log_worker_receive_statistics(
             protocol_name, len(entities), sent_amount, sent_success
         )
+
+
+def update_node(pod, response):
+    """Update Node in database
+
+    :param pod: Hostname
+    :param response: Dictionary with booleans "result" and "https"
+    """
+    Node.get_or_create(host=pod)
+    if response["result"]:
+        # Update delivered_count and last_success, nullify failure_count
+        Node.update(
+            last_success=datetime.datetime.now(), total_delivered=Node.total_delivered + 1,
+            failure_count=0, https=response["https"]).where(Node.host==pod).execute()
+    else:
+        # Update failure_count
+        Node.update(
+            failure_count=Node.failure_count + 1).where(Node.host==pod).execute()

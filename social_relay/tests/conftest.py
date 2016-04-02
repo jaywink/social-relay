@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 import os
 
 import pytest
 
-from social_relay.models import ReceiveStatistic, WorkerReceiveStatistic
+from social_relay.models import create_all_tables
 
 
 @pytest.fixture
@@ -12,5 +13,5 @@ def app():
     except:
         pass
     from social_relay import app, database
-    database.database.create_tables([ReceiveStatistic, WorkerReceiveStatistic])
+    create_all_tables(database)
     return app

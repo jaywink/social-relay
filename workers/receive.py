@@ -72,9 +72,13 @@ def save_post_metadata(entity, protocol, hosts):
     :param protocol: Protocol identifier
     :param hosts: List of hostnames that send was done successfully
     """
-    post, created = Post.get_or_create(guid=entity.guid, protocol=protocol)
-    for host in hosts:
-        post.nodes.add(Node.get(host=host))
+    try:
+        post, created = Post.get_or_create(guid=entity.guid, protocol=protocol)
+        for host in hosts:
+            post.nodes.add(Node.get(host=host))
+    except Exception as ex:
+        logging.warning("Exception when trying to save post '{entity}' into database: {exc}".format(
+            entity=entity, exc=ex))
 
 
 def process(payload):
@@ -128,13 +132,18 @@ def update_node(pod, response):
     :param pod: Hostname
     :param response: Dictionary with booleans "result" and "https"
     """
-    Node.get_or_create(host=pod)
-    if response["result"]:
-        # Update delivered_count and last_success, nullify failure_count
-        Node.update(
-            last_success=datetime.datetime.now(), total_delivered=Node.total_delivered + 1,
-            failure_count=0, https=response["https"]).where(Node.host==pod).execute()
-    else:
-        # Update failure_count
-        Node.update(
-            failure_count=Node.failure_count + 1).where(Node.host==pod).execute()
+    try:
+        Node.get_or_create(host=pod)
+        if response["result"]:
+            # Update delivered_count and last_success, nullify failure_count
+            Node.update(
+                last_success=datetime.datetime.now(), total_delivered=Node.total_delivered + 1,
+                failure_count=0, https=response["https"]).where(Node.host==pod).execute()
+        else:
+            # Update failure_count
+            Node.update(
+                failure_count=Node.failure_count + 1).where(Node.host==pod).execute()
+    except Exception as ex:
+        logging.warning("Exception when trying to save or update Node {node} into database: {exc}".format(
+            node=pod, exc=ex)
+        )

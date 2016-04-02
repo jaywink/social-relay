@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 import datetime
 import json
 
-from social_relay.models import ReceiveStatistic, WorkerReceiveStatistic
-from social_relay.utils.data import get_pod_preferences
+from social_relay.models import ReceiveStatistic, WorkerReceiveStatistic, Node
+from social_relay.utils.data import get_pod_preferences, public_queue, get_worker_count
 
 
 def get_subscriber_stats():
@@ -49,7 +50,15 @@ def get_count_stats():
         "month": WorkerReceiveStatistic.select().where(WorkerReceiveStatistic.created_at >= month_ago).count(),
         "all_time": WorkerReceiveStatistic.select().count(),
     }
-    return incoming, outgoing
+    distinct_nodes = {
+        "all": Node.select().count(),
+        "https": Node.select().where(Node.https==True).count(),
+    }
+    processing = {
+        "workers": get_worker_count(),
+        "queue_jobs": len(public_queue),
+    }
+    return incoming, outgoing, distinct_nodes, processing
 
 
 def log_receive_statistics(sender_host):

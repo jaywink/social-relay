@@ -1,18 +1,14 @@
+# -*- coding: utf-8 -*-
 import json
 
 from flask import render_template, request, Response, abort
 from flask.ext.bower import Bower
-from rq import Queue
 from rq_dashboard import RQDashboard
 
 from federation.hostmeta.generators import generate_host_meta, generate_legacy_webfinger, generate_hcard
-
 from social_relay import app
-from social_relay.utils.data import r
+from social_relay.utils.data import public_queue
 from social_relay.utils.statistics import get_subscriber_stats, get_count_stats, log_receive_statistics
-
-
-public_queue = Queue("receive", connection=r)
 
 
 # RQ DASHBOARD
@@ -44,13 +40,15 @@ Bower(app)
 @app.route('/')
 def index():
     subscriber_stats = get_subscriber_stats()
-    incoming, outgoing = get_count_stats()
+    incoming, outgoing, distinct_nodes, processing = get_count_stats()
     return render_template(
         'index.html',
         config=app.config,
         subscriber_stats=subscriber_stats,
         incoming_counts=incoming,
-        outgoing_counts=outgoing
+        outgoing_counts=outgoing,
+        distinct_nodes=distinct_nodes,
+        processing=processing,
     )
 
 

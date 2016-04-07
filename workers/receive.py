@@ -53,14 +53,15 @@ def send_payload(host, payload):
             )
         except timeout:
             response = False
-        if not response or response.status_code != 200:
+        if not response or response.status_code not in [200, 202]:
             https = False
             response = requests.post(
                 "http://%s/receive/public" % host, data={"xml": payload}, timeout=10, allow_redirects=False
             )
-            if response.status_code != 200:
+            if response.status_code not in [200, 202]:
                 return {"result": False, "https": https}
-    except (ConnectionError, Timeout):
+    except (ConnectionError, Timeout) as ex:
+        logging.debug("Connection failed with {host}: {ex}".format(host=host, ex=ex))
         return {"result": False, "https": https}
     return {"result": True, "https": https}
 

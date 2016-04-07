@@ -8,6 +8,7 @@ See https://wiki.diasporafoundation.org/Relay_servers_for_public_posts
 
 * Python 3.x
 * Redis
+* SQLite3
 * Packages for building LXML (required by Social-Federation library):
    - libxml2-dev
    - libxslt-dev

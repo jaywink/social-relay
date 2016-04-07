@@ -6,7 +6,7 @@ hiredis==0.2.0
 redis==2.10.3
 
 # social-federation
-git+https://github.com/jaywink/social-federation.git@master#egg=federation
+git+https://github.com/jaywink/social-federation.git@36dac79121170a2cce9d7c30fcc3b1aabba6e50b#egg=federation
 
 # generic
 requests==2.7.0

@@ -3,7 +3,7 @@ import datetime
 from unittest.mock import Mock, patch
 
 import pytest
-from federation.entities import base
+from federation.entities.diaspora.entities import DiasporaPost
 
 from social_relay.models import Node, Post
 from workers.receive import process
@@ -23,7 +23,7 @@ class TestReceiveWorkerCallsLogStatistics(object):
 @patch("workers.receive.get_pod_preferences", return_value={})
 class TestReceiveWorkerProcessCallsSendPayload(object):
     @patch("workers.receive.handle_receive", return_value=("foo@example.com", "diaspora", [
-        base.Post(raw_content="Awesome #post")
+        DiasporaPost(raw_content="Awesome #post")
     ]))
 
     @patch("workers.receive.send_payload")
@@ -34,7 +34,7 @@ class TestReceiveWorkerProcessCallsSendPayload(object):
 
 @pytest.mark.usefixtures('config')
 @patch("workers.receive.handle_receive", return_value=("foo@example.com", "diaspora", [
-    base.Post(raw_content="Awesome #post", guid="foobar")
+    DiasporaPost(raw_content="Awesome #post", guid="foobar")
 ]))
 @patch("workers.receive.send_payload", return_value={"result": True, "https": True})
 @patch("workers.receive.get_pod_preferences", return_value={})

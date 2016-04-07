@@ -4,11 +4,11 @@ from _socket import timeout
 import json
 import logging
 import requests
-from requests.exceptions import ConnectionError, Timeout
 
 from federation.controllers import handle_receive
-from federation.entities import base
+from federation.entities.diaspora.entities import DiasporaPost
 from federation.exceptions import NoSuitableProtocolFoundError
+from requests.exceptions import ConnectionError, Timeout
 
 from social_relay import config
 from social_relay.models import Node, Post
@@ -68,7 +68,7 @@ def send_payload(host, payload):
 def save_post_metadata(entity, protocol, hosts):
     """Save Post metadata to db.
 
-    :param entity: Post entity
+    :param entity: DiasporaPost entity
     :param protocol: Protocol identifier
     :param hosts: List of hostnames that send was done successfully
     """
@@ -106,7 +106,7 @@ def process(payload):
         for entity in entities:
             logging.info("Entity: %s" % entity)
             # We only care about posts atm
-            if isinstance(entity, base.Post):
+            if isinstance(entity, DiasporaPost):
                 sent_to_nodes = []
                 # Add pods who want this posts tags
                 final_send_to_pods = send_to_pods[:] + pods_who_want_tags(entity.tags)

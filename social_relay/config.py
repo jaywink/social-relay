@@ -20,7 +20,7 @@ RELAY_PUBLIC_KEY = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9eofav26VCq3C6g9sIPji
                    "IohseDPo5YC9FBjp9gy7caJtvSmM5YQnDP7fjp/ghDSFtVqRWpfJbM2g9R+rAhD6w1JgvBYoOHF0ittOrbPv8WvzhaHivX" \
                    "ZADp relay@localhost"
 
-POD_LIST_JSON = "http://the-federation.info/pods.json"
+POD_LIST_JSON = "https://the-federation.info/pods.json"
 
 RQ_DASHBOARD = False  # Enable in local config
 

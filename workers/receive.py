@@ -51,13 +51,16 @@ def send_payload(host, payload):
             response = requests.post(
                 "https://%s/receive/public" % host, data={"xml": payload}, timeout=10, allow_redirects=False
             )
+            logging.debug("protocol=https host=%s result=%s" % (host, response.status_code))
         except timeout:
+            logging.debug("protocol=https host=%s result=timeout" % host)
             response = False
         if not response or response.status_code not in [200, 202]:
             https = False
             response = requests.post(
                 "http://%s/receive/public" % host, data={"xml": payload}, timeout=10, allow_redirects=False
             )
+            logging.debug("protocol=http host=%s result=%s" % (host, response.status_code))
             if response.status_code not in [200, 202]:
                 return {"result": False, "https": https}
     except (ConnectionError, Timeout) as ex:

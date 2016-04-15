@@ -61,6 +61,8 @@ def host_meta():
 @app.route("/webfinger")
 def webfinger():
     account = request.args.get("q", "")
+    if account.startswith("acct:"):
+        account = account.replace("acct:", "", 1)
     if account != app.config.get("RELAY_ACCOUNT"):
         return abort(404)
     webfinger = generate_legacy_webfinger(

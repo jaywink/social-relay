@@ -16,23 +16,23 @@ from social_relay.utils.data import get_pod_preferences
 from social_relay.utils.statistics import log_worker_receive_statistics
 
 
-def pods_who_want_tags(tags):
-    pods = []
-    for pod, data in get_pod_preferences().items():
+def nodes_who_want_tags(tags):
+    nodes = []
+    for node, data in get_pod_preferences().items():
         data = json.loads(data.decode("utf-8"))
         if not set(data["tags"]).isdisjoint(tags):
             # One or more tags match
-            pods.append(pod.decode("utf-8"))
-    return pods
+            nodes.append(node.decode("utf-8"))
+    return nodes
 
 
-def pods_who_want_all():
-    pods = []
-    for pod, data in get_pod_preferences().items():
+def nodes_who_want_all():
+    nodes = []
+    for node, data in get_pod_preferences().items():
         data = json.loads(data.decode("utf-8"))
         if data["subscribe"] and data["scope"] == "all":
-            pods.append(pod.decode("utf-8"))
-    return pods
+            nodes.append(node.decode("utf-8"))
+    return nodes
 
 
 def send_payload(host, payload):
@@ -99,11 +99,11 @@ def process(payload):
     if not entities:
         logging.warning("No entities in payload")
         return
-    send_to_pods = pods_who_want_all()
-    send_to_pods += config.ALWAYS_FORWARD_TO_HOSTS
-    if sender.split("@")[1] in send_to_pods:
+    all_nodes = nodes_who_want_all()
+    all_nodes += config.ALWAYS_FORWARD_TO_HOSTS
+    if sender.split("@")[1] in all_nodes:
         # Don't send back to sender
-        send_to_pods.remove(sender.split("@")[1])
+        all_nodes.remove(sender.split("@")[1])
     sent_amount = 0
     sent_success = 0
     try:
@@ -113,15 +113,15 @@ def process(payload):
             if isinstance(entity, DiasporaPost):
                 sent_to_nodes = []
                 # Add pods who want this posts tags
-                final_send_to_pods = send_to_pods[:] + pods_who_want_tags(entity.tags)
+                final_send_to_nodes = all_nodes[:] + nodes_who_want_tags(entity.tags)
                 # Send out
-                for pod in final_send_to_pods:
-                    response = send_payload(pod, payload)
+                for node in final_send_to_nodes:
+                    response = send_payload(node, payload)
                     if response["result"]:
                         sent_success += 1
-                        sent_to_nodes.append(pod)
+                        sent_to_nodes.append(node)
                     sent_amount += 1
-                    update_node(pod, response)
+                    update_node(node, response)
                 if sent_to_nodes:
                     save_post_metadata(entity=entity, protocol=protocol_name, hosts=sent_to_nodes)
     finally:

@@ -6,7 +6,7 @@ import pytest
 from federation.entities.diaspora.entities import DiasporaPost
 
 from social_relay.models import Node, Post
-from workers.receive import process
+from workers.receive import process, get_send_to_nodes
 
 
 @pytest.mark.usefixtures('config')
@@ -84,3 +84,16 @@ class TestReceiveWorkerStoresNodeAndPostMetadata(object):
         assert post
         assert post.nodes.count() == 1
         assert post.nodes.first().host == "sub.example.com"
+
+
+@pytest.mark.usefixtures('config')
+@patch("workers.receive.nodes_who_want_all", return_value=[])
+class TestReceiveWorkerGetSendToNodes(object):
+    def test_get_send_to_nodes_returns_nodes(self, mock_nodes_who_want_all):
+        nodes = get_send_to_nodes("foo@example.com", DiasporaPost())
+        assert nodes == ["sub.example.com"]
+
+    @patch("workers.receive.nodes_who_want_tags", return_value=["tags.example.com"])
+    def test_get_send_to_nodes_returns_nodes_with_tags(self, mock_nodes_who_want_tags, mock_nodes_who_want_all):
+        nodes = get_send_to_nodes("foo@example.com", DiasporaPost())
+        assert set(nodes) == {"sub.example.com", "tags.example.com"}

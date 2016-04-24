@@ -85,6 +85,24 @@ def save_post_metadata(entity, protocol, hosts):
             entity=entity, exc=ex))
 
 
+def get_send_to_nodes(sender, entity):
+    """Get the target nodes to send this entity to.
+
+    :param sender: Sender handle
+    :type sender: unicode
+    :param entity: Entity instance
+    :return: list
+    """
+    if isinstance(entity, DiasporaPost):
+        nodes = nodes_who_want_all()
+        nodes += config.ALWAYS_FORWARD_TO_HOSTS
+        nodes += nodes_who_want_tags(entity.tags)
+        if sender.split("@")[1] in nodes:
+            # Don't send back to sender
+            nodes.remove(sender.split("@")[1])
+        return nodes
+
+
 def process(payload):
     """Open payload and route it to any pods that might be interested in it."""
     try:
@@ -99,11 +117,6 @@ def process(payload):
     if not entities:
         logging.warning("No entities in payload")
         return
-    all_nodes = nodes_who_want_all()
-    all_nodes += config.ALWAYS_FORWARD_TO_HOSTS
-    if sender.split("@")[1] in all_nodes:
-        # Don't send back to sender
-        all_nodes.remove(sender.split("@")[1])
     sent_amount = 0
     sent_success = 0
     try:
@@ -112,10 +125,9 @@ def process(payload):
             # We only care about posts atm
             if isinstance(entity, DiasporaPost):
                 sent_to_nodes = []
-                # Add pods who want this posts tags
-                final_send_to_nodes = all_nodes[:] + nodes_who_want_tags(entity.tags)
+                nodes = get_send_to_nodes(sender, entity)
                 # Send out
-                for node in final_send_to_nodes:
+                for node in nodes:
                     response = send_payload(node, payload)
                     if response["result"]:
                         sent_success += 1

@@ -4,16 +4,22 @@ import logging
 from _socket import timeout
 
 import requests
+from peewee import DoesNotExist
 from requests.exceptions import ConnectionError, Timeout
 
 from federation.controllers import handle_receive
-from federation.entities.diaspora.entities import DiasporaPost
+from federation.entities.diaspora.entities import DiasporaPost, DiasporaLike, DiasporaComment
 from federation.exceptions import NoSuitableProtocolFoundError
 
 from social_relay import config
 from social_relay.models import Node, Post
 from social_relay.utils.data import nodes_who_want_tags, nodes_who_want_all
 from social_relay.utils.statistics import log_worker_receive_statistics
+
+
+SUPPORTED_ENTITIES = (
+    DiasporaPost, DiasporaLike, DiasporaComment
+)
 
 
 def send_payload(host, payload):
@@ -82,6 +88,14 @@ def get_send_to_nodes(sender, entity):
             # Don't send back to sender
             nodes.remove(sender.split("@")[1])
         return nodes
+    elif isinstance(entity, (DiasporaLike, DiasporaComment)):
+        # Try to get nodes from the target_guid
+        try:
+            post = Post.get(guid=entity.target_guid)
+            return [node.host for node in post.nodes]
+        except DoesNotExist:
+            return []
+    return []
 
 
 def process(payload):
@@ -104,7 +118,7 @@ def process(payload):
         for entity in entities:
             logging.info("Entity: %s" % entity)
             # We only care about posts atm
-            if isinstance(entity, DiasporaPost):
+            if isinstance(entity, SUPPORTED_ENTITIES):
                 sent_to_nodes = []
                 nodes = get_send_to_nodes(sender, entity)
                 # Send out
@@ -115,7 +129,7 @@ def process(payload):
                         sent_to_nodes.append(node)
                     sent_amount += 1
                     update_node(node, response)
-                if sent_to_nodes:
+                if sent_to_nodes and isinstance(entity, DiasporaPost):
                     save_post_metadata(entity=entity, protocol=protocol_name, hosts=sent_to_nodes)
     finally:
         log_worker_receive_statistics(

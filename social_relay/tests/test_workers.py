@@ -10,7 +10,7 @@ from workers.receive import process, get_send_to_nodes
 
 
 @pytest.mark.usefixtures('config')
-@patch("workers.receive.get_pod_preferences", return_value={})
+@patch("social_relay.utils.data.get_pod_preferences", return_value={})
 class TestReceiveWorkerCallsLogStatistics(object):
     @patch("workers.receive.log_worker_receive_statistics")
     @patch("workers.receive.handle_receive", return_value=("foo@example.com", "diaspora", ["foo", "bar"]))
@@ -20,7 +20,7 @@ class TestReceiveWorkerCallsLogStatistics(object):
 
 
 @pytest.mark.usefixtures('config')
-@patch("workers.receive.get_pod_preferences", return_value={})
+@patch("social_relay.utils.data.get_pod_preferences", return_value={})
 class TestReceiveWorkerProcessCallsSendPayload(object):
     @patch("workers.receive.handle_receive", return_value=("foo@example.com", "diaspora", [
         DiasporaPost(raw_content="Awesome #post")
@@ -37,7 +37,7 @@ class TestReceiveWorkerProcessCallsSendPayload(object):
     DiasporaPost(raw_content="Awesome #post", guid="foobar")
 ]))
 @patch("workers.receive.send_payload", return_value={"result": True, "https": True})
-@patch("workers.receive.get_pod_preferences", return_value={})
+@patch("social_relay.utils.data.get_pod_preferences", return_value={})
 class TestReceiveWorkerStoresNodeAndPostMetadata(object):
     def test_send_payload_stores_unknown_node_into_db(self, mock_handle_receive, mock_send_payload,
                                                       mock_pod_preferences):

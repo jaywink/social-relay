@@ -1,38 +1,19 @@
 # -*- coding: utf-8 -*-
 import datetime
-from _socket import timeout
-import json
 import logging
+from _socket import timeout
+
 import requests
+from requests.exceptions import ConnectionError, Timeout
 
 from federation.controllers import handle_receive
 from federation.entities.diaspora.entities import DiasporaPost
 from federation.exceptions import NoSuitableProtocolFoundError
-from requests.exceptions import ConnectionError, Timeout
 
 from social_relay import config
 from social_relay.models import Node, Post
-from social_relay.utils.data import get_pod_preferences
+from social_relay.utils.data import nodes_who_want_tags, nodes_who_want_all
 from social_relay.utils.statistics import log_worker_receive_statistics
-
-
-def nodes_who_want_tags(tags):
-    nodes = []
-    for node, data in get_pod_preferences().items():
-        data = json.loads(data.decode("utf-8"))
-        if not set(data["tags"]).isdisjoint(tags):
-            # One or more tags match
-            nodes.append(node.decode("utf-8"))
-    return nodes
-
-
-def nodes_who_want_all():
-    nodes = []
-    for node, data in get_pod_preferences().items():
-        data = json.loads(data.decode("utf-8"))
-        if data["subscribe"] and data["scope"] == "all":
-            nodes.append(node.decode("utf-8"))
-    return nodes
 
 
 def send_payload(host, payload):

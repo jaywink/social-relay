@@ -6,8 +6,9 @@ from flask.ext.bower import Bower
 from rq_dashboard import RQDashboard
 
 from federation.hostmeta.generators import generate_host_meta, generate_legacy_webfinger, generate_hcard
+
 from social_relay import app
-from social_relay.utils.data import public_queue
+from social_relay.utils.queues import public_queue
 from social_relay.utils.statistics import get_subscriber_stats, get_count_stats, log_receive_statistics
 
 

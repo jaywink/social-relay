@@ -1,38 +1,25 @@
 # -*- coding: utf-8 -*-
 import datetime
-from _socket import timeout
-import json
 import logging
+from _socket import timeout
+
 import requests
+from peewee import DoesNotExist
+from requests.exceptions import ConnectionError, Timeout
 
 from federation.controllers import handle_receive
-from federation.entities.diaspora.entities import DiasporaPost
+from federation.entities.diaspora.entities import DiasporaPost, DiasporaLike, DiasporaComment
 from federation.exceptions import NoSuitableProtocolFoundError
-from requests.exceptions import ConnectionError, Timeout
 
 from social_relay import config
 from social_relay.models import Node, Post
-from social_relay.utils.data import get_pod_preferences
+from social_relay.utils.data import nodes_who_want_tags, nodes_who_want_all
 from social_relay.utils.statistics import log_worker_receive_statistics
 
 
-def pods_who_want_tags(tags):
-    pods = []
-    for pod, data in get_pod_preferences().items():
-        data = json.loads(data.decode("utf-8"))
-        if not set(data["tags"]).isdisjoint(tags):
-            # One or more tags match
-            pods.append(pod.decode("utf-8"))
-    return pods
-
-
-def pods_who_want_all():
-    pods = []
-    for pod, data in get_pod_preferences().items():
-        data = json.loads(data.decode("utf-8"))
-        if data["subscribe"] and data["scope"] == "all":
-            pods.append(pod.decode("utf-8"))
-    return pods
+SUPPORTED_ENTITIES = (
+    DiasporaPost, DiasporaLike, DiasporaComment
+)
 
 
 def send_payload(host, payload):
@@ -85,6 +72,32 @@ def save_post_metadata(entity, protocol, hosts):
             entity=entity, exc=ex))
 
 
+def get_send_to_nodes(sender, entity):
+    """Get the target nodes to send this entity to.
+
+    :param sender: Sender handle
+    :type sender: unicode
+    :param entity: Entity instance
+    :return: list
+    """
+    if isinstance(entity, DiasporaPost):
+        nodes = nodes_who_want_all()
+        nodes += config.ALWAYS_FORWARD_TO_HOSTS
+        nodes += nodes_who_want_tags(entity.tags)
+        if sender.split("@")[1] in nodes:
+            # Don't send back to sender
+            nodes.remove(sender.split("@")[1])
+        return nodes
+    elif isinstance(entity, (DiasporaLike, DiasporaComment)):
+        # Try to get nodes from the target_guid
+        try:
+            post = Post.get(guid=entity.target_guid)
+            return [node.host for node in post.nodes]
+        except DoesNotExist:
+            return []
+    return []
+
+
 def process(payload):
     """Open payload and route it to any pods that might be interested in it."""
     try:
@@ -99,30 +112,24 @@ def process(payload):
     if not entities:
         logging.warning("No entities in payload")
         return
-    send_to_pods = pods_who_want_all()
-    send_to_pods += config.ALWAYS_FORWARD_TO_HOSTS
-    if sender.split("@")[1] in send_to_pods:
-        # Don't send back to sender
-        send_to_pods.remove(sender.split("@")[1])
     sent_amount = 0
     sent_success = 0
     try:
         for entity in entities:
             logging.info("Entity: %s" % entity)
             # We only care about posts atm
-            if isinstance(entity, DiasporaPost):
+            if isinstance(entity, SUPPORTED_ENTITIES):
                 sent_to_nodes = []
-                # Add pods who want this posts tags
-                final_send_to_pods = send_to_pods[:] + pods_who_want_tags(entity.tags)
+                nodes = get_send_to_nodes(sender, entity)
                 # Send out
-                for pod in final_send_to_pods:
-                    response = send_payload(pod, payload)
+                for node in nodes:
+                    response = send_payload(node, payload)
                     if response["result"]:
                         sent_success += 1
-                        sent_to_nodes.append(pod)
+                        sent_to_nodes.append(node)
                     sent_amount += 1
-                    update_node(pod, response)
-                if sent_to_nodes:
+                    update_node(node, response)
+                if sent_to_nodes and isinstance(entity, DiasporaPost):
                     save_post_metadata(entity=entity, protocol=protocol_name, hosts=sent_to_nodes)
     finally:
         log_worker_receive_statistics(

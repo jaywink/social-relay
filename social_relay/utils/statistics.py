@@ -3,7 +3,8 @@ import datetime
 import json
 
 from social_relay.models import ReceiveStatistic, WorkerReceiveStatistic, Node
-from social_relay.utils.data import get_pod_preferences, public_queue, get_worker_count
+from social_relay.utils.data import get_pod_preferences
+from social_relay.utils.queues import public_queue, get_worker_count
 
 
 def get_subscriber_stats():

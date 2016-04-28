@@ -1,12 +1,14 @@
-[![Build Status](https://travis-ci.org/jaywink/social-relay.svg?branch=master)](https://travis-ci.org/jaywink/social-relay) [![Stories in Ready](https://badge.waffle.io/jaywink/social-relay.png?label=ready&title=Ready)](https://waffle.io/jaywink/social-relay)
+[![Build Status](https://travis-ci.org/jaywink/social-relay.svg?branch=master)](https://travis-ci.org/jaywink/social-relay) [![Stories in Ready](https://badge.waffle.io/jaywink/social-relay.png?label=ready&title=Ready)](https://waffle.io/jaywink/social-relay) [![codecov](https://codecov.io/gh/jaywink/social-relay/branch/master/graph/badge.svg)](https://codecov.io/gh/jaywink/social-relay) [![Requirements Status](https://requires.io/github/jaywink/social-relay/requirements.svg?branch=master)](https://requires.io/github/jaywink/social-relay/requirements/?branch=master) [![Code Health](https://landscape.io/github/jaywink/social-relay/master/landscape.svg?style=flat)](https://landscape.io/github/jaywink/social-relay/master)
 
 # Social-Relay
 
-See https://wiki.diasporafoundation.org/Relay_servers_for_public_posts
+Application to act as a relay for public posts using the Diaspora protocol. Keeps track of nodes and their subscription preferences, receives payloads and forwards the payloads to subscribers. The aim is to pass public posts around in an efficient way so any new node in the network can quickly subscribe to lots of public activity, without having to wait a long time to create social relationships.
+
+See original idea https://wiki.diasporafoundation.org/Relay_servers_for_public_posts
 
 ## Requirements
 
-* Python 3.x
+* Python 3.x (tested on 3.4/3.5)
 * Redis
 * SQLite3
 * Packages for building LXML (required by Social-Federation library):
@@ -25,6 +27,14 @@ Create local config:
     cp social_relay/local_config.py.example social_relay/local_config.py
 
 Edit the `local_config.py` file as instructed in the file.
+
+## Database
+
+The SQLite database needs an initial schema creation. Do this with:
+
+    arnold up 0
+
+The same command should always be run when fetching new relay code. It will migrate any new schema changes.
 
 ### RQ Dashboard
 
@@ -100,6 +110,10 @@ This is not the recommended way for a production server. For testing and develop
 Make sure you have installed requirements from `requirements/development.txt`.
 
 Execute `py.test` to run the tests.
+
+## Author
+
+Jason Robinson / @jaywink / https://jasonrobinson.me / https://iliketoast.net/u/jaywink
 
 ## License
 

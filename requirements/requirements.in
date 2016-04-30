@@ -1,19 +1,20 @@
+# Flask
 Flask==0.10.1
 Flask-Bower==1.2.1
 
 # redis backend
 hiredis==0.2.0
-redis==2.10.3
+redis==2.10.5
 
 # social-federation
-git+https://github.com/jaywink/social-federation.git@36dac79121170a2cce9d7c30fcc3b1aabba6e50b#egg=federation
+-e git+https://github.com/jaywink/social-federation.git@cddebf87cd884eb664adb0992148df7682b37dae#egg=Social-Federation==0.3.1
 
 # generic
-requests==2.7.0
+requests==2.10.0
 schedule==0.3.2
 
 # background jobs
-rq==0.5.4
+rq==0.5.6
 rq-dashboard==0.3.4
 
 # pod preferences

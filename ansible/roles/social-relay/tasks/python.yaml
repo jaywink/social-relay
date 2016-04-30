@@ -10,3 +10,5 @@
   command: creates=/home/socialrelay/venv virtualenv -p python3.4 /home/socialrelay/venv
 - name: Update pip
   pip: name=pip state=latest virtualenv=/home/socialrelay/venv
+- name: Install pip-tools
+  pip: name=pip-tools state=latest virtualenv=/home/socialrelay/venv

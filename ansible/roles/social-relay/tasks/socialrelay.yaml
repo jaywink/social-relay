@@ -11,7 +11,7 @@
 # Requirements
 - name: Install app requirements
   become_user: socialrelay
-  pip: requirements=/home/socialrelay/socialrelay/requirements/base.txt virtualenv=/home/socialrelay/venv
+  command: chdir=/home/socialrelay/socialrelay executable=/bin/bash /home/socialrelay/venv/bin/pip-sync requirements/requirements.txt
   notify:
     - restart worker
     - restart jobs

@@ -10,6 +10,10 @@ New dependency, SQLite3 added. Make sure before deploying to install necessary O
 
 Of course a database means schema migrations. See the readme for instructions on how to create the initial schema and what to do when pulling in a new version of the relay.
 
+### Python dependencies
+
+[pip-tools](https://github.com/nvie/pip-tools) is now used to maintain dependencies. You can still use the normal `pip` commands to install requirements, though using `pip-sync` from pip-tools package will ensure unnecessary packages are also removed. Check the readme.
+
 ### Added
 - Add SystemD example services (thanks @jpope777).
 - Add SQLite database as requirement.

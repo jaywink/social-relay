@@ -17,8 +17,23 @@ See original idea https://wiki.diasporafoundation.org/Relay_servers_for_public_p
    - lib32z1-dev
    - python3-dev
        - Alternatively, install `python-lxml` package, for example, if you don't want to install everything in a virtual env.
+* Pip 6.1 or later
+* `pip-tools`
 
-Python libraries in `requirements/base.txt`.
+### Python libraries
+
+Pip-tools is a nifty package to pin requirements. You can do `pip install -r requirements/base.txt` to install the Python requirements as in any regular project, but `pip-tools` will also ensure removal of unnecessary packages.
+
+First, make sure `pip` is up-to-date and install `pip-tools`:
+
+    pip install --upgrade pip
+    pip install pip-tools
+
+Then install the requirements:
+
+    pip-sync requirements/requirements.txt
+
+Run the `pip-sync` command after every refresh of the relay code to install/remove packages.
 
 ## Configuring
 
@@ -99,17 +114,28 @@ The rqworker service file can also be used to start the optional `failed` queue 
 
     systemctl start social-relay_rqworker@failed.service
 
-## Running a development server
+## Development
+
+### Running a development server
 
 This is not the recommended way for a production server. For testing and development, run the server:
 
     python devserver.py
 
-## Running tests
+### Running tests
 
-Make sure you have installed requirements from `requirements/development.txt`.
+Make sure you have installed requirements using the command:
+
+    pip-sync requirements/development.txt
 
 Execute `py.test` to run the tests.
+
+### Updating requirements files
+
+When changing dependencies, make sure to update the requirements files:
+
+    pip-compile --output-file requirements/requirements.txt requirements/requirements.in
+    pip-compile --output-file requirements/development.txt requirements/requirements.in requirements/development.in
 
 ## Author
 

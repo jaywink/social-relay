@@ -4,7 +4,11 @@
 
 Application to act as a relay for public posts using the Diaspora protocol. Keeps track of nodes and their subscription preferences, receives payloads and forwards the payloads to subscribers. The aim is to pass public posts around in an efficient way so any new node in the network can quickly subscribe to lots of public activity, without having to wait a long time to create social relationships.
 
-See original idea https://wiki.diasporafoundation.org/Relay_servers_for_public_posts
+## How does one integrate to the relay system? How do I write my own relay?
+
+See [relay design concept](https://github.com/jaywink/social-relay/blob/master/docs/relays.md).
+
+Original idea for the relay system can be found in the [diaspora* project wiki](https://wiki.diasporafoundation.org/Relay_servers_for_public_posts).
 
 ## Requirements
 

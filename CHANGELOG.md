@@ -1,4 +1,9 @@
-## [1.1.0]
+## [unreleased]
+
+### Changed
+- Bump `Social-Federation` to 0.3.2. Fixes issue with DiasporaPost processing when actual message content is empty.
+
+## [1.1.0] - 2016-05-08
 
 ### Backwards incompatible changes
 

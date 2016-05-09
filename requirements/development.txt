@@ -5,7 +5,7 @@
 #    pip-compile --output-file requirements/development.txt requirements/requirements.in requirements/development.in
 #
 
--e git+https://github.com/jaywink/social-federation.git@cddebf87cd884eb664adb0992148df7682b37dae#egg=Social-Federation==0.3.1
+-e git+https://github.com/jaywink/social-federation.git@v0.3.2#egg=Social-Federation==0.3.2
 arnold==0.4.1
 arrow==0.7.0              # via times
 click==6.6                # via rq

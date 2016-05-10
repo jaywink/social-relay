@@ -8,6 +8,8 @@ This document is in working draft status and is subject to change.
 
 This document describes the generic principles on how a relay should be built, and how the relay system should be interacted with.
 
+For the original idea, see the [diaspora* project wiki](https://wiki.diasporafoundation.org/Relay_servers_for_public_posts).
+
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC2119](https://www.w3.org/TR/activitystreams-core/#bib-RFC2119).
 
 ## Terms used in this document
@@ -16,12 +18,21 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 * `relay server` - a server acting as a relay for public visibility content.
 * `relay system` - a group of independent relay servers.
 * `protocol` - the Diaspora protocol which the relay system uses.
+* `participation` - a comment or like Diaspora protocol message.
 
 ## Integrating with the relay system
 
-### Node subscription preferences
+### Subscribing vs sending
 
-A node wishing to integrate with the relay system MUST expose a `.well-known/x-social-relay` JSON document with the following schema.
+There are two ways to integrate with the relay system - subscribing to content and sending content.
+
+Nodes MAY subscribe to content from the relay system. Nodes MAY send out content to the relay system. These two are not depending on each other. A node does not have to subscribe to content to send content, or the other way around.
+
+### Subscribing to content
+
+#### Node subscription preferences
+
+A node wishing to subscribe to content from the relay system MUST expose a `.well-known/x-social-relay` JSON document with the following schema.
 
     {
       "$schema": "http://json-schema.org/draft-04/schema#",
@@ -62,11 +73,11 @@ Example `.well-known/x-social-relay` document:
       "tags": ["foo", "bar"]
     }
 
-### Node discovery
+#### Node discovery
 
 The relay system must somehow become aware of the node to fetch the `.well-known/x-social-relay` document. Currently nodes MUST register at the https://the-federation.info list. Once registered there, the relay system will automatically become aware of the node.
 
-### Outgoing content publishing
+### Sending content to the relays
 
 Only public visibility content is handled by the relay system. Nodes MUST NOT send out private messages to the relay system.
 
@@ -74,13 +85,13 @@ Nodes MUST NOT send a single status message, comment, like or other content to m
 
 A node MAY send content to any relay server in the system. This server can be hard coded into settings to always be the same or the server can be randomized from a list on each send.
 
-### Relay servers
+#### Relay servers
 
 Relay servers are basically standard identities when it comes to discovering them. Each relay will have a handle in the form `relay@domain.tld`. Normal Diaspora protocol discovery methods SHOULD be used to interact with them.
 
 When sending content to a relay, the payload MUST be composed as if the target identity was any other identity in the network. Nodes wishing to send out to relays need only carbon copy the relay server handle into any public content.
 
-### Choosing a relay server
+#### Choosing a relay server
 
 A list of relay servers is not yet available since work on decentralizing the relay system is ongoing. The following relays are currently known to be operational:
 
@@ -90,13 +101,21 @@ A list of relay servers is not yet available since work on decentralizing the re
 
 A node MAY send content to any of the relays.
 
-### Types of outgoing content
+#### Types of outgoing content
+
+##### Status messages
 
 A node MAY send out public visibility status messages to a relay.
 
-A node MUST send out comments, likes and participations to a relay if the status message that is being commented, liked or participated upon was sent out to a relay. The relay MAY be the same, but this is not a requirement.
+##### Photos
 
-Relayed content from other nodes MUST NOT be sent out to relays (unless the normal federation logic happens to do that due to social relationships).
+Public visibility photos linked to status messages MAY be sent out to a relay. The relay system does not currently handle photos not linked to status messages.
+
+##### Participations (Comments and Likes)
+
+A node MUST send out comments, likes and participations to a relay for any locally authored status messages, if the status message that is being commented, liked or participated upon was sent out to a relay. The relay SHOULD be the same, but this is not a hard requirement.
+
+The key here is **locally authored status message**. As per the Diaspora protocol, any participations on local status messages from both local and remote users MUST be relayed to both local and remote subscribers. The same rules apply to sending participations to the relay. If the status message is local, any comments and likes MUST be sent out to the relay system, if the status message has also been sent out.
 
 ## Building a relay server
 

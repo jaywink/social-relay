@@ -26,7 +26,7 @@ Original idea for the relay system can be found in the [diaspora* project wiki](
 
 ### Python libraries
 
-Pip-tools is a nifty package to pin requirements. You can do `pip install -r requirements/base.txt` to install the Python requirements as in any regular project, but `pip-tools` will also ensure removal of unnecessary packages.
+Pip-tools is a nifty package to pin requirements. You can do `pip install -r requirements/requirements.txt` to install the Python requirements as in any regular project, but `pip-tools` will also ensure removal of unnecessary packages.
 
 First, make sure `pip` is up-to-date and install `pip-tools`:
 

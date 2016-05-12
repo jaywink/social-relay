@@ -6,7 +6,7 @@ python:
 services:
   - redis-server
 install:
-  - pip install -U pip
+  - pip install -U pip==8.1.1  # Locked to 8.1.1 due to pip-tools, should be ok to remote this in pip-tools>=1.7
   - pip install pip-tools
   - pip-sync requirements/development.txt
   - pip freeze

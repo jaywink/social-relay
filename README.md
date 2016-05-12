@@ -21,16 +21,18 @@ Original idea for the relay system can be found in the [diaspora* project wiki](
    - lib32z1-dev
    - python3-dev
        - Alternatively, install `python-lxml` package, for example, if you don't want to install everything in a virtual env.
+
+Optional (for better dependency management):
 * Pip 6.1 or later
-* `pip-tools`
+* pip-tools
 
 ### Python libraries
 
 Pip-tools is a nifty package to pin requirements. You can do `pip install -r requirements/requirements.txt` to install the Python requirements as in any regular project, but `pip-tools` will also ensure removal of unnecessary packages.
 
-First, make sure `pip` is up-to-date and install `pip-tools`:
+First, make sure `pip` is up-to-date and install `pip-tools`. Note, currently pip-tools<1.7 does not support pip>8.1.1.
 
-    pip install --upgrade pip
+    pip install -U pip==8.1.1
     pip install pip-tools
 
 Then install the requirements:

@@ -32,6 +32,12 @@ class TestViewsRespond(object):
     def test_receive_public_returns_200_with_xml_content(self, client):
         assert client.post(url_for("receive_public"), data={"xml": "foo"}).status_code == 200
 
+    def test_nodeinfo_wellknown(self, client):
+        assert client.get(url_for('nodeinfo_wellknown')).status_code == 200
+
+    def test_nodeinfo(self, client):
+        assert client.get(url_for('nodeinfo')).status_code == 200
+
 
 @pytest.mark.usefixtures('client_class')
 class TestViewsCallStatisticsLoggers(object):

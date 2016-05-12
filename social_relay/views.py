@@ -5,7 +5,10 @@ from flask import render_template, request, Response, abort
 from flask.ext.bower import Bower
 from rq_dashboard import RQDashboard
 
-from federation.hostmeta.generators import generate_host_meta, generate_legacy_webfinger, generate_hcard
+from federation.hostmeta.generators import (
+    generate_host_meta, generate_legacy_webfinger, generate_hcard, get_nodeinfo_well_known_document,
+    NODEINFO_DOCUMENT_PATH, NodeInfo
+)
 
 from social_relay import app
 from social_relay.utils.queues import public_queue
@@ -57,6 +60,26 @@ def index():
 def host_meta():
     hostmeta = generate_host_meta("diaspora", webfinger_host=app.config.get("SERVER_HOST"))
     return Response(hostmeta, status=200, mimetype="application/xrd+xml")
+
+
+@app.route('/.well-known/nodeinfo')
+def nodeinfo_wellknown():
+    nodeinfo = get_nodeinfo_well_known_document(app.config.get("SERVER_HOST"))
+    return Response(json.dumps(nodeinfo), status=200, mimetype="application/json")
+
+
+@app.route(NODEINFO_DOCUMENT_PATH)
+def nodeinfo():
+    nodeinfo = NodeInfo(
+        software="social-relay",
+        protocols={"inbound": ["diaspora"], "outbound": ["diaspora"]},
+        services={"inbound": [], "outbound": []},
+        open_registrations=False,
+        usage={"users": {}},
+        metadata={"nodeName": app.config.get("RELAY_NAME")},
+        skip_validate=True
+    )
+    return Response(nodeinfo.render(), status=200, mimetype="application/json")
 
 
 @app.route("/webfinger")

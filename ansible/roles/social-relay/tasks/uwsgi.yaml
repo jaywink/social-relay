@@ -4,6 +4,3 @@
   become_user: socialrelay
   notify:
     - restart web
-- name: Install uWSGI
-  pip: name=uwsgi state=latest virtualenv=/home/socialrelay/venv
-  become_user: socialrelay

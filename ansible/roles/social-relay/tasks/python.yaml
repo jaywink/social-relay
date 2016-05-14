@@ -9,6 +9,9 @@
   become_user: socialrelay
   command: creates=/home/socialrelay/venv virtualenv -p python3.4 /home/socialrelay/venv
 - name: Update pip
-  pip: name=pip state=latest virtualenv=/home/socialrelay/venv
+  # Lock to 8.1.1 due to pip-tools, remove once pip-tools releases 1.7
+  pip: name=pip state=present version=8.1.1 virtualenv=/home/socialrelay/venv
+  become_user: socialrelay
 - name: Install pip-tools
   pip: name=pip-tools state=latest virtualenv=/home/socialrelay/venv
+  become_user: socialrelay

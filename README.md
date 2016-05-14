@@ -142,6 +142,7 @@ When changing dependencies, make sure to update the requirements files:
 
     pip-compile --output-file requirements/requirements.txt requirements/requirements.in
     pip-compile --output-file requirements/development.txt requirements/requirements.in requirements/development.in
+    pip-compile --output-file requirements/requirements-ansible.txt requirements/requirements.in requirements/requirements-ansible.in
 
 ## Author
 

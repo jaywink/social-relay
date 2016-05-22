@@ -18,7 +18,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 * `relay server` - a server acting as a relay for public visibility content.
 * `relay system` - a group of independent relay servers.
 * `protocol` - the Diaspora protocol which the relay system uses.
-* `participation` - a comment or like Diaspora protocol message.
+* `participation` - a comment, like or participation Diaspora protocol message.
+* `retraction` - a removal of a commer, like or participation Diaspora protocol message.
 
 ## Integrating with the relay system
 
@@ -81,7 +82,7 @@ The relay system must somehow become aware of the node to fetch the `.well-known
 
 Only public visibility content is handled by the relay system. Nodes MUST NOT send out private messages to the relay system.
 
-Nodes MUST NOT send a single status message, comment, like or other content to more than one relay server, and only once.
+Nodes MUST NOT send a single status message, comment, like or other content to more than one relay server. Nodes MUST send each content payload only once and only to one relay server.
 
 A node MAY send content to any relay server in the system. This server can be hard coded into settings to always be the same or the server can be randomized from a list on each send.
 
@@ -107,15 +108,21 @@ A node MAY send content to any of the relays.
 
 A node MAY send out public visibility status messages to a relay.
 
+A node MUST send out to a relay retractions for status messages that have been previously sent out to a relay.
+
 ##### Photos
 
 Public visibility photos linked to status messages MAY be sent out to a relay. The relay system does not currently handle photos not linked to status messages.
 
-##### Participations (Comments and Likes)
+A node MUST send out to a relay retractions for photos that have been previously sent out to a relay.
+
+##### Participations (Comments, Likes and Participations)
 
 A node MUST send out comments, likes and participations to a relay for any locally authored status messages, if the status message that is being commented, liked or participated upon was sent out to a relay. The relay SHOULD be the same, but this is not a hard requirement.
 
 The key here is **locally authored status message**. As per the Diaspora protocol, any participations on local status messages from both local and remote users MUST be relayed to both local and remote subscribers. The same rules apply to sending participations to the relay. If the status message is local, any comments and likes MUST be sent out to the relay system, if the status message has also been sent out.
+
+A node MUST send out to a relay retractions for participations on locally authored content, as per the rules above for sending out new participations.
 
 ## Building a relay server
 

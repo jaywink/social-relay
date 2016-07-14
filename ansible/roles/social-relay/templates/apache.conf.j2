@@ -1,13 +1,15 @@
 <VirtualHost *:80>
     ServerName {{ socialrelay_hostname }}
     ServerAlias www.{{ socialrelay_hostname }}
+
+{% if socialrelay_https %}
     RedirectPermanent / https://{{ socialrelay_hostname }}/
 </VirtualHost>
 
 <VirtualHost *:443>
     ServerName {{ socialrelay_hostname }}
     ServerAlias www.{{ socialrelay_hostname }}
-
+{% endif %}
     ServerAdmin webmaster@{{ socialrelay_hostname }}
 
     Alias /robots.txt {{ socialrelay_web_root }}/robots.txt
@@ -22,8 +24,16 @@
     ProxyPass /static !
     ProxyPass / uwsgi://127.0.0.1:3039/
 
+{% if socialrelay_https %}
     SSLEngine on
-    SSLCertificateFile /etc/ssl/certs/{{ socialrelay_hostname }}.crt
-    SSLCertificateKeyFile /etc/ssl/private/{{ socialrelay_hostname }}.key
-    SSLCertificateChainFile /etc/ssl/certs/{{ socialrelay_hostname }}.chain.pem
+    {% if socialrelay_letsencrypt %}
+        SSLCertificateFile /etc/letsencrypt/live/{{ socialrelay_hostname }}/cert.pem
+        SSLCertificateKeyFile /etc/letsencrypt/live/{{ socialrelay_hostname }}/privkey.pem
+        SSLCertificateChainFile /etc/letsencrypt/live/{{ socialrelay_hostname }}/chain.pem
+    {% else %}
+        SSLCertificateFile /etc/ssl/certs/{{ socialrelay_hostname }}.crt
+        SSLCertificateKeyFile /etc/ssl/private/{{ socialrelay_hostname }}.key
+        SSLCertificateChainFile /etc/ssl/certs/{{ socialrelay_hostname }}.chain.pem
+    {% endif %}
+{% endif %}
 </VirtualHost>

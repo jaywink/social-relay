@@ -15,16 +15,19 @@
   template: dest=/etc/apache2/sites-available/socialrelay.conf src=apache.conf.j2
 - name: SSL cert
   copy:
-      content: "{{ ssl_cert }}"
+      content: "{{ socialrelay_ssl_cert }}"
       dest: /etc/ssl/certs/{{ socialrelay_hostname }}.crt
+  when: socialrelay_https and not socialrelay_letsencrypt
 - name: SSL key
   copy:
-      content: "{{ ssl_key }}"
+      content: "{{ socialrelay_ssl_key }}"
       dest: /etc/ssl/private/{{ socialrelay_hostname }}.key
+  when: socialrelay_https and not socialrelay_letsencrypt
 - name: SSL chain
   copy:
-      content: "{{ ssl_chain }}"
+      content: "{{ socialrelay_ssl_chain }}"
       dest: /etc/ssl/certs/{{ socialrelay_hostname }}.chain.pem
+  when: socialrelay_https and not socialrelay_letsencrypt
 - name: Enable site
   command: a2ensite socialrelay
   notify:

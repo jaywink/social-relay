@@ -27,11 +27,15 @@ class PodPoller(object):
         logging.info("Querying %s" % host)
         try:
             try:
-                response = requests.get("https://%s/.well-known/x-social-relay" % host, timeout=5)
+                response = requests.get("https://%s/.well-known/x-social-relay" % host,
+                                timeout=5,
+                                headers={ "User-Agent" : config.USER_AGENT })
             except timeout:
                 response = None
             if not response or response.status_code != 200:
-                response = requests.get("http://%s/.well-known/x-social-relay" % host, timeout=5)
+                response = requests.get("http://%s/.well-known/x-social-relay" % host,
+                                timeout=5,
+                                headers={ "User-Agent" : config.USER_AGENT })
                 if response.status_code != 200:
                     return None
         except (ConnectionError, Timeout, timeout):

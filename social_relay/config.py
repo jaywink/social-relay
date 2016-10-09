@@ -8,9 +8,13 @@ SERVER_HOST = "http://127.0.0.1:5000"
 
 RELAY_USERNAME = "relay"
 
+
 # Just something hcard needs, override in locals if you want to customize
 # This might appear visible on some pod who fetches the relay hcard...
 RELAY_NAME = "Social-Relay"
+
+# Set this to something else if you have any issues from default value
+USER_AGENT = "Social-Relay 1.0 https://github.com/jaywink/social-relay"
 
 # Relays only need a public key because Diaspora pods want to read one. So this doesn't need changing normally,
 # override in locals if needed

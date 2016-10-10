@@ -38,7 +38,7 @@ def send_payload(host, payload):
             response = requests.post(
                 "https://%s/receive/public" % host,
                 data={"xml": payload},
-                headers={"User-Agent" : config.USER_AGENT},
+                headers={"User-Agent": config.USER_AGENT},
                 timeout=10,
                 allow_redirects=False
             )
@@ -51,7 +51,7 @@ def send_payload(host, payload):
             response = requests.post(
                 "http://%s/receive/public" % host,
                 data={"xml": payload},
-                headers={"User-Agent" : config.USER_AGENT},
+                headers={"User-Agent": config.USER_AGENT},
                 timeout=10,
                 allow_redirects=False
             )

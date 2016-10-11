@@ -7,9 +7,9 @@ import requests
 from peewee import DoesNotExist
 from requests.exceptions import ConnectionError, Timeout
 
-from federation.controllers import handle_receive
 from federation.entities.diaspora.entities import DiasporaPost, DiasporaLike, DiasporaComment
 from federation.exceptions import NoSuitableProtocolFoundError
+from federation.inbound import handle_receive
 
 from social_relay import config
 from social_relay.models import Node, Post

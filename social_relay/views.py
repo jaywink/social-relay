@@ -112,7 +112,10 @@ def hcard(guid):
         photo300="",
         photo100="",
         photo50="",
-        searchable="false"
+        searchable="false",
+        guid=app.config.get("RELAY_GUID"),
+        public_key=app.config.get("RELAY_PUBLIC_KEY"),
+        username=app.config.get("RELAY_USERNAME"),
     )
     return Response(hcard, status=200)
 

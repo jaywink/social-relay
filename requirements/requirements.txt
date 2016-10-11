@@ -6,8 +6,8 @@ Flask-Bower==1.2.1
 hiredis==0.2.0
 redis==2.10.5
 
-# social-federation
--e git+https://github.com/jaywink/social-federation.git@v0.3.2#egg=Social-Federation==0.3.2
+# federation
+federation==0.8.0
 
 # generic
 requests==2.10.0

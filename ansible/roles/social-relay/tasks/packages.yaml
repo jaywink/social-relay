@@ -19,7 +19,7 @@
     # uWSGI
     - build-essential
     - python3-dev
-    # Social-Federation deps
+    # federation deps
     - libxml2-dev
     - libxslt-dev
     - lib32z1-dev

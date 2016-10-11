@@ -15,7 +15,7 @@ Original idea for the relay system can be found in the [diaspora* project wiki](
 * Python 3.x (tested on 3.4/3.5)
 * Redis
 * SQLite3
-* Packages for building LXML (required by Social-Federation library):
+* Packages for building LXML (required by `federation` library):
    - libxml2-dev
    - libxslt-dev
    - lib32z1-dev

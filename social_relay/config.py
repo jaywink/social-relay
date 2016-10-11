@@ -3,6 +3,9 @@ import logging
 from logging import handlers
 import os
 
+# Current version. Needless to say this shouldn't be changed except for a release.
+VERSION = "1.1.1"
+
 # Set this to a real domain in local config
 SERVER_HOST = "http://127.0.0.1:5000"
 
@@ -14,7 +17,7 @@ RELAY_USERNAME = "relay"
 RELAY_NAME = "Social-Relay"
 
 # Set this to something else if you have any issues from default value
-USER_AGENT = "Social-Relay 1.0 https://github.com/jaywink/social-relay"
+USER_AGENT = "Social-Relay/%s - https://github.com/jaywink/social-relay" % VERSION
 
 # Relays only need a public key because Diaspora pods want to read one. So this doesn't need changing normally,
 # override in locals if needed

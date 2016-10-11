@@ -71,7 +71,7 @@ def nodeinfo_wellknown():
 @app.route(NODEINFO_DOCUMENT_PATH)
 def nodeinfo():
     nodeinfo = NodeInfo(
-        software="social-relay",
+        software={"name": "social-relay", "version": app.config.get("VERSION")},
         protocols={"inbound": ["diaspora"], "outbound": ["diaspora"]},
         services={"inbound": [], "outbound": []},
         open_registrations=False,

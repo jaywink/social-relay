@@ -2,6 +2,7 @@
 
 ### Added
 - Expose [NodeInfo](https://github.com/jhass/nodeinfo) to allow registering relays to pod lists. Unfortunately, NodeInfo schema doesn't contain the relay software key so this NodeInfo document cannot be validated by consumers.
+- Network calls now use a custom user agent `Social-Relay/<version> - https://github.com/jaywink/social-relay`.
 
 ### Fixes
 - Fix `pip-sync` usage to maintain dependencies in Ansible role.

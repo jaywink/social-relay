@@ -127,6 +127,8 @@ The rqworker service file can also be used to start the optional `failed` queue 
 This is not the recommended way for a production server. For testing and development, run the server:
 
     python devserver.py
+    
+The app will be running at [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
 ### Running tests
 

@@ -22,24 +22,23 @@ Original idea for the relay system can be found in the [diaspora* project wiki](
    - python3-dev
        - Alternatively, install `python-lxml` package, for example, if you don't want to install everything in a virtual env.
 
-Optional (for better dependency management):
-* Pip 6.1 or later
-* pip-tools
-
 ### Python libraries
 
-Pip-tools is a nifty package to pin requirements. You can do `pip install -r requirements/requirements.txt` to install the Python requirements as in any regular project, but `pip-tools` will also ensure removal of unnecessary packages.
+Create a Python 3.3+ virtualenv and activate it.
 
-First, make sure `pip` is up-to-date and install `pip-tools`. Note, currently pip-tools<1.7 does not support pip>8.1.1.
+Ensure `pip` and `setuptools` are up to date.
 
-    pip install -U pip==8.1.1
-    pip install pip-tools
+    pip install -U pip setuptools
 
-Then install the requirements:
+Production requirements (for uWSGI deployment):
 
-    pip-sync requirements/requirements.txt
+    pip install -r requirements/production.txt
+    
+Development requirements:
+ 
+    pip install -r requirements/development.txt
 
-Run the `pip-sync` command after every refresh of the relay code to install/remove packages.
+Ensure also to install things like `uWSGI` if you use them in your deployment.
 
 ## Configuring
 
@@ -132,23 +131,11 @@ The app will be running at [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
 ### Running tests
 
-Make sure you have installed requirements using the command:
-
-    pip-sync requirements/development.txt
-
 Execute `py.test` to run the tests.
-
-### Updating requirements files
-
-When changing dependencies, make sure to update the requirements files:
-
-    pip-compile --output-file requirements/requirements.txt requirements/requirements.in
-    pip-compile --output-file requirements/development.txt requirements/requirements.in requirements/development.in
-    pip-compile --output-file requirements/requirements-ansible.txt requirements/requirements.in requirements/requirements-ansible.in
 
 ## Author
 
-Jason Robinson / @jaywink / https://jasonrobinson.me / https://iliketoast.net/u/jaywink
+Jason Robinson / @jaywink / https://jasonrobinson.me
 
 ## License
 

@@ -1,7 +1,0 @@
-## Requirements for Ansible role deployment
-
-# uWSGI
-uWSGI==2.0.13
-
-# Tools
-ipython==4.2.0

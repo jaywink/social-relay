@@ -11,7 +11,7 @@
 # Requirements
 - name: Install app requirements
   become_user: socialrelay
-  command: chdir=/home/socialrelay/socialrelay /home/socialrelay/venv/bin/pip-sync /home/socialrelay/socialrelay/requirements/requirements-ansible.txt
+  pip: requirements=/home/socialrelay/socialrelay/requirements/production.txt virtualenv=/home/socialrelay/venv
   notify:
     - restart worker
     - restart jobs

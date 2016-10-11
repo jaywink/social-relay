@@ -4,8 +4,8 @@
 - Expose [NodeInfo](https://github.com/jhass/nodeinfo) to allow registering relays to pod lists. Unfortunately, NodeInfo schema doesn't contain the relay software key so this NodeInfo document cannot be validated by consumers.
 - Network calls now use a custom user agent `Social-Relay/<version> - https://github.com/jaywink/social-relay`.
 
-### Fixes
-- Fix `pip-sync` usage to maintain dependencies in Ansible role.
+### Removed
+- Removed suggestion to use `pip-tools` and convert requirements files to standard Python project requirements files. Didn't dig the workflow after all. To install dev dependencies use `requirements/development.txt`. For production, use `requirements/production.txt`, which also contains `uWSGI`. If you don't deploy using uWSGI, you can just use `requirements/requirements.txt`.
 
 ## [1.1.1] - 2016-05-09
 

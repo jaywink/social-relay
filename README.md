@@ -137,6 +137,8 @@ Execute `py.test` to run the tests.
 
 Jason Robinson / @jaywink / https://jasonrobinson.me
 
+Awesome contributors listed in `CONTRIBUTORS` file.
+
 ## License
 
 AGPLv3

@@ -68,6 +68,12 @@ body {
   background-color: #428bca;
 }
 
+/* Other sidebar content */
+.version-text {
+  position: absolute;
+  bottom: 15px;
+  opacity: .7;
+}
 
 /*
  * Main content

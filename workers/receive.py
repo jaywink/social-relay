@@ -7,7 +7,8 @@ import requests
 from peewee import DoesNotExist
 from requests.exceptions import ConnectionError, Timeout
 
-from federation.entities.diaspora.entities import DiasporaPost, DiasporaLike, DiasporaComment
+from federation.entities.base import Image
+from federation.entities.diaspora.entities import DiasporaPost, DiasporaLike, DiasporaComment, DiasporaRetraction
 from federation.exceptions import NoSuitableProtocolFoundError
 from federation.inbound import handle_receive
 
@@ -18,7 +19,7 @@ from social_relay.utils.statistics import log_worker_receive_statistics
 
 
 SUPPORTED_ENTITIES = (
-    DiasporaPost, DiasporaLike, DiasporaComment
+    DiasporaPost, DiasporaLike, DiasporaComment, DiasporaRetraction, Image
 )
 
 
@@ -88,15 +89,16 @@ def get_send_to_nodes(sender, entity):
     :param entity: Entity instance
     :return: list
     """
-    if isinstance(entity, DiasporaPost):
+    if isinstance(entity, (DiasporaPost, Image)):
         nodes = nodes_who_want_all()
         nodes += config.ALWAYS_FORWARD_TO_HOSTS
-        nodes += nodes_who_want_tags(entity.tags)
+        if isinstance(entity, DiasporaPost):
+            nodes += nodes_who_want_tags(entity.tags)
         if sender.split("@")[1] in nodes:
             # Don't send back to sender
             nodes.remove(sender.split("@")[1])
         return nodes
-    elif isinstance(entity, (DiasporaLike, DiasporaComment)):
+    elif isinstance(entity, (DiasporaLike, DiasporaComment, DiasporaRetraction)):
         # Try to get nodes from the target_guid
         try:
             post = Post.get(guid=entity.target_guid)

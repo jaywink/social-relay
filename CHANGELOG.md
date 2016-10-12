@@ -2,7 +2,8 @@
 
 ### Added
 - Expose [NodeInfo](https://github.com/jhass/nodeinfo) to allow registering relays to pod lists. Unfortunately, NodeInfo schema doesn't contain the relay software key so this NodeInfo document cannot be validated by consumers.
-- Network calls now use a custom user agent `Social-Relay/<version> - https://github.com/jaywink/social-relay`.
+- Network calls now use a custom user agent `Social-Relay/<version> - https://github.com/jaywink/social-relay`. Thanks @bmanojlovic for the patch.
+- Relay also Diaspora `retraction` and `photo` entities. The former follows the same way `like` and `comment` entities are relayed, ie the targets are the same as where the `status_message` or `photo` were relayed. `photo` follows same rules as `status_message` entities, ie according to subscriber wishes.
 
 ### Removed
 - Removed suggestion to use `pip-tools` and convert requirements files to standard Python project requirements files. Didn't dig the workflow after all. To install dev dependencies use `requirements/development.txt`. For production, use `requirements/production.txt`, which also contains `uWSGI`. If you don't deploy using uWSGI, you can just use `requirements/requirements.txt`.

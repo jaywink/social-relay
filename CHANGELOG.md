@@ -5,6 +5,9 @@
 - Network calls now use a custom user agent `Social-Relay/<version> - https://github.com/jaywink/social-relay`. Thanks @bmanojlovic for the patch.
 - Relay also Diaspora `retraction` and `photo` entities. The former follows the same way `like` and `comment` entities are relayed, ie the targets are the same as where the `status_message` or `photo` were relayed. `photo` follows same rules as `status_message` entities, ie according to subscriber wishes.
 
+### Changed
+- Replaced custom payload sending with the new helper from `federation`. This will not try to deliver to `http` targets at all. This means nodes that are not using https will not get deliveries. Really, these days, there is no reason to run a public website with http.
+
 ### Removed
 - Removed suggestion to use `pip-tools` and convert requirements files to standard Python project requirements files. Didn't dig the workflow after all. To install dev dependencies use `requirements/development.txt`. For production, use `requirements/production.txt`, which also contains `uWSGI`. If you don't deploy using uWSGI, you can just use `requirements/requirements.txt`.
 

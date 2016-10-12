@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 import datetime
 import logging
-from _socket import timeout
-
-import requests
-from peewee import DoesNotExist
-from requests.exceptions import ConnectionError, Timeout
 
 from federation.entities.base import Image
 from federation.entities.diaspora.entities import DiasporaPost, DiasporaLike, DiasporaComment, DiasporaRetraction
 from federation.exceptions import NoSuitableProtocolFoundError
 from federation.inbound import handle_receive
+from federation.utils.network import send_document
+from peewee import DoesNotExist
 
 from social_relay import config
 from social_relay.models import Node, Post
@@ -21,48 +18,6 @@ from social_relay.utils.statistics import log_worker_receive_statistics
 SUPPORTED_ENTITIES = (
     DiasporaPost, DiasporaLike, DiasporaComment, DiasporaRetraction, Image
 )
-
-
-def send_payload(host, payload):
-    """Post payload to host, try https first, fall back to http.
-
-    Return a dictionary containing:
-        "result": True or False, depending on success of operation.
-        "https": True or False
-
-    Timeouts or connection errors will not be raised.
-    """
-    logging.info("Sending payload to %s" % host)
-    https = True
-    try:
-        try:
-            response = requests.post(
-                "https://%s/receive/public" % host,
-                data={"xml": payload},
-                headers={"User-Agent": config.USER_AGENT},
-                timeout=10,
-                allow_redirects=False
-            )
-            logging.debug("protocol=https host=%s result=%s" % (host, response.status_code))
-        except timeout:
-            logging.debug("protocol=https host=%s result=timeout" % host)
-            response = False
-        if not response or response.status_code not in [200, 202]:
-            https = False
-            response = requests.post(
-                "http://%s/receive/public" % host,
-                data={"xml": payload},
-                headers={"User-Agent": config.USER_AGENT},
-                timeout=10,
-                allow_redirects=False
-            )
-            logging.debug("protocol=http host=%s result=%s" % (host, response.status_code))
-            if response.status_code not in [200, 202]:
-                return {"result": False, "https": https}
-    except (ConnectionError, Timeout) as ex:
-        logging.debug("Connection failed with {host}: {ex}".format(host=host, ex=ex))
-        return {"result": False, "https": https}
-    return {"result": True, "https": https}
 
 
 def save_post_metadata(entity, protocol, hosts):
@@ -133,13 +88,18 @@ def process(payload):
                 nodes = get_send_to_nodes(sender, entity)
                 # Send out
                 for node in nodes:
-                    response = send_payload(node, payload)
-                    if response["result"]:
+                    status, error = send_document(
+                        url="https://%s/receive/public" % node,
+                        data={"xml": payload},
+                        headers={"User-Agent": config.USER_AGENT},
+                    )
+                    is_success = status in [200, 202]
+                    if is_success:
                         sent_success += 1
                         sent_to_nodes.append(node)
                     sent_amount += 1
-                    update_node(node, response)
-                if sent_to_nodes and isinstance(entity, DiasporaPost):
+                    update_node(node, is_success)
+                if sent_to_nodes and isinstance(entity, (DiasporaPost, Image)):
                     save_post_metadata(entity=entity, protocol=protocol_name, hosts=sent_to_nodes)
     finally:
         log_worker_receive_statistics(
@@ -147,24 +107,25 @@ def process(payload):
         )
 
 
-def update_node(pod, response):
+def update_node(node, success):
     """Update Node in database
 
-    :param pod: Hostname
-    :param response: Dictionary with booleans "result" and "https"
+    :param node: Hostname
+    :param success: Was the last call a success (bool)
     """
     try:
-        Node.get_or_create(host=pod)
-        if response["result"]:
+        Node.get_or_create(host=node)
+        if success:
             # Update delivered_count and last_success, nullify failure_count
+            # TODO: remove the whole https tracking - we're only delivering to https now
             Node.update(
                 last_success=datetime.datetime.now(), total_delivered=Node.total_delivered + 1,
-                failure_count=0, https=response["https"]).where(Node.host==pod).execute()
+                failure_count=0, https=True).where(Node.host == node).execute()
         else:
             # Update failure_count
             Node.update(
-                failure_count=Node.failure_count + 1).where(Node.host==pod).execute()
+                failure_count=Node.failure_count + 1).where(Node.host == node).execute()
     except Exception as ex:
         logging.warning("Exception when trying to save or update Node {node} into database: {exc}".format(
-            node=pod, exc=ex)
+            node=node, exc=ex)
         )

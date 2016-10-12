@@ -26,20 +26,20 @@ class TestReceiveWorkerProcessCallsSendPayload(object):
         DiasporaPost(raw_content="Awesome #post")
     ]))
 
-    @patch("workers.receive.send_payload")
-    def test_send_payload_called(self, mock_handle_receive, mock_send_payload, mock_pod_preferences):
+    @patch("workers.receive.send_document", return_value=(200, None))
+    def test_send_payload_called(self, mock_handle_receive, mock_send_document, mock_pod_preferences):
         process(Mock())
-        assert mock_send_payload.call_count == 1
+        assert mock_send_document.call_count == 1
 
 
 @pytest.mark.usefixtures('config')
 @patch("workers.receive.handle_receive", return_value=("foo@example.com", "diaspora", [
     DiasporaPost(raw_content="Awesome #post", guid="foobar")
 ]))
-@patch("workers.receive.send_payload", return_value={"result": True, "https": True})
+@patch("workers.receive.send_document", return_value=(200, None))
 @patch("social_relay.utils.data.get_pod_preferences", return_value={})
 class TestReceiveWorkerStoresNodeAndPostMetadata(object):
-    def test_send_payload_stores_unknown_node_into_db(self, mock_handle_receive, mock_send_payload,
+    def test_send_payload_stores_unknown_node_into_db(self, mock_handle_receive, mock_send_document,
                                                       mock_pod_preferences):
         process(Mock())
         assert Node.select().count() == 1
@@ -47,7 +47,7 @@ class TestReceiveWorkerStoresNodeAndPostMetadata(object):
         assert node
         assert node.https
 
-    def test_send_payload_updates_existing_node_in_db(self, mock_handle_receive, mock_send_payload,
+    def test_send_payload_updates_existing_node_in_db(self, mock_handle_receive, mock_send_document,
                                                       mock_pod_preferences):
         Node.create(
             host="sub.example.com", last_success=datetime.datetime.now()
@@ -68,7 +68,7 @@ class TestReceiveWorkerStoresNodeAndPostMetadata(object):
         node = Node.get(Node.host=="sub.example.com")
         assert node.failure_count == 1
 
-    def test_send_payload_success_clears_existing_node_failure_count(self, mock_handle_receive, mock_send_payload,
+    def test_send_payload_success_clears_existing_node_failure_count(self, mock_handle_receive, mock_send_document,
                                                                      mock_pod_preferences):
         Node.create(
             host="sub.example.com", last_success=datetime.datetime.now(), failure_count=1
@@ -77,7 +77,7 @@ class TestReceiveWorkerStoresNodeAndPostMetadata(object):
         node = Node.get(Node.host == "sub.example.com")
         assert node.failure_count == 0
 
-    def test_send_payload_insert_post_into_posts_table(self, mock_handle_receive, mock_send_payload,
+    def test_send_payload_insert_post_into_posts_table(self, mock_handle_receive, mock_send_document,
                                                        mock_pod_preferences):
         process(Mock())
         post = Post.get(Post.guid=="foobar")

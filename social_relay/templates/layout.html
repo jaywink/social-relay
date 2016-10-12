@@ -5,11 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="Social Relay">
-    <meta name="author" content="Jason Robinson">
+    <meta name="description" content="{{ config.get("RELAY_NAME") }}">
     <!--<link rel="icon" href="../../favicon.ico">-->
 
-    <title>Social Relay</title>
+    <title>{{ config.get("RELAY_NAME") }}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('bower.static', filename='bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -39,7 +38,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Social Relay</a>
+                <a class="navbar-brand" href="/">{{ config.get("RELAY_NAME") }}</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -55,7 +54,7 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li class="active"><a class="selector" href="#" data-content="subscribers">Subscribers</a></li>
+                    <li class="active"><a class="selector" href="#" data-content="subscribers">Dashboard</a></li>
                     <li><a class="selector" href="#" data-content="about">About</a></li>
                 </ul>
                 <div class="version-text"><a href="https://github.com/jaywink/social-relay/releases">v{{ config.get("VERSION") }}</a></div>

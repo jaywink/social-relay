@@ -91,8 +91,7 @@ def process(payload):
                     status, error = send_document(
                         url="https://%s/receive/public" % node,
                         data={"xml": payload},
-                        # TODO: enable once federation send_document is fixed not to duplicate this
-                        # headers={"User-Agent": config.USER_AGENT},
+                        headers={"User-Agent": config.USER_AGENT},
                     )
                     is_success = status in [200, 202]
                     if is_success:

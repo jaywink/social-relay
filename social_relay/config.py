@@ -4,7 +4,7 @@ from logging import handlers
 import os
 
 # Current version. Needless to say this shouldn't be changed except for a release.
-VERSION = "1.1.1"
+VERSION = "1.2.0"
 
 # Set this to a real domain in local config
 SERVER_HOST = "http://127.0.0.1:5000"

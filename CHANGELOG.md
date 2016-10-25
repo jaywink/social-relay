@@ -1,4 +1,4 @@
-## [unreleased]
+## [1.2.0] - 2016-10-25
 
 ### Added
 - Expose [NodeInfo](https://github.com/jhass/nodeinfo) to allow registering relays to pod lists. Unfortunately, NodeInfo schema doesn't contain the relay software key so this NodeInfo document cannot be validated by consumers.

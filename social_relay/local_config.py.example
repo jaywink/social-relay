@@ -14,3 +14,10 @@ ALWAYS_FORWARD_TO_HOSTS = []
 # You *must* set these if RQ_DASHBOARD is enabled.
 #RQ_DASHBOARD_USERNAME = "a very good username"
 #RQ_DASHBOARD_PASSWORD = "a very good password"
+
+# Uncomment and set for PostgreSQL
+#DATABASE_TYPE = 'postgresql'
+#DATABASE_NAME = "socialrelay"
+#DATABASE_USER = "socialrelay"
+#DATABASE_PASSWORD = "socialrelay"
+#DATABASE_HOST = "127.0.0.1"

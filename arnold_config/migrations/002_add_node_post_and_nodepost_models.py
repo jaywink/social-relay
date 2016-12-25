@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from arnold_config import database
-
+from social_relay.config import database
 from social_relay.models import Node, Post, NodePost
 
 

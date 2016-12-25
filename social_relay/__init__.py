@@ -7,7 +7,7 @@ from social_relay import config
 app = Flask(__name__)
 app.config.from_object(config)
 
-database = FlaskDB(app)
+database = FlaskDB(app, config.database)
 
 import social_relay.views
 

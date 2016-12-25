@@ -2,7 +2,7 @@
 # Code
 - name: Get latest socialrelay code
   become_user: socialrelay
-  git: accept_hostkey=yes dest=/home/socialrelay/socialrelay repo=https://github.com/jaywink/social-relay.git force=yes
+  git: accept_hostkey=yes dest=/home/socialrelay/socialrelay repo=https://github.com/jaywink/social-relay.git force=yes version={{ socialrelay_version }}
   notify:
     - restart worker
     - restart jobs
@@ -16,6 +16,14 @@
     - restart worker
     - restart jobs
     - restart web
+- name: Install PostgreSQL requirements
+  become_user: socialrelay
+  pip: requirements=/home/socialrelay/socialrelay/requirements/postgresql.txt virtualenv=/home/socialrelay/venv
+  notify:
+    - restart worker
+    - restart jobs
+    - restart web
+  when: socialrelay_database == "postgresql"
 
 # Settings
 - name: Create local settings

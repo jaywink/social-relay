@@ -3,7 +3,7 @@ import logging
 from logging import handlers
 import os
 
-from peewee import SqliteDatabase, PostgresqlDatabase
+from peewee import PostgresqlDatabase, MySQLDatabase
 
 # Current version. Needless to say this shouldn't be changed except for a release.
 VERSION = "1.2.0"
@@ -40,12 +40,11 @@ LOG_TO_CONSOLE = False
 
 # Database
 # Override in local_config.py
-DATABASE_TYPE = 'sqlite'
-DATABASE_NAME = 'var/social-relay.db'
-# Needed only for postgres/mysql
-DATABASE_USER = ''
-DATABASE_PASSWORD = ''
-DATABASE_HOST = ''
+DATABASE_TYPE = 'postgresql'
+DATABASE_NAME = 'socialrelay'
+DATABASE_USER = 'socialrelay'
+DATABASE_PASSWORD = None
+DATABASE_HOST = '127.0.0.1'
 
 # Redis
 REDIS_DB = 0
@@ -104,12 +103,14 @@ if RQ_DASHBOARD:
         raise
 
 # Initialize db connection
-if DATABASE_TYPE == "sqlite":
-    database = SqliteDatabase(DATABASE_NAME)
-elif DATABASE_TYPE == "postgresql":
+if DATABASE_TYPE == "postgresql":
     database = PostgresqlDatabase(
         database=DATABASE_NAME, user=DATABASE_USER, password=DATABASE_PASSWORD, host=DATABASE_HOST,
         autorollback=True,
+    )
+elif DATABASE_TYPE == "mysql":
+    database = MySQLDatabase(
+        database=DATABASE_NAME, user=DATABASE_USER, password=DATABASE_PASSWORD, host=DATABASE_HOST,
     )
 else:
     raise Exception("Invalid database type configuration")

@@ -5,9 +5,11 @@ python:
   - "3.5"
 services:
   - redis-server
+  - postgresql
 install:
   - pip install -U pip setuptools
   - pip install -U -r requirements/development.txt
+  - pip install -U -r requirements/postgresql.txt
   - pip freeze
 cache:
   directories:
@@ -16,6 +18,8 @@ cache:
 before_script:
   - npm install -g bower
   - bower install
+  - psql -c "create user socialrelaytest password 'socialrelaytest';" -U postgres
+  - psql -c 'create database socialrelaytest owner socialrelaytest;' -U postgres
 script: py.test --cov=./
 after_success:
   - codecov

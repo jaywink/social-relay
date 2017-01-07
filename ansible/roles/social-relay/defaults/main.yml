@@ -1,6 +1,4 @@
 ---
-#socialrelay_database_file: "var/social-relay.db"
-socialrelay_database: postgresql
 socialrelay_database_name: socialrelay
 socialrelay_database_user: socialrelay
 #socialrelay_database_password: set me

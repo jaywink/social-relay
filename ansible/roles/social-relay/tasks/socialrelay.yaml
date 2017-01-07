@@ -23,7 +23,6 @@
     - restart worker
     - restart jobs
     - restart web
-  when: socialrelay_database == "postgresql"
 
 # Settings
 - name: Create local settings

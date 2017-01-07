@@ -124,7 +124,7 @@ An Apache2 site example can be found [here](https://github.com/jaywink/social-re
 
 ### Ansible (Ubuntu)
 
-An Ansible role written for Ubuntu is provided in `ansible` directory. The role uses uWSGI and Apache to serve the app. It will run also the scheduled jobs and a worker. Everything is handled by upstart.
+An Ansible role written for Ubuntu is provided in `ansible` directory. The role uses PostgreSQL, uWSGI and Apache. It will run also the scheduled jobs and a worker. Everything is handled by upstart.
 
 Tested with Ubuntu 14.04 LTS.
 

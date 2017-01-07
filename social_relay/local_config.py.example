@@ -14,3 +14,6 @@ ALWAYS_FORWARD_TO_HOSTS = []
 # You *must* set these if RQ_DASHBOARD is enabled.
 #RQ_DASHBOARD_USERNAME = "a very good username"
 #RQ_DASHBOARD_PASSWORD = "a very good password"
+
+# Uncomment and set database password or other overrides
+#DATABASE_PASSWORD = ""

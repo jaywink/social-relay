@@ -1,5 +1,8 @@
 ---
-socialrelay_database_file: "var/social-relay.db"
+socialrelay_database_name: socialrelay
+socialrelay_database_user: socialrelay
+#socialrelay_database_password: set me
+socialrelay_database_host: 127.0.0.1
 socialrelay_hostname: mysocialrelay.me
 socialrelay_redis_db: 0
 socialrelay_redis_host: localhost
@@ -7,6 +10,7 @@ socialrelay_redis_port: 6379
 socialrelay_relay_guid:
 socialrelay_secret_key:
 socialrelay_web_root: /home/socialrelay/socialrelay/social_relay/static
+socialrelay_version: master
 
 # Keep true to use https
 socialrelay_https: true

@@ -1,5 +1,18 @@
 ---
-- name: Install SQLite3
+- name: Install PostgreSQL
   apt: name={{ item }} state=present
   with_items:
-    - sqlite3
+    - libpq-dev
+    - postgresql-9.3
+    - python-psycopg2
+
+- name: Create database
+  postgresql_db: name={{ socialrelay_database_name }}
+  become_user: postgres
+- name: Create user
+  postgresql_user: db={{ socialrelay_database_name }} name={{ socialrelay_database_user }} password={{ socialrelay_database_password }} priv=ALL
+  become_user: postgres
+- name: Ensure user does not have unnecessary privilege
+  postgresql_user: name={{ socialrelay_database_user }} role_attr_flags=NOSUPERUSER,NOCREATEDB
+  become_user: postgres
+

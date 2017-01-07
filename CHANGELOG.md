@@ -1,3 +1,13 @@
+## [unreleased]
+
+### Backwards incompatible changes
+
+**Important!** Removed support for SQLite. Added support for PostgreSQL and MySQL/MariaDB.
+
+Reason for this is that SQLite simply will not scale for more than one worker running. With increased adoption of the relay system within The Federation, relays will have to deal with more traffic in the future. Thus, a proper database is needed.
+
+Relays upgrading should not worry too much about migrating the old data over. That can be done but due to limited amount of nodes sending participations at this moment, routing doesn't yet use the database that much. There are no schema changes in this upgrade so if you wish to move the data from the SQLite DB, it should be relatively easy to do so.
+
 ## [1.2.0] - 2016-10-25
 
 ### Added

@@ -54,8 +54,16 @@ class Post(database.Model):
 NodePost = Post.nodes.get_through_model()
 
 
+TABLES = (
+    ReceiveStatistic, WorkerReceiveStatistic, Node, Post, NodePost,
+)
+
+
 def create_all_tables(db):
     """Create all tables to the designated db."""
-    db.database.create_tables([
-        ReceiveStatistic, WorkerReceiveStatistic, Node, Post, NodePost,
-    ])
+    db.database.create_tables(TABLES)
+
+
+def drop_all_tables(db):
+    """Drop all tables from the designated db."""
+    db.database.drop_tables(TABLES)

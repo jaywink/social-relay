@@ -3,8 +3,10 @@ import logging
 from logging import handlers
 import os
 
+from peewee import PostgresqlDatabase, MySQLDatabase
+
 # Current version. Needless to say this shouldn't be changed except for a release.
-VERSION = "1.2.0"
+VERSION = "1.3.0.dev"
 
 # Set this to a real domain in local config
 SERVER_HOST = "http://127.0.0.1:5000"
@@ -37,7 +39,12 @@ LOG_PATH = "var/social-relay.log"
 LOG_TO_CONSOLE = False
 
 # Database
-DATABASE_NAME = 'var/social-relay.db'
+# Override in local_config.py or env variable "RELAY_DATABASE_TYPE"
+DATABASE_TYPE = os.environ.get("RELAY_DATABASE_TYPE") or 'postgresql'
+DATABASE_NAME = os.environ.get("RELAY_DATABASE_NAME") or 'socialrelay'
+DATABASE_USER = os.environ.get("RELAY_DATABASE_USER") or 'socialrelay'
+DATABASE_PASSWORD = os.environ.get("RELAY_DATABASE_PASSWORD")
+DATABASE_HOST = os.environ.get("RELAY_DATABASE_HOST") or '127.0.0.1'
 
 # Redis
 REDIS_DB = 0
@@ -51,9 +58,6 @@ try:
     from social_relay.local_config import *
 except ImportError:
     pass
-
-# Set up database URI
-DATABASE = 'sqlite:///{name}'.format(name=DATABASE_NAME)
 
 RELAY_ACCOUNT = "%s@%s" % (
     RELAY_USERNAME,
@@ -97,3 +101,16 @@ if RQ_DASHBOARD:
         print("****\nYOU MUST define RQ_DASHBOARD_USERNAME and RQ_DASHBOARD_PASSWORD if RQ_DASHBOARD is enabled.\n"
               "****")
         raise
+
+# Initialize db connection
+if DATABASE_TYPE == "postgresql":
+    database = PostgresqlDatabase(
+        database=DATABASE_NAME, user=DATABASE_USER, password=DATABASE_PASSWORD, host=DATABASE_HOST,
+        autorollback=True,
+    )
+elif DATABASE_TYPE == "mysql":
+    database = MySQLDatabase(
+        database=DATABASE_NAME, user=DATABASE_USER, password=DATABASE_PASSWORD, host=DATABASE_HOST,
+    )
+else:
+    raise Exception("Invalid database type configuration")

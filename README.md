@@ -10,37 +10,68 @@ See [relay design concept](https://github.com/jaywink/social-relay/blob/master/d
 
 Original idea for the relay system can be found in the [diaspora* project wiki](https://wiki.diasporafoundation.org/Relay_servers_for_public_posts).
 
-## Requirements
+## Installation
+       
+### System libraries
 
-* Python 3.x (tested on 3.4/3.5)
-* Redis
-* SQLite3
-* Packages for building LXML (required by `federation` library):
-   - libxml2-dev
-   - libxslt-dev
-   - lib32z1-dev
-   - python3-dev
-       - Alternatively, install `python-lxml` package, for example, if you don't want to install everything in a virtual env.
+Depending on your database, you will probably need extra libraries installed.
+
+For databases, PostgreSQL and MySQL/MariaDB are supported, choose one.
+
+#### Python
+
+Python 3.4+ is required.
+
+#### Redis
+
+    # Debian / Ubuntu
+    sudo apt-get install redis-server
+
+#### PostgreSQL
+
+    # Debian / Ubuntu
+    sudo apt-get install libpq-dev postgresql
+    
+#### MySQL/MariaDB
+
+    # Debian / Ubuntu
+    sudo apt-get install python3-dev libmysqlclient-dev 
+
+    # Red Hat / CentOS
+    sudo yum install python3-devel mysql-devel
+    
+#### Federation
+
+The `federation` dependency `lxml` requires certain libraries present:
+ 
+    # Debian / Ubuntu
+    sudo apt-get install libxml2-dev libxslt-dev lib32z1-dev python3-dev
 
 ### Python libraries
 
-Create a Python 3.3+ virtualenv and activate it.
+Create a Python 3.4+ virtualenv and activate it.
 
 Ensure `pip` and `setuptools` are up to date.
 
     pip install -U pip setuptools
 
-Production requirements (for uWSGI deployment):
+If you are deploying via uWSGI, use:
 
     pip install -r requirements/production.txt
     
-Development requirements:
- 
-    pip install -r requirements/development.txt
+Otherwise just use the base requirements and install your favourite WSGI engine manually:
 
-Ensure also to install things like `uWSGI` if you use them in your deployment.
+    pip install -r requirements/requirements.txt
+    
+Additionally, choose your database and install the requirements:
 
-## Configuring
+    # PostgreSQL
+    pip install -r requirements/postgresql.txt
+    
+    # MySQL/MariaDB
+    pip install -r requirements/mysql.txt
+
+### Configuring
 
 Create local config:
 
@@ -48,7 +79,7 @@ Create local config:
 
 Edit the `local_config.py` file as instructed in the file.
 
-## Database
+### Database
 
 The SQLite database needs an initial schema creation. Do this with:
 
@@ -61,13 +92,13 @@ The same command should always be run when fetching new relay code. It will migr
 An RQ dashboard can be found at `/rq`. Enable it in `social_relay/local_config.py` by setting `RQ_DASHBOARD = True`.
 You must also set a username and password in the same file.
 
-## Static files
+### Static files
 
 Bower is used to pull in some JavaScript libs. [Install it first](http://bower.io/) if needed. Then run `bower install`.
 
 Statics are server under the `/static` path which should be server by the web server.
 
-## Running tasks
+### Running tasks
 
 For normal operation, scheduled jobs should always be running. They take care of refreshing the pod list and polling pods for their subscription preferences. Without these scheduled jobs, the relay will not be able to function.
 
@@ -75,7 +106,7 @@ Keep this running:
 
     python -m tasks.schedule_jobs
 
-## Processing receive queue
+### Processing receive queue
 
 Incoming posts are stored in Redis and processed using RQ workers. Keep one or more worker running always.
 
@@ -93,7 +124,7 @@ An Apache2 site example can be found [here](https://github.com/jaywink/social-re
 
 ### Ansible (Ubuntu)
 
-An Ansible role written for Ubuntu is provided in `ansible` directory. The role uses uWSGI and Apache to serve the app. It will run also the scheduled jobs and a worker. Everything is handled by upstart.
+An Ansible role written for Ubuntu is provided in `ansible` directory. The role uses PostgreSQL, uWSGI and Apache. It will run also the scheduled jobs and a worker. Everything is handled by upstart.
 
 Tested with Ubuntu 14.04 LTS.
 
@@ -120,6 +151,10 @@ The rqworker service file can also be used to start the optional `failed` queue 
     systemctl start social-relay_rqworker@failed.service
 
 ## Development
+
+### Additional development requirements
+
+    pip install -r requirements/development.txt
 
 ### Running a development server
 

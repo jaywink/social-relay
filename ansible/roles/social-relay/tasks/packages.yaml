@@ -1,6 +1,7 @@
 ---
-- name: Ensure locales are set
+- name: Ensure locales are set (LANGUAGE)
   lineinfile: line='LANGUAGE="en_US.UTF-8"' dest=/etc/default/locale state=present
+- name: Ensure locales are set (LC_ALL)
   lineinfile: line='LC_ALL="en_US.UTF-8"' dest=/etc/default/locale state=present
 - name: Generate locales
   command: /usr/sbin/locale-gen

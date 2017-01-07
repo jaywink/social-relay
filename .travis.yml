@@ -3,13 +3,18 @@ language: python
 python:
   - "3.4"
   - "3.5"
+env:
+  - RELAY_DATABASE_TYPE=postgresql
+  - RELAY_DATABASE_TYPE=mysql
 services:
   - redis-server
   - postgresql
+  - mysql
 install:
   - pip install -U pip setuptools
   - pip install -U -r requirements/development.txt
-  - pip install -U -r requirements/postgresql.txt
+  - sh -c "if [ '$RELAY_DATABASE_TYPE' = 'postgresql' ]; then pip install -U -r requirements/postgresql.txt; fi"
+  - sh -c "if [ '$RELAY_DATABASE_TYPE' = 'mysql' ]; then pip install -U -r requirements/mysql.txt; fi"
   - pip freeze
 cache:
   directories:
@@ -18,8 +23,8 @@ cache:
 before_script:
   - npm install -g bower
   - bower install
-  - psql -c "create user socialrelaytest password 'socialrelaytest';" -U postgres
-  - psql -c 'create database socialrelaytest owner socialrelaytest;' -U postgres
+  - sh -c "if [ '$RELAY_DATABASE_TYPE' = 'postgresql' ]; then psql -c 'create database socialrelaytest owner postgres;' -U postgres; fi"
+  - sh -c "if [ '$RELAY_DATABASE_TYPE' = 'mysql' ]; then mysql -e 'CREATE DATABASE socialrelaytest;'; fi"
 script: py.test --cov=./
 after_success:
   - codecov

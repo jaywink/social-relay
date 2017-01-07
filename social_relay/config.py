@@ -39,12 +39,12 @@ LOG_PATH = "var/social-relay.log"
 LOG_TO_CONSOLE = False
 
 # Database
-# Override in local_config.py
-DATABASE_TYPE = 'postgresql'
-DATABASE_NAME = 'socialrelay'
-DATABASE_USER = 'socialrelay'
-DATABASE_PASSWORD = None
-DATABASE_HOST = '127.0.0.1'
+# Override in local_config.py or env variable "RELAY_DATABASE_TYPE"
+DATABASE_TYPE = os.environ.get("RELAY_DATABASE_TYPE") or 'postgresql'
+DATABASE_NAME = os.environ.get("RELAY_DATABASE_NAME") or 'socialrelay'
+DATABASE_USER = os.environ.get("RELAY_DATABASE_USER") or 'socialrelay'
+DATABASE_PASSWORD = os.environ.get("RELAY_DATABASE_PASSWORD")
+DATABASE_HOST = os.environ.get("RELAY_DATABASE_HOST") or '127.0.0.1'
 
 # Redis
 REDIS_DB = 0

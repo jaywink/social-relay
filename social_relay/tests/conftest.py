@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
-from peewee import ProgrammingError
+from peewee import ProgrammingError, OperationalError
 
 from social_relay.models import create_all_tables, drop_all_tables
 
@@ -10,7 +10,7 @@ def app(request):
     from social_relay import app, database
     try:
         drop_all_tables(database)
-    except ProgrammingError:
+    except (ProgrammingError, OperationalError):
         pass
     create_all_tables(database)
 

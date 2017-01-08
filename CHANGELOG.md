@@ -2,11 +2,21 @@
 
 ### Backwards incompatible changes
 
+#### Database engines
+
 **Important!** Removed support for SQLite. Added support for PostgreSQL and MySQL/MariaDB.
 
 Reason for this is that SQLite simply will not scale for more than one worker running. With increased adoption of the relay system within The Federation, relays will have to deal with more traffic in the future. Thus, a proper database is needed.
 
 Relays upgrading should not worry too much about migrating the old data over. That can be done but due to limited amount of nodes sending participations at this moment, routing doesn't yet use the database that much. There are no schema changes in this upgrade so if you wish to move the data from the SQLite DB, it should be relatively easy to do so.
+
+#### RQ worker wrapper
+
+The old wrapper `runworker.py` has been removed. This was initially added to easily provide a way to run a worker using the already existing Redis configuration. It's better however to use the cli command provided by RQ to not have to maintain our own wrapper, and to be able to use all the available cli options.
+
+To run a worker, use the following command:
+
+    rqworker -c social_relay.config receive
 
 ## [1.2.0] - 2016-10-25
 

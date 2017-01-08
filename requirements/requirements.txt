@@ -1,5 +1,5 @@
 # Flask
-Flask==0.10.1
+Flask==0.12
 Flask-Bower==1.2.1
 
 # redis backend

@@ -10,7 +10,7 @@ redis==2.10.5
 federation==0.9.1
 
 # generic
-requests==2.10.0
+requests==2.12.4
 schedule==0.3.2
 
 # background jobs

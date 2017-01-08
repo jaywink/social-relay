@@ -31,7 +31,9 @@ RELAY_PUBLIC_KEY = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9eofav26VCq3C6g9sIPji
 
 POD_LIST_JSON = "https://the-federation.info/pods.json"
 
+# RQ Dashboard
 RQ_DASHBOARD = False  # Enable in local config
+RQ_POLL_INTERVAL = 2500  # Poll interval for the RQ dashboard
 
 BOWER_COMPONENTS_ROOT = "../bower_components"
 

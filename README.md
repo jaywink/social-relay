@@ -110,11 +110,9 @@ Keep this running:
 
 Incoming posts are stored in Redis and processed using RQ workers. Keep one or more worker running always.
 
-To make use of the app configuration for Redis in `social_relay/local_config.py`, use the provided `runworker.py` wrapper, as follows:
+To make use of the app configuration for Redis in `social_relay/local_config.py`, run the worker(s) as follows:
 
-    python runworker.py receive
-
-If you do run a worker via `rqworker` command directly, make sure to use the same Redis database as set in app configuration.
+    rqworker -c social_relay.config receive
 
 ## Deployment
 

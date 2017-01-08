@@ -1,40 +1,23 @@
 # -*- coding: utf-8 -*-
 import json
 
-from flask import render_template, request, Response, abort
-from flask.ext.bower import Bower
-from rq_dashboard import RQDashboard
-
+import rq_dashboard
 from federation.hostmeta.generators import (
     generate_host_meta, generate_legacy_webfinger, generate_hcard, get_nodeinfo_well_known_document,
     NODEINFO_DOCUMENT_PATH, NodeInfo
 )
+from flask import render_template, request, Response, abort
+from flask_bower import Bower
 
 from social_relay import app
+from social_relay.utils.auth import basic_auth
 from social_relay.utils.queues import public_queue
 from social_relay.utils.statistics import get_subscriber_stats, get_count_stats, log_receive_statistics
 
-
 # RQ DASHBOARD
 if app.config.get("RQ_DASHBOARD"):
-    # Snippet from https://github.com/nvie/rq-dashboard/issues/75#issuecomment-90843823
-    # Prepare the authentication for the RQ dashboard
-    def _basic_http_auth():
-        auth = request.authorization
-        return auth and auth.password == app.config.get("RQ_DASHBOARD_PASSWORD") and \
-               auth.username == app.config.get("RQ_DASHBOARD_USERNAME")
-
-    # And we register it
-    RQDashboard(app, auth_handler=_basic_http_auth)
-
-    # NOTE: RQ Dashboard is registered as a blueprint and thus we can setup a Flask error handler for our case.
-    # When the configured RQ Dashboard auth_handler returns False, a 401 HTTPException is thrown out,
-    # so we can intercept it. Thus, we setup an error handler for the rq_dashboard blueprint.
-    def _auth_exception_handler(error):
-        return '', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'}
-
-    app.error_handler_spec.setdefault('rq_dashboard', {})[401] = _auth_exception_handler
-
+    rq_dashboard.blueprint.before_request(basic_auth)
+    app.register_blueprint(rq_dashboard.blueprint, url_prefix="/rq")
 
 # Bower
 Bower(app)

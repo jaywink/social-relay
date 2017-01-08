@@ -7,7 +7,7 @@ from federation.hostmeta.generators import (
     NODEINFO_DOCUMENT_PATH, NodeInfo
 )
 from flask import render_template, request, Response, abort
-from flask.ext.bower import Bower
+from flask_bower import Bower
 
 from social_relay import app
 from social_relay.utils.auth import basic_auth

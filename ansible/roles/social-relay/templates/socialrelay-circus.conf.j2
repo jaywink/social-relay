@@ -1,0 +1,16 @@
+description "socialrelay circus"
+setuid socialrelay
+setgid socialrelay
+start on runlevel [2345]
+stop on runlevel [06]
+
+respawn
+
+env PYTHONPATH="/home/socialrelay/socialrelay"
+env RQWORKER_NUM={{ socialrelay_rq_workers }}
+env VIRTUAL_ENV=/home/socialrelay/venv
+env LC_ALL=C.UTF-8
+env LANG=C.UTF-8
+
+chdir /home/socialrelay/socialrelay
+exec /home/socialrelay/venv/bin/circusd extras/circus/circus.ini

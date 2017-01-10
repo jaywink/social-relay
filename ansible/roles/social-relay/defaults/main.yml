@@ -8,6 +8,7 @@ socialrelay_redis_db: 0
 socialrelay_redis_host: localhost
 socialrelay_redis_port: 6379
 socialrelay_relay_guid:
+socialrelay_rq_workers: 5
 socialrelay_secret_key:
 socialrelay_web_root: /home/socialrelay/socialrelay/social_relay/static
 socialrelay_version: master

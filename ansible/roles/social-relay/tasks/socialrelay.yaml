@@ -4,8 +4,7 @@
   become_user: socialrelay
   git: accept_hostkey=yes dest=/home/socialrelay/socialrelay repo=https://github.com/jaywink/social-relay.git force=yes version={{ socialrelay_version }}
   notify:
-    - restart worker
-    - restart jobs
+    - restart circus
     - restart web
 
 # Requirements
@@ -13,15 +12,13 @@
   become_user: socialrelay
   pip: requirements=/home/socialrelay/socialrelay/requirements/production.txt virtualenv=/home/socialrelay/venv
   notify:
-    - restart worker
-    - restart jobs
+    - restart circus
     - restart web
 - name: Install PostgreSQL requirements
   become_user: socialrelay
   pip: requirements=/home/socialrelay/socialrelay/requirements/postgresql.txt virtualenv=/home/socialrelay/venv
   notify:
-    - restart worker
-    - restart jobs
+    - restart circus
     - restart web
 
 # Settings
@@ -29,8 +26,7 @@
   become_user: socialrelay
   template: dest=/home/socialrelay/socialrelay/social_relay/local_config.py src=local_config.py.j2
   notify:
-    - restart worker
-    - restart jobs
+    - restart circus
     - restart web
 
 # Database
@@ -38,25 +34,34 @@
   become_user: socialrelay
   script: venv_exec.sh arnold up 0
   notify:
-    - restart worker
-    - restart jobs
+    - restart circus
     - restart web
 
 # Bower
 - name: Install bower statics
   become_user: socialrelay
   bower: path=/home/socialrelay/socialrelay
+  notify:
+    - restart web
 
 # Upstart
-- name: Set up worker upstart job
-  template: dest=/etc/init/socialrelay-worker.conf src=socialrelay-worker.conf.j2
+- name: Set up circus upstart job
+  template: dest=/etc/init/socialrelay-circus.conf src=socialrelay-circus.conf.j2
   notify:
-    - restart worker
-- name: Set up scheduled jobs upstart job
-  template: dest=/etc/init/socialrelay-jobs.conf src=socialrelay-jobs.conf.j2
-  notify:
-    - restart jobs
+    - restart circus
 - name: Set up web upstart job
   template: dest=/etc/init/socialrelay-web.conf src=socialrelay-web.conf.j2
   notify:
     - restart web
+
+# TODO: remove these old legacy upstart jobs once removal deployed
+- name: Stop worker upstart job
+  service: name=socialrelay-worker state=restarted
+  ignore_errors: True
+- name: Stop jobs upstart job
+  service: name=socialrelay-jobs state=restarted
+  ignore_errors: True
+- name: Remove worker upstart job
+  file: path=/etc/init/socialrelay-worker.conf state=absent
+- name: Remove jobs upstart job
+  file: path=/etc/init/socialrelay-jobs.conf state=absent

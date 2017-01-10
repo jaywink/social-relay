@@ -1,9 +1,7 @@
 ---
 - name: restart apache
   service: name=apache2 state=restarted
-- name: restart worker
-  service: name=socialrelay-worker state=restarted
-- name: restart jobs
-  service: name=socialrelay-jobs state=restarted
+- name: restart circus
+  service: name=socialrelay-circus state=restarted
 - name: restart web
   service: name=socialrelay-web state=restarted

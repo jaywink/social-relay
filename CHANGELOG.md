@@ -17,6 +17,11 @@ The old wrapper `runworker.py` has been removed. This was initially added to eas
 To run a worker, use the following command:
 
     rqworker -c social_relay.config receive
+    
+Note! See `circus` note below for recommended way of running workers in production.
+
+### Added
+- Added `circus` to handle running jobs and and one or more workers comfortably via one command. This removes the need to separately ensure jobs and workers are running. To use `circus`, either install it via `requirements/production.txt` or separately with `pip install circus`. To run jobs and workers, use the following command: `RQWORKER_NUM=5 circusd extras/circus/circus.ini` - specifying in the variable the amount of workers you want running.
 
 ## [1.2.0] - 2016-10-25
 

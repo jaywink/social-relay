@@ -1,4 +1,5 @@
 -r requirements.txt
 
-# uWSGI
 uWSGI==2.0.14
+
+circus==0.14.0

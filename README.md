@@ -55,7 +55,7 @@ Ensure `pip` and `setuptools` are up to date.
 
     pip install -U pip setuptools
 
-If you are deploying via uWSGI, use:
+For a production deployment, uWSGI (for app server) and Circus (for running workers) are encouraged. Use the production requirements to install them:
 
     pip install -r requirements/production.txt
     
@@ -98,19 +98,31 @@ Bower is used to pull in some JavaScript libs. [Install it first](http://bower.i
 
 Statics are server under the `/static` path which should be server by the web server.
 
-### Running tasks
+### Running tasks and workers
 
-For normal operation, scheduled jobs should always be running. They take care of refreshing the pod list and polling pods for their subscription preferences. Without these scheduled jobs, the relay will not be able to function.
+Scheduled jobs handle the polling of node lists and nodes themselves, to fetch their subscription settings. Without the scheduled jobs the server will not be able to function. RQ workers on the other hand process all the incoming payloads and distribute them onwards to subscribing nodes. At least one RQ worker must be running at all times.
 
-Keep this running:
+In production, it's easiest to use the provided `circus` configuration. This is installed via the provided production requirements, or `pip install circus` if not using the provided requirements file.
+
+Then, export how many RQ workers you want. If you see your `receive` queue build up, increase this count and restart `circus`.
+
+    export RQWORKER_NUM=5
+
+To start `circus`, virtualenv activated in the project folder:
+
+    circusd extras/circus/circus.ini
+    
+You can daemonize `circus` by passing an extra `--daemonize` flag.
+
+#### Running tasks manually (without circus)
+
+If you don't want to use `circus`, run the tasks manually.  Keep this running:
 
     python -m tasks.schedule_jobs
 
-### Processing receive queue
+#### Processing receive queue (without circus)
 
-Incoming posts are stored in Redis and processed using RQ workers. Keep one or more worker running always.
-
-To make use of the app configuration for Redis in `social_relay/local_config.py`, run the worker(s) as follows:
+If you don't want to use `circus`, run the workers manually. Run the worker(s) as follows:
 
     rqworker -c social_relay.config receive
 
@@ -162,9 +174,13 @@ This is not the recommended way for a production server. For testing and develop
     
 The app will be running at [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
+### Running an RQ worker
+
+    rqworker -c social_relay.config receive
+
 ### Running tests
 
-Execute `py.test` to run the tests.
+    py.test
 
 ## Author
 

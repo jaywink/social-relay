@@ -81,7 +81,9 @@ Edit the `local_config.py` file as instructed in the file.
 
 ### Database
 
-The SQLite database needs an initial schema creation. Do this with:
+You can set database connection settings as environment variables or in `social_relay/local_config.py` - see `social_relay/config.py` for what to override.
+
+The database needs an initial schema creation. Do this with:
 
     arnold up 0
 

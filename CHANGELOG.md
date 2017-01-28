@@ -1,3 +1,8 @@
+## [unreleased]
+
+### Fixed
+* Diaspora changed their timestamp format in release 0.6.3. This release brings federation support for this timestamp format. Any relay that wants to relay content from Diaspora upgraded Diaspora nodes must upgrade to this release asap.
+
 ## [1.3.0] - 2017-01-11
 
 ### Backwards incompatible changes

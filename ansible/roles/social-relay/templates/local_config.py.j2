@@ -16,11 +16,15 @@ ALWAYS_FORWARD_TO_HOSTS = []
 LOG_TO_CONSOLE = True
 
 # Uncomment the line below to disable RQ dashboard
-#RQ_DASHBOARD = True
+{% if socialrelay_rq_admin_username %}
+RQ_DASHBOARD = True
+{% else %}
+RQ_DASHBOARD = False
+{% endif %}
 
 # You *must* set these.
-RQ_DASHBOARD_USERNAME = "admin"
-RQ_DASHBOARD_PASSWORD = "admin"
+RQ_DASHBOARD_USERNAME = "{{ socialrelay_rq_admin_username }}"
+RQ_DASHBOARD_PASSWORD = "{{ socialrelay_rq_admin_password }}"
 
 DATABASE_TYPE = 'postgresql'
 DATABASE_NAME = "{{ socialrelay_database_name }}"

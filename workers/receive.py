@@ -46,9 +46,10 @@ def get_send_to_nodes(sender, entity):
     """
     if isinstance(entity, (DiasporaPost, Image)):
         nodes = nodes_who_want_all()
-        nodes += config.ALWAYS_FORWARD_TO_HOSTS
+        if config.ALWAYS_FORWARD_TO_HOSTS:
+            nodes.update(set(config.ALWAYS_FORWARD_TO_HOSTS))
         if isinstance(entity, DiasporaPost):
-            nodes += nodes_who_want_tags(entity.tags)
+            nodes.update(nodes_who_want_tags(entity.tags))
         if sender.split("@")[1] in nodes:
             # Don't send back to sender
             nodes.remove(sender.split("@")[1])
@@ -57,10 +58,10 @@ def get_send_to_nodes(sender, entity):
         # Try to get nodes from the target_guid
         try:
             post = Post.get(guid=entity.target_guid)
-            return [node.host for node in post.nodes]
+            return {node.host for node in post.nodes}
         except DoesNotExist:
-            return []
-    return []
+            return set()
+    return set()
 
 
 def process(payload):
@@ -79,28 +80,32 @@ def process(payload):
         return
     sent_amount = 0
     sent_success = 0
+    nodes = set()
+    sent_to_nodes = []
+    entity = None
     try:
         for entity in entities:
             logging.info("Entity: %s" % entity)
             # We only care about posts atm
+            # Diaspora payloads should only have one top level entity. Once we find a suitable one, just start sending
             if isinstance(entity, SUPPORTED_ENTITIES):
-                sent_to_nodes = []
                 nodes = get_send_to_nodes(sender, entity)
-                # Send out
-                for node in nodes:
-                    status, error = send_document(
-                        url="https://%s/receive/public" % node,
-                        data={"xml": payload},
-                        headers={"User-Agent": config.USER_AGENT},
-                    )
-                    is_success = status in [200, 202]
-                    if is_success:
-                        sent_success += 1
-                        sent_to_nodes.append(node)
-                    sent_amount += 1
-                    update_node(node, is_success)
-                if sent_to_nodes and isinstance(entity, (DiasporaPost, Image)):
-                    save_post_metadata(entity=entity, protocol=protocol_name, hosts=sent_to_nodes)
+                break
+        # Send out
+        for node in nodes:
+            status, error = send_document(
+                url="https://%s/receive/public" % node,
+                data={"xml": payload},
+                headers={"User-Agent": config.USER_AGENT},
+            )
+            is_success = status in [200, 202]
+            if is_success:
+                sent_success += 1
+                sent_to_nodes.append(node)
+            sent_amount += 1
+            update_node(node, is_success)
+        if sent_to_nodes and isinstance(entity, (DiasporaPost, Image)):
+            save_post_metadata(entity=entity, protocol=protocol_name, hosts=sent_to_nodes)
     finally:
         log_worker_receive_statistics(
             protocol_name, len(entities), sent_amount, sent_success

@@ -14,19 +14,19 @@ def get_pod_preferences():
 
 
 def nodes_who_want_tags(tags):
-    nodes = []
+    nodes = set()
     for node, data in get_pod_preferences().items():
         data = json.loads(data.decode("utf-8"))
         if not set(data["tags"]).isdisjoint(tags):
             # One or more tags match
-            nodes.append(node.decode("utf-8"))
+            nodes.add(node.decode("utf-8"))
     return nodes
 
 
 def nodes_who_want_all():
-    nodes = []
+    nodes = set()
     for node, data in get_pod_preferences().items():
         data = json.loads(data.decode("utf-8"))
         if data["subscribe"] and data["scope"] == "all":
-            nodes.append(node.decode("utf-8"))
+            nodes.add(node.decode("utf-8"))
     return nodes

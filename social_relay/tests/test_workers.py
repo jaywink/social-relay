@@ -25,7 +25,6 @@ class TestReceiveWorkerProcessCallsSendPayload(object):
     @patch("workers.receive.handle_receive", return_value=("foo@example.com", "diaspora", [
         DiasporaPost(raw_content="Awesome #post")
     ]))
-
     @patch("workers.receive.send_document", return_value=(200, None))
     def test_send_payload_called(self, mock_handle_receive, mock_send_document, mock_pod_preferences):
         process(Mock())
@@ -88,26 +87,26 @@ class TestReceiveWorkerStoresNodeAndPostMetadata(object):
 
 @pytest.mark.usefixtures('config')
 class TestReceiveWorkerGetSendToNodes(object):
-    @patch("workers.receive.nodes_who_want_all", return_value=[])
+    @patch("workers.receive.nodes_who_want_all", return_value=set())
     def test_get_send_to_nodes_with_post_returns_nodes(self, mock_nodes_who_want_all):
         nodes = get_send_to_nodes("foo@example.com", DiasporaPost())
-        assert nodes == ["sub.example.com"]
+        assert nodes == {"sub.example.com"}
 
-    @patch("workers.receive.nodes_who_want_tags", return_value=["tags.example.com"])
-    @patch("workers.receive.nodes_who_want_all", return_value=[])
+    @patch("workers.receive.nodes_who_want_tags", return_value={"tags.example.com"})
+    @patch("workers.receive.nodes_who_want_all", return_value=set())
     def test_get_send_to_nodes_with_post_returns_nodes_with_tags(self, mock_nodes_who_want_tags,
                                                                  mock_nodes_who_want_all):
         nodes = get_send_to_nodes("foo@example.com", DiasporaPost())
-        assert set(nodes) == {"sub.example.com", "tags.example.com"}
+        assert nodes == {"sub.example.com", "tags.example.com"}
 
     def test_get_send_to_nodes_with_like_returns_nodes_for_post(self):
         Node.create(host="sub.example.com")
         save_post_metadata(DiasporaPost(guid="12345"), "diaspora", ["sub.example.com"])
         nodes = get_send_to_nodes("foo@example.com", DiasporaLike(target_guid="12345"))
-        assert nodes == ["sub.example.com"]
+        assert nodes == {"sub.example.com"}
 
     def test_get_send_to_nodes_with_like_returns_no_nodes_for_unknown_post(self):
         Node.create(host="sub.example.com")
         save_post_metadata(DiasporaPost(guid="12345"), "diaspora", ["sub.example.com"])
         nodes = get_send_to_nodes("foo@example.com", DiasporaLike(target_guid="54321"))
-        assert nodes == []
+        assert nodes == set()

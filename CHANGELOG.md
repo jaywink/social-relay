@@ -1,3 +1,8 @@
+## [unreleased]
+
+### Fixed
+* Add a longer worker timeout for sending. Seems default 180 seconds is not enough in cases where post will be delivered to a lot of hosts. Allow setting a long timeout, defaulting to 1080 seconds.
+
 ## [1.3.1] - 2017-01-28
 
 ### Fixed

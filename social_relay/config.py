@@ -6,7 +6,7 @@ import os
 from peewee import PostgresqlDatabase, MySQLDatabase
 
 # Current version. Needless to say this shouldn't be changed except for a release.
-VERSION = "1.3.1"
+VERSION = "1.3.2-dev"
 
 # Set this to a real domain in local config
 SERVER_HOST = "http://127.0.0.1:5000"
@@ -39,6 +39,10 @@ BOWER_COMPONENTS_ROOT = "../bower_components"
 
 LOG_PATH = "var/social-relay.log"
 LOG_TO_CONSOLE = False
+
+# Worker RQ timeout (seconds)
+# Sending to many hosts can take some time. If you see timeout errors in the RQ dashboard, set a longer timeout here
+RELAY_WORKER_TIMEOUT = 1080
 
 # Database
 # Override in local_config.py or env variable "RELAY_DATABASE_TYPE"

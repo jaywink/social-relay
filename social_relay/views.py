@@ -111,7 +111,7 @@ def receive_public():
     except KeyError:
         return abort(404)
     # Queue to rq for processing
-    public_queue.enqueue("workers.receive.process", payload)
+    public_queue.enqueue("workers.receive.process", payload, timeout=app.config.get("RELAY_WORKER_TIMEOUT"))
 
     # Log statistics
     log_receive_statistics(request.host)

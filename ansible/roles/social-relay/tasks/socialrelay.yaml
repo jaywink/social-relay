@@ -56,10 +56,10 @@
 
 # TODO: remove these old legacy upstart jobs once removal deployed
 - name: Stop worker upstart job
-  service: name=socialrelay-worker state=restarted
+  service: name=socialrelay-worker state=stopped
   ignore_errors: True
 - name: Stop jobs upstart job
-  service: name=socialrelay-jobs state=restarted
+  service: name=socialrelay-jobs state=stopped
   ignore_errors: True
 - name: Remove worker upstart job
   file: path=/etc/init/socialrelay-worker.conf state=absent

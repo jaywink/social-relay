@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import datetime
 import logging
 
@@ -85,13 +84,14 @@ def process(payload):
     entity = None
     try:
         for entity in entities:
-            logging.info("Entity: %s" % entity)
             # We only care about posts atm
             # Diaspora payloads should only have one top level entity. Once we find a suitable one, just start sending
             if isinstance(entity, SUPPORTED_ENTITIES):
                 nodes = get_send_to_nodes(sender, entity)
                 break
         # Send out
+        if nodes:
+            logging.info("Sending %s to %s nodes", entity, len(nodes))
         for node in nodes:
             status, error = send_document(
                 url="https://%s/receive/public" % node,
@@ -104,6 +104,7 @@ def process(payload):
                 sent_to_nodes.append(node)
             sent_amount += 1
             update_node(node, is_success)
+        logging.info("Successfully sent to %s nodes", len(sent_to_nodes))
         if sent_to_nodes and isinstance(entity, (DiasporaPost, Image)):
             save_post_metadata(entity=entity, protocol=protocol_name, hosts=sent_to_nodes)
     finally:

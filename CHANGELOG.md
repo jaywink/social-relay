@@ -1,4 +1,4 @@
-## [unreleased]
+## [1.3.3] - 2017-03-10
 
 ### Fixed
 * Fix sending to nodes via tags when tags in content was not all lower case.

@@ -1,3 +1,10 @@
+## [unreleased]
+
+### Added
+* Accept new style Diaspora public payloads without `xml=payload` form data.
+* Add profile model. Store remote profile handle + public key for later use, since we don't want to always fetch them.
+* Start validating signatures in sent payloads. This requires fetching remote profiles. Closes #[31](https://github.com/jaywink/social-relay/issues/31).
+
 ## [1.3.3] - 2017-03-10
 
 ### Fixed

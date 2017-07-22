@@ -184,6 +184,10 @@ The app will be running at [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
 ### Running tests
 
+Ensure there is a test database. By default the tests try to connect to PostgreSQL with db, username and password `socialrelaytest`.
+
+Then run test with:
+
     py.test
 
 ## Author

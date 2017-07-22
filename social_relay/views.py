@@ -27,7 +27,7 @@ Bower(app)
 @app.route('/')
 def index():
     subscriber_stats = get_subscriber_stats()
-    incoming, outgoing, distinct_nodes, processing = get_count_stats()
+    incoming, outgoing, distinct_nodes, processing, profiles = get_count_stats()
     return render_template(
         'index.html',
         config=app.config,
@@ -36,6 +36,7 @@ def index():
         outgoing_counts=outgoing,
         distinct_nodes=distinct_nodes,
         processing=processing,
+        profiles=profiles,
     )
 
 

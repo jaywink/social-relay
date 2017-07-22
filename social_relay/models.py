@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import datetime
+import logging
 
-from peewee import DateTimeField, CharField, IntegerField, BooleanField
+from federation.fetchers import retrieve_remote_profile
+from peewee import DateTimeField, CharField, IntegerField, BooleanField, TextField, DoesNotExist
 from playhouse.fields import ManyToManyField
 
 from social_relay import database
+from social_relay.utils.text import safe_text
 
 
 class StatisticBase(database.Model):
@@ -54,8 +57,54 @@ class Post(database.Model):
 NodePost = Post.nodes.get_through_model()
 
 
+class Profile(database.Model):
+    """Store profile public keys."""
+    identifier = CharField(unique=True)
+    public_key = TextField()
+    created_at = DateTimeField(default=datetime.datetime.now)
+
+    @staticmethod
+    def get_public_key(identifier):
+        profile = Profile.get_profile(identifier)
+        if profile:
+            return profile.public_key
+
+    @staticmethod
+    def get_profile(identifier):
+        """Get or create remote profile.
+
+        Fetch it from federation layer if necessary or if the public key is empty for some reason.
+        """
+        try:
+            sender_profile = Profile.get(Profile.identifier == identifier)
+            if not sender_profile.public_key:
+                raise DoesNotExist
+        except DoesNotExist:
+            remote_profile = retrieve_remote_profile(identifier)
+            if not remote_profile:
+                logging.warning("Remote profile %s not found locally or remotely.", identifier)
+                return
+            sender_profile = Profile.from_remote_profile(remote_profile)
+        return sender_profile
+
+    @staticmethod
+    def from_remote_profile(remote_profile):
+        """Create a Profile from a remote Profile entity."""
+        public_key = safe_text(remote_profile.public_key)
+        profile, created = Profile.get_or_create(
+            handle=safe_text(remote_profile.handle),
+            defaults={
+                "public_key": public_key,
+            },
+        )
+        if not created and profile.public_key != public_key:
+            profile.public_key = public_key
+            profile.save()
+        return profile
+
+
 TABLES = (
-    ReceiveStatistic, WorkerReceiveStatistic, Node, Post, NodePost,
+    ReceiveStatistic, WorkerReceiveStatistic, Node, Post, NodePost, Profile,
 )
 
 

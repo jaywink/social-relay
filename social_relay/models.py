@@ -92,7 +92,7 @@ class Profile(database.Model):
         """Create a Profile from a remote Profile entity."""
         public_key = safe_text(remote_profile.public_key)
         profile, created = Profile.get_or_create(
-            handle=safe_text(remote_profile.handle),
+            identifier=safe_text(remote_profile.handle),
             defaults={
                 "public_key": public_key,
             },

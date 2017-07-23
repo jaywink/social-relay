@@ -6,7 +6,7 @@ import pytest
 
 
 @pytest.mark.usefixtures('client_class')
-class TestViewsRespond(object):
+class TestViewsRespond:
     def test_index(self, client):
         assert client.get(url_for('index')).status_code == 200
 
@@ -26,11 +26,12 @@ class TestViewsRespond(object):
     def test_hcard_returns_200_with_relay_guid(self, client):
         assert client.get(url_for('webfinger', guid="jvfhieuhfuih78fhf8uibhfhuyweyfdu")).status_code == 404
 
-    def test_receive_public_returns_404_without_xml_content(self, client):
+    def test_receive_public_returns_404_without_payload(self, client):
         assert client.post(url_for("receive_public")).status_code == 404
 
-    def test_receive_public_returns_200_with_xml_content(self, client):
+    def test_receive_public_returns_200_with_payload(self, client):
         assert client.post(url_for("receive_public"), data={"xml": "foo"}).status_code == 200
+        assert client.post(url_for("receive_public"), data="<foo>bar</foo>").status_code == 200
 
     def test_nodeinfo_wellknown(self, client):
         assert client.get(url_for('nodeinfo_wellknown')).status_code == 200
@@ -40,7 +41,7 @@ class TestViewsRespond(object):
 
 
 @pytest.mark.usefixtures('client_class')
-class TestViewsCallStatisticsLoggers(object):
+class TestViewsCallStatisticsLoggers:
     @patch("social_relay.views.log_receive_statistics")
     def test_receive_public_calls_log_receive_statistics(self, mock_statistics, client):
         client.post(url_for("receive_public"), data={"xml": "foo"})

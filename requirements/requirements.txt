@@ -7,11 +7,12 @@ hiredis==0.2.0
 redis==2.10.5
 
 # federation
-federation==0.10.1
+federation==0.13.0
 
 # generic
 requests==2.12.4
 schedule==0.4.2
+bleach==2.0.0
 
 # background jobs
 rq==0.7.1

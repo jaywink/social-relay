@@ -9,7 +9,7 @@ from federation.utils.network import send_document
 from peewee import DoesNotExist
 
 from social_relay import config
-from social_relay.models import Node, Post
+from social_relay.models import Node, Post, Profile
 from social_relay.utils.data import nodes_who_want_tags, nodes_who_want_all
 from social_relay.utils.statistics import log_worker_receive_statistics
 
@@ -66,7 +66,7 @@ def get_send_to_nodes(sender, entity):
 def process(payload):
     """Open payload and route it to any pods that might be interested in it."""
     try:
-        sender, protocol_name, entities = handle_receive(payload, skip_author_verification=True)
+        sender, protocol_name, entities = handle_receive(payload, sender_key_fetcher=Profile.get_public_key)
         logging.debug("sender=%s, protocol_name=%s, entities=%s" % (sender, protocol_name, entities))
     except NoSuitableProtocolFoundError:
         logging.warning("No suitable protocol found for payload")
@@ -84,7 +84,6 @@ def process(payload):
     entity = None
     try:
         for entity in entities:
-            # We only care about posts atm
             # Diaspora payloads should only have one top level entity. Once we find a suitable one, just start sending
             if isinstance(entity, SUPPORTED_ENTITIES):
                 nodes = get_send_to_nodes(sender, entity)

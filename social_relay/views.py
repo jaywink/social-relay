@@ -27,7 +27,7 @@ Bower(app)
 @app.route('/')
 def index():
     subscriber_stats = get_subscriber_stats()
-    incoming, outgoing, distinct_nodes, processing = get_count_stats()
+    incoming, outgoing, distinct_nodes, processing, profiles = get_count_stats()
     return render_template(
         'index.html',
         config=app.config,
@@ -36,6 +36,7 @@ def index():
         outgoing_counts=outgoing,
         distinct_nodes=distinct_nodes,
         processing=processing,
+        profiles=profiles,
     )
 
 
@@ -106,9 +107,14 @@ def hcard(guid):
 @app.route("/receive/public/", methods=["POST"])
 @app.route("/receive/public", methods=["POST"])
 def receive_public():
+    payload = ""
     try:
+        # Legacy payloads
         payload = request.form["xml"]
     except KeyError:
+        if request.data:
+            payload = request.data
+    if not payload:
         return abort(404)
     # Queue to rq for processing
     public_queue.enqueue("workers.receive.process", payload, timeout=app.config.get("RELAY_WORKER_TIMEOUT"))
@@ -118,7 +124,7 @@ def receive_public():
 
     # return 200 whatever
     data = {
-        'result'  : 'ok',
+        'result': 'ok',
     }
     js = json.dumps(data)
     return Response(js, status=200, mimetype='application/json')

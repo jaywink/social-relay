@@ -2,7 +2,7 @@
 import pytest
 from peewee import ProgrammingError, OperationalError
 
-from social_relay.models import create_all_tables, drop_all_tables
+from social_relay.models import create_all_tables, drop_all_tables, Profile
 
 
 @pytest.fixture
@@ -20,3 +20,8 @@ def app(request):
     request.addfinalizer(drop_db)
 
     return app
+
+
+@pytest.fixture
+def profile(app):
+    return Profile.create(identifier="relay@domain.tld", public_key="public_key")

@@ -1,4 +1,4 @@
-## [unreleased]
+## [1.4.0] - 2017-07-23
 
 ### Added
 * Accept new style Diaspora public payloads without `xml=payload` form data.

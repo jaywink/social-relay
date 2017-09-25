@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import datetime
 from unittest.mock import Mock, patch
 
@@ -6,12 +5,12 @@ import pytest
 from federation.entities.diaspora.entities import DiasporaPost, DiasporaLike
 
 from social_relay.models import Node, Post
-from workers.receive import process, get_send_to_nodes, save_post_metadata
+from workers.receive import process, get_send_to_nodes, save_post_metadata, HEADERS
 
 
 @pytest.mark.usefixtures('config')
 @patch("social_relay.utils.data.get_pod_preferences", return_value={})
-class TestReceiveWorkerCallsLogStatistics(object):
+class TestReceiveWorkerCallsLogStatistics:
     @patch("workers.receive.log_worker_receive_statistics")
     @patch("workers.receive.handle_receive", return_value=("foo@example.com", "diaspora", ["foo", "bar"]))
     def test_log_statistics_called(self, mock_statistics, mock_handle_receive, mock_pod_preferences):
@@ -20,15 +19,18 @@ class TestReceiveWorkerCallsLogStatistics(object):
 
 
 @pytest.mark.usefixtures('config')
-@patch("social_relay.utils.data.get_pod_preferences", return_value={})
-class TestReceiveWorkerProcessCallsSendPayload(object):
+class TestReceiveWorkerProcessCallsSendPayload:
+    @patch("social_relay.utils.data.get_pod_preferences", return_value={})
     @patch("workers.receive.handle_receive", return_value=("foo@example.com", "diaspora", [
         DiasporaPost(raw_content="Awesome #post")
     ]))
     @patch("workers.receive.send_document", return_value=(200, None))
-    def test_send_payload_called(self, mock_handle_receive, mock_send_document, mock_pod_preferences):
-        process(Mock())
+    def test_send_payload_called(self, mock_send_document, mock_handle_receive, mock_pod_preferences):
+        process("payload")
         assert mock_send_document.call_count == 1
+        mock_send_document.assert_called_once_with(
+            url="https://sub.example.com/receive/public", data="payload", headers=HEADERS,
+        )
 
 
 @pytest.mark.usefixtures('config')
@@ -37,7 +39,7 @@ class TestReceiveWorkerProcessCallsSendPayload(object):
 ]))
 @patch("workers.receive.send_document", return_value=(200, None))
 @patch("social_relay.utils.data.get_pod_preferences", return_value={})
-class TestReceiveWorkerStoresNodeAndPostMetadata(object):
+class TestReceiveWorkerStoresNodeAndPostMetadata:
     def test_send_payload_stores_unknown_node_into_db(self, mock_handle_receive, mock_send_document,
                                                       mock_pod_preferences):
         process(Mock())
@@ -86,7 +88,7 @@ class TestReceiveWorkerStoresNodeAndPostMetadata(object):
 
 
 @pytest.mark.usefixtures('config')
-class TestReceiveWorkerGetSendToNodes(object):
+class TestReceiveWorkerGetSendToNodes:
     @patch("workers.receive.nodes_who_want_all", return_value=set())
     def test_get_send_to_nodes_with_post_returns_nodes(self, mock_nodes_who_want_all):
         nodes = get_send_to_nodes("foo@example.com", DiasporaPost())

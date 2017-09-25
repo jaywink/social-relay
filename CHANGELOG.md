@@ -1,3 +1,8 @@
+## [unreleased]
+
+### Changed
+* Start sending payloads according to new style Diaspora protocol requirements. #[62](https://github.com/jaywink/social-relay/issues/62).
+
 ## [1.4.0] - 2017-07-23
 
 ### Added

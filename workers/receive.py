@@ -13,6 +13,9 @@ from social_relay.models import Node, Post, Profile
 from social_relay.utils.data import nodes_who_want_tags, nodes_who_want_all
 from social_relay.utils.statistics import log_worker_receive_statistics
 
+HEADERS = {
+    "User-Agent": config.USER_AGENT, "Content-Type": "application/magic-envelope+xml",
+}
 
 SUPPORTED_ENTITIES = (
     DiasporaPost, DiasporaLike, DiasporaComment, DiasporaRetraction, Image
@@ -94,8 +97,8 @@ def process(payload):
         for node in nodes:
             status, error = send_document(
                 url="https://%s/receive/public" % node,
-                data={"xml": payload},
-                headers={"User-Agent": config.USER_AGENT},
+                data=payload,
+                headers=HEADERS,
             )
             is_success = status in [200, 202]
             if is_success:

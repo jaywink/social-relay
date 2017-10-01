@@ -5,4 +5,5 @@
   vars_files:
     - /path/to/your/vars.yml
   roles:
+    - geerlingguy.nodejs
     - social-relay

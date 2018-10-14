@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/jaywink/social-relay.svg?branch=master)](https://travis-ci.org/jaywink/social-relay) [![Stories in Ready](https://badge.waffle.io/jaywink/social-relay.png?label=ready&title=Ready)](https://waffle.io/jaywink/social-relay) [![codecov](https://codecov.io/gh/jaywink/social-relay/branch/master/graph/badge.svg)](https://codecov.io/gh/jaywink/social-relay) [![Requirements Status](https://requires.io/github/jaywink/social-relay/requirements.svg?branch=master)](https://requires.io/github/jaywink/social-relay/requirements/?branch=master) [![Code Health](https://landscape.io/github/jaywink/social-relay/master/landscape.svg?style=flat)](https://landscape.io/github/jaywink/social-relay/master)
+[![Build Status](https://travis-ci.org/jaywink/social-relay.svg?branch=master)](https://travis-ci.org/jaywink/social-relay) [![codecov](https://codecov.io/gh/jaywink/social-relay/branch/master/graph/badge.svg)](https://codecov.io/gh/jaywink/social-relay) [![Requirements Status](https://requires.io/github/jaywink/social-relay/requirements.svg?branch=master)](https://requires.io/github/jaywink/social-relay/requirements/?branch=master) 
 
-[![chat on freenode](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](http://webchat.freenode.net?channels=%23socialrelay&uio=d4)
+[![issue tracker](https://img.shields.io/badge/issue%20tracker-gitlab-orange.svg)](https://git.feneas.org/jaywink/social-relay)
 
 # Social-Relay
 

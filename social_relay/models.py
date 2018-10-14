@@ -41,6 +41,7 @@ class Node(database.Model):
     https = BooleanField(default=False)
 
 
+# TODO remove in next release after migration drops it
 class Post(database.Model):
     """Stores list of domains where posts have been delivered to."""
     nodes = ManyToManyField(Node, related_name="posts")
@@ -54,6 +55,7 @@ class Post(database.Model):
         )
 
 
+# TODO remove in next release after migration drops it
 NodePost = Post.nodes.get_through_model()
 
 

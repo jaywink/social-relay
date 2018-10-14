@@ -46,3 +46,4 @@ nosetests.xml
 social_relay/local_config.py
 
 bower_components
+node_modules

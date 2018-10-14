@@ -85,7 +85,7 @@ if LOG_TO_CONSOLE:
     logging_handlers.append(logging.StreamHandler())
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s:%(levelname)s:%(module)s: %(message)s',
     handlers=logging_handlers
 )

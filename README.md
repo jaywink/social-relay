@@ -161,6 +161,11 @@ The rqworker service file can also be used to start the optional `failed` queue 
 ### Development requirements
 
     pip install -r requirements/development.txt
+    
+Ensure also `bower` is installed.
+
+    npm install bower
+    bower install
 
 ### Running a development server
 

@@ -2,10 +2,10 @@ import datetime
 from unittest.mock import Mock, patch
 
 import pytest
-from federation.entities.diaspora.entities import DiasporaPost, DiasporaLike
+from federation.entities.diaspora.entities import DiasporaPost
 
-from social_relay.models import Node, Post
-from workers.receive import process, get_send_to_nodes, save_post_metadata, HEADERS
+from social_relay.models import Node
+from workers.receive import process, get_send_to_nodes, HEADERS
 
 
 @pytest.mark.usefixtures('config')
@@ -78,14 +78,6 @@ class TestReceiveWorkerStoresNodeAndPostMetadata:
         node = Node.get(Node.host == "sub.example.com")
         assert node.failure_count == 0
 
-    def test_send_payload_insert_post_into_posts_table(self, mock_handle_receive, mock_send_document,
-                                                       mock_pod_preferences):
-        process(Mock())
-        post = Post.get(Post.guid=="foobar")
-        assert post
-        assert post.nodes.count() == 1
-        assert post.nodes.first().host == "sub.example.com"
-
 
 @pytest.mark.usefixtures('config')
 class TestReceiveWorkerGetSendToNodes:
@@ -100,15 +92,3 @@ class TestReceiveWorkerGetSendToNodes:
                                                                  mock_nodes_who_want_all):
         nodes = get_send_to_nodes("foo@example.com", DiasporaPost())
         assert nodes == {"sub.example.com", "tags.example.com"}
-
-    def test_get_send_to_nodes_with_like_returns_nodes_for_post(self):
-        Node.create(host="sub.example.com")
-        save_post_metadata(DiasporaPost(guid="12345"), "diaspora", ["sub.example.com"])
-        nodes = get_send_to_nodes("foo@example.com", DiasporaLike(target_guid="12345"))
-        assert nodes == {"sub.example.com"}
-
-    def test_get_send_to_nodes_with_like_returns_no_nodes_for_unknown_post(self):
-        Node.create(host="sub.example.com")
-        save_post_metadata(DiasporaPost(guid="12345"), "diaspora", ["sub.example.com"])
-        nodes = get_send_to_nodes("foo@example.com", DiasporaLike(target_guid="54321"))
-        assert nodes == set()

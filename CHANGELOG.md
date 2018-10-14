@@ -4,6 +4,8 @@
 
 * Now using `pip-tools` to maintain dependencies. To install all requirements now just choose a db and install either `requirements/postgresql.txt` or `requirements/mysql.txt` which will pull in all the rest.
 
+* Removed tracking of where posts are sent. This was used to allow sending participations (likes, comments and retractions) to the same targets. Diaspora project rejected this enhancement from their code and it ended up only being used by Hubzilla. Diaspora now sends a participation automatically on receiving any post which should be the default behaviour. Thus, no need to relay participations.
+
 ## [1.5.0] - 2017-09-25
 
 ### Changed

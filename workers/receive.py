@@ -2,14 +2,13 @@ import datetime
 import logging
 
 from federation.entities.base import Image
-from federation.entities.diaspora.entities import DiasporaPost, DiasporaLike, DiasporaComment, DiasporaRetraction
+from federation.entities.diaspora.entities import DiasporaPost
 from federation.exceptions import NoSuitableProtocolFoundError
 from federation.inbound import handle_receive
 from federation.utils.network import send_document
-from peewee import DoesNotExist
 
 from social_relay import config
-from social_relay.models import Node, Post, Profile
+from social_relay.models import Node, Profile
 from social_relay.utils.data import nodes_who_want_tags, nodes_who_want_all
 from social_relay.utils.statistics import log_worker_receive_statistics
 
@@ -18,24 +17,8 @@ HEADERS = {
 }
 
 SUPPORTED_ENTITIES = (
-    DiasporaPost, DiasporaLike, DiasporaComment, DiasporaRetraction, Image
+    DiasporaPost,
 )
-
-
-def save_post_metadata(entity, protocol, hosts):
-    """Save Post metadata to db.
-
-    :param entity: DiasporaPost entity
-    :param protocol: Protocol identifier
-    :param hosts: List of hostnames that send was done successfully
-    """
-    try:
-        post, created = Post.get_or_create(guid=entity.guid, protocol=protocol)
-        for host in hosts:
-            post.nodes.add(Node.get(host=host))
-    except Exception as ex:
-        logging.warning("Exception when trying to save post '{entity}' into database: {exc}".format(
-            entity=entity, exc=ex))
 
 
 def get_send_to_nodes(sender, entity):
@@ -56,13 +39,6 @@ def get_send_to_nodes(sender, entity):
             # Don't send back to sender
             nodes.remove(sender.split("@")[1])
         return nodes
-    elif isinstance(entity, (DiasporaLike, DiasporaComment, DiasporaRetraction)):
-        # Try to get nodes from the target_guid
-        try:
-            post = Post.get(guid=entity.target_guid)
-            return {node.host for node in post.nodes}
-        except DoesNotExist:
-            return set()
     return set()
 
 
@@ -107,8 +83,6 @@ def process(payload):
             sent_amount += 1
             update_node(node, is_success)
         logging.info("Successfully sent to %s nodes", len(sent_to_nodes))
-        if sent_to_nodes and isinstance(entity, (DiasporaPost, Image)):
-            save_post_metadata(entity=entity, protocol=protocol_name, hosts=sent_to_nodes)
     finally:
         log_worker_receive_statistics(
             protocol_name, len(entities), sent_amount, sent_success

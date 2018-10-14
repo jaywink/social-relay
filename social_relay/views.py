@@ -114,7 +114,7 @@ def receive_public():
     public_queue.enqueue("workers.receive.process", request.data, timeout=app.config.get("RELAY_WORKER_TIMEOUT"))
 
     # Log statistics
-    log_receive_statistics(request.host)
+    log_receive_statistics(request.remote_addr)
 
     # return 200 whatever
     data = {

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from unittest.mock import patch
 
 from flask import url_for
@@ -30,7 +29,6 @@ class TestViewsRespond:
         assert client.post(url_for("receive_public")).status_code == 404
 
     def test_receive_public_returns_200_with_payload(self, client):
-        assert client.post(url_for("receive_public"), data={"xml": "foo"}).status_code == 200
         assert client.post(url_for("receive_public"), data="<foo>bar</foo>").status_code == 200
 
     def test_nodeinfo_wellknown(self, client):
@@ -44,5 +42,5 @@ class TestViewsRespond:
 class TestViewsCallStatisticsLoggers:
     @patch("social_relay.views.log_receive_statistics")
     def test_receive_public_calls_log_receive_statistics(self, mock_statistics, client):
-        client.post(url_for("receive_public"), data={"xml": "foo"})
+        client.post(url_for("receive_public"), data='<foo>bar</foo>')
         assert mock_statistics.call_count == 1

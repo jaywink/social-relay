@@ -1,0 +1,13 @@
+-r postgresql.txt
+
+# Testing
+pytest-flask
+pytest-env
+
+# Coverage
+codecov
+coverage
+pytest-cov
+
+# Tools
+ipython

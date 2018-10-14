@@ -1,3 +1,9 @@
+## [unrelased]
+
+### Changed
+
+* Now using `pip-tools` to maintain dependencies. To install all requirements now just choose a db and install either `requirements/postgresql.txt` or `requirements/mysql.txt` which will pull in all the rest.
+
 ## [1.5.0] - 2017-09-25
 
 ### Changed

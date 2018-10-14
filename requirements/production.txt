@@ -1,5 +1,4 @@
+# NOTE deprecated, use postgresql.txt or mysql.txt directly
+# fall back to plain requirements for old behaviour
+
 -r requirements.txt
-
-uWSGI==2.0.14
-
-circus==0.14.0

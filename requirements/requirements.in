@@ -1,0 +1,32 @@
+# Flask
+Flask==0.12
+Flask-Bower==1.2.1
+
+# redis backend
+hiredis==0.2.0
+redis==2.10.5
+
+# federation
+federation==0.13.0
+
+# generic
+requests==2.12.4
+schedule==0.4.2
+bleach==2.0.0
+
+# background jobs
+rq==0.7.1
+rq-dashboard==0.3.7
+
+# pod preferences
+jsonschema==2.5.1
+
+# Database
+peewee==2.8.5
+# Database migrations
+arnold==0.4.1
+
+# Production serving
+uWSGI
+circus==0.14.0
+tornado<5  # Not direct but locked due to circus

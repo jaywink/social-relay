@@ -57,15 +57,7 @@ Ensure `pip` and `setuptools` are up to date.
 
     pip install -U pip setuptools
 
-For a production deployment, uWSGI (for app server) and Circus (for running workers) are encouraged. Use the production requirements to install them:
-
-    pip install -r requirements/production.txt
-    
-Otherwise just use the base requirements and install your favourite WSGI engine manually:
-
-    pip install -r requirements/requirements.txt
-    
-Additionally, choose your database and install the requirements:
+For a production deployment, choose your database and install the requirements:
 
     # PostgreSQL
     pip install -r requirements/postgresql.txt
@@ -166,7 +158,7 @@ The rqworker service file can also be used to start the optional `failed` queue 
 
 ## Development
 
-### Additional development requirements
+### Development requirements
 
     pip install -r requirements/development.txt
 
@@ -189,6 +181,16 @@ Ensure there is a test database. By default the tests try to connect to PostgreS
 Then run test with:
 
     py.test
+
+### Maintaining dependencies
+
+When changing requirements, use pip-tools.
+
+    pip install pip-tools
+    
+To compile all
+
+    ./compile-requirements.sh
 
 ## Author
 

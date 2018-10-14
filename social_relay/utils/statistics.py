@@ -64,9 +64,9 @@ def get_count_stats():
     return incoming, outgoing, distinct_nodes, processing, profiles
 
 
-def log_receive_statistics(sender_host):
+def log_receive_statistics(sender_addr):
     """Add a ReceiveStatistic entry to the database."""
-    ReceiveStatistic.create(sender_host=sender_host)
+    ReceiveStatistic.create(sender_host=sender_addr)
 
 
 def log_worker_receive_statistics(protocol, entities, sent_amount, sent_success):

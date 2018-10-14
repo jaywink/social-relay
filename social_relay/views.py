@@ -107,20 +107,14 @@ def hcard(guid):
 @app.route("/receive/public/", methods=["POST"])
 @app.route("/receive/public", methods=["POST"])
 def receive_public():
-    payload = ""
-    try:
-        # Legacy payloads
-        payload = request.form["xml"]
-    except KeyError:
-        if request.data:
-            payload = request.data
-    if not payload:
+    if not request.data:
         return abort(404)
+
     # Queue to rq for processing
-    public_queue.enqueue("workers.receive.process", payload, timeout=app.config.get("RELAY_WORKER_TIMEOUT"))
+    public_queue.enqueue("workers.receive.process", request.data, timeout=app.config.get("RELAY_WORKER_TIMEOUT"))
 
     # Log statistics
-    log_receive_statistics(request.host)
+    log_receive_statistics(request.remote_addr)
 
     # return 200 whatever
     data = {

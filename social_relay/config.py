@@ -6,7 +6,7 @@ import os
 from peewee import PostgresqlDatabase, MySQLDatabase
 
 # Current version. Needless to say this shouldn't be changed except for a release.
-VERSION = "1.5.0"
+VERSION = "1.6.0-dev"
 
 # Set this to a real domain in local config
 SERVER_HOST = "http://127.0.0.1:5000"

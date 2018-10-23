@@ -1,4 +1,7 @@
 ---
+- set_fact:
+    _systemd: "{{ true if ansible_lsb.major_release >= 15 else false }}"
+
 - include: user.yaml
 - include: packages.yaml
 - include: redis.yaml

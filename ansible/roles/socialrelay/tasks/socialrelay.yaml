@@ -49,19 +49,21 @@
   template: dest=/etc/init/socialrelay-circus.conf src=socialrelay-circus.conf.j2
   notify:
     - restart circus
+  when: not _systemd
 - name: Set up web upstart job
   template: dest=/etc/init/socialrelay-web.conf src=socialrelay-web.conf.j2
   notify:
     - restart web
+  when: not _systemd
 
-# TODO: remove these old legacy upstart jobs once removal deployed
-- name: Stop worker upstart job
-  service: name=socialrelay-worker state=stopped
-  ignore_errors: True
-- name: Stop jobs upstart job
-  service: name=socialrelay-jobs state=stopped
-  ignore_errors: True
-- name: Remove worker upstart job
-  file: path=/etc/init/socialrelay-worker.conf state=absent
-- name: Remove jobs upstart job
-  file: path=/etc/init/socialrelay-jobs.conf state=absent
+# SystemD
+- name: Set up circus systemd service
+  template: dest=/etc/systemd/system/socialrelay-circus.service src=socialrelay-circus.upstart.conf
+  notify:
+    - restart circus
+  when: _systemd
+- name: Set up web systemd service
+  template: dest=/etc/systemd/system/socialrelay-web.service src=socialrelay-web.upstart.conf
+  notify:
+    - restart web
+  when: _systemd

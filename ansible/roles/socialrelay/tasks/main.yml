@@ -3,6 +3,7 @@
 - include: packages.yaml
 - include: redis.yaml
 - include: database.yaml
+  when: socialrelay_database_host == "127.0.0.1"
 - include: apache.yaml
 - include: ssh.yaml
 - include: python.yaml

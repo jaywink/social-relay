@@ -8,7 +8,7 @@ Application to act as a relay for public posts using the Diaspora protocol. Keep
 
 ## How does one integrate to the relay system? How do I write my own relay?
 
-See [relay design concept](https://github.com/jaywink/social-relay/blob/master/docs/relays.md).
+See [relay design concept](https://git.feneas.org/jaywink/social-relay/blob/master/docs/relays.md).
 
 Original idea for the relay system can be found in the [diaspora* project wiki](https://wiki.diasporafoundation.org/Relay_servers_for_public_posts).
 
@@ -126,7 +126,7 @@ If you don't want to use `circus`, run the workers manually. Run the worker(s) a
 
 Pretty much normal Python + WSGI setup, just install the requirements and serve app using WSGI and statics via the web server. See the following sections for platform specific helpers.
 
-An Apache2 site example can be found [here](https://github.com/jaywink/social-relay/blob/master/ansible/roles/social-relay/templates/apache.conf.j2). The same folder also has examples for upstart init jobs.
+An Apache2 site example can be found [here](https://git.feneas.org/jaywink/social-relay/tree/master/ansible/roles/socialrelay/templates/apache.conf.j2). The same folder also has examples for upstart init jobs.
 
 ### Ansible (Ubuntu)
 

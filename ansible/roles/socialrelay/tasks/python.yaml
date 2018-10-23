@@ -7,7 +7,7 @@
 - name: Create virtualenv
   # We do this here since Ansible only has virtualenv_python in 2.x
   become_user: socialrelay
-  command: creates=/home/socialrelay/venv virtualenv -p python3.4 /home/socialrelay/venv
+  command: creates=/home/socialrelay/venv virtualenv -p python3 /home/socialrelay/venv
 - name: Update pip and setuptools
   pip: name={{ item }} state=latest virtualenv=/home/socialrelay/venv
   become_user: socialrelay

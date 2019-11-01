@@ -39,4 +39,4 @@ termcolor==1.1.0          # via arnold
 tornado==4.5.3
 uwsgi==2.0.17.1
 webencodings==0.5.1       # via html5lib
-werkzeug==0.14.1          # via flask
+werkzeug==0.15.3          # via flask

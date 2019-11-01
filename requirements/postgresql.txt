@@ -40,4 +40,4 @@ termcolor==1.1.0
 tornado==4.5.3
 uwsgi==2.0.17.1
 webencodings==0.5.1
-werkzeug==0.14.1
+werkzeug==0.15.3

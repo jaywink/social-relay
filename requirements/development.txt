@@ -65,4 +65,4 @@ traitlets==4.3.2          # via ipython
 uwsgi==2.0.17.1
 wcwidth==0.1.7            # via prompt-toolkit
 webencodings==0.5.1
-werkzeug==0.14.1
+werkzeug==0.15.3

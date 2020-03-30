@@ -4,39 +4,38 @@
 #
 #    ./compile-requirements.sh
 #
-arnold==0.4.1
+arnold==0.4.1             # via -r requirements.in
 arrow==0.12.1             # via rq-dashboard
-bleach==2.0.0
-circus==0.14.0
+bleach==3.1.4             # via -r requirements.in
+circus==0.14.0            # via -r requirements.in
 click==7.0                # via flask, rq
 cssselect==1.0.3          # via federation
 dirty-validators==0.4.0   # via federation
-federation==0.13.0
-flask-bower==1.2.1
-flask==0.12
-hiredis==0.2.0
-html5lib==1.0.1           # via bleach
+federation==0.13.0        # via -r requirements.in
+flask-bower==1.2.1        # via -r requirements.in
+flask==0.12               # via -r requirements.in, flask-bower, rq-dashboard
+hiredis==0.2.0            # via -r requirements.in
 iowait==0.2               # via circus
 isodate==0.6.0            # via python-xrd
 itsdangerous==0.24        # via flask
 jinja2==2.10              # via flask
-jsonschema==2.5.1
+jsonschema==2.5.1         # via -r requirements.in, federation
 lxml==4.2.5               # via federation
 markupsafe==1.0           # via jinja2
-peewee==2.8.5
+peewee==2.8.5             # via -r requirements.in, arnold
 psutil==5.4.7             # via circus
 pycrypto==2.6.1           # via federation
 python-dateutil==2.7.3    # via arrow, federation
 python-xrd==0.1           # via federation
 pyzmq==17.1.2             # via circus
-redis==2.10.5
-requests==2.12.4
-rq-dashboard==0.3.7
-rq==0.7.1
-schedule==0.4.2
-six==1.11.0               # via bleach, html5lib, isodate, python-dateutil
+redis==2.10.5             # via -r requirements.in, rq, rq-dashboard
+requests==2.12.4          # via -r requirements.in, federation
+rq-dashboard==0.3.7       # via -r requirements.in
+rq==0.7.1                 # via -r requirements.in, rq-dashboard
+schedule==0.4.2           # via -r requirements.in
+six==1.11.0               # via bleach, python-dateutil
 termcolor==1.1.0          # via arnold
-tornado==4.5.3
-uwsgi==2.0.17.1
-webencodings==0.5.1       # via html5lib
+tornado==4.5.3            # via -r requirements.in, circus
+uwsgi==2.0.17.1           # via -r requirements.in
+webencodings==0.5.1       # via bleach
 werkzeug==0.14.1          # via flask

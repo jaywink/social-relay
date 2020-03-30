@@ -6,7 +6,7 @@
 #
 arnold==0.4.1
 arrow==0.12.1
-bleach==2.0.0
+bleach==3.1.4
 circus==0.14.0
 click==7.0
 cssselect==1.0.3
@@ -15,7 +15,6 @@ federation==0.13.0
 flask-bower==1.2.1
 flask==0.12
 hiredis==0.2.0
-html5lib==1.0.1
 iowait==0.2
 isodate==0.6.0
 itsdangerous==0.24

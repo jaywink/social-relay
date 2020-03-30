@@ -4,65 +4,64 @@
 #
 #    ./compile-requirements.sh
 #
-arnold==0.4.1
-arrow==0.12.1
+arnold==0.4.1             # via -r postgresql.txt
+arrow==0.12.1             # via -r postgresql.txt, rq-dashboard
 atomicwrites==1.2.1       # via pytest
 attrs==18.2.0             # via pytest
 backcall==0.1.0           # via ipython
-bleach==2.0.0
-circus==0.14.0
-click==7.0
-codecov==2.0.15
-coverage==4.5.1
-cssselect==1.0.3
+bleach==3.1.4             # via -r postgresql.txt
+circus==0.14.0            # via -r postgresql.txt
+click==7.0                # via -r postgresql.txt, flask, rq
+codecov==2.0.15           # via -r development.in
+coverage==4.5.1           # via -r development.in, codecov, pytest-cov
+cssselect==1.0.3          # via -r postgresql.txt, federation
 decorator==4.3.0          # via ipython, traitlets
-dirty-validators==0.4.0
-federation==0.13.0
-flask-bower==1.2.1
-flask==0.12
-hiredis==0.2.0
-html5lib==1.0.1
-iowait==0.2
+dirty-validators==0.4.0   # via -r postgresql.txt, federation
+federation==0.13.0        # via -r postgresql.txt
+flask-bower==1.2.1        # via -r postgresql.txt
+flask==0.12               # via -r postgresql.txt, flask-bower, pytest-flask, rq-dashboard
+hiredis==0.2.0            # via -r postgresql.txt
+iowait==0.2               # via -r postgresql.txt, circus
 ipython-genutils==0.2.0   # via traitlets
-ipython==7.0.1
-isodate==0.6.0
-itsdangerous==0.24
+ipython==7.0.1            # via -r development.in
+isodate==0.6.0            # via -r postgresql.txt, python-xrd
+itsdangerous==0.24        # via -r postgresql.txt, flask
 jedi==0.13.1              # via ipython
-jinja2==2.10
-jsonschema==2.5.1
-lxml==4.2.5
-markupsafe==1.0
+jinja2==2.10              # via -r postgresql.txt, flask
+jsonschema==2.5.1         # via -r postgresql.txt, federation
+lxml==4.2.5               # via -r postgresql.txt, federation
+markupsafe==1.0           # via -r postgresql.txt, jinja2
 more-itertools==4.3.0     # via pytest
 parso==0.3.1              # via jedi
-peewee==2.8.5
+peewee==2.8.5             # via -r postgresql.txt, arnold
 pexpect==4.6.0            # via ipython
 pickleshare==0.7.5        # via ipython
 pluggy==0.7.1             # via pytest
 prompt-toolkit==2.0.6     # via ipython
-psutil==5.4.7
-psycopg2==2.7.5
+psutil==5.4.7             # via -r postgresql.txt, circus
+psycopg2==2.7.5           # via -r postgresql.txt
 ptyprocess==0.6.0         # via pexpect
 py==1.7.0                 # via pytest
-pycrypto==2.6.1
+pycrypto==2.6.1           # via -r postgresql.txt, federation
 pygments==2.2.0           # via ipython
-pytest-cov==2.6.0
-pytest-env==0.6.2
-pytest-flask==0.13.0
+pytest-cov==2.6.0         # via -r development.in
+pytest-env==0.6.2         # via -r development.in
+pytest-flask==0.13.0      # via -r development.in
 pytest==3.8.2             # via pytest-cov, pytest-env, pytest-flask
-python-dateutil==2.7.3
-python-xrd==0.1
-pyzmq==17.1.2
-redis==2.10.5
-requests==2.12.4
-rq-dashboard==0.3.7
-rq==0.7.1
-schedule==0.4.2
+python-dateutil==2.7.3    # via -r postgresql.txt, arrow, federation
+python-xrd==0.1           # via -r postgresql.txt, federation
+pyzmq==17.1.2             # via -r postgresql.txt, circus
+redis==2.10.5             # via -r postgresql.txt, rq, rq-dashboard
+requests==2.12.4          # via -r postgresql.txt, codecov, federation
+rq-dashboard==0.3.7       # via -r postgresql.txt
+rq==0.7.1                 # via -r postgresql.txt, rq-dashboard
+schedule==0.4.2           # via -r postgresql.txt
 simplegeneric==0.8.1      # via ipython
-six==1.11.0
-termcolor==1.1.0
-tornado==4.5.3
+six==1.11.0               # via -r postgresql.txt, bleach, isodate, more-itertools, prompt-toolkit, pytest, python-dateutil, traitlets
+termcolor==1.1.0          # via -r postgresql.txt, arnold
+tornado==4.5.3            # via -r postgresql.txt, circus
 traitlets==4.3.2          # via ipython
-uwsgi==2.0.17.1
+uwsgi==2.0.17.1           # via -r postgresql.txt
 wcwidth==0.1.7            # via prompt-toolkit
-webencodings==0.5.1
-werkzeug==0.14.1
+webencodings==0.5.1       # via -r postgresql.txt, bleach
+werkzeug==0.14.1          # via -r postgresql.txt, flask, pytest-flask
